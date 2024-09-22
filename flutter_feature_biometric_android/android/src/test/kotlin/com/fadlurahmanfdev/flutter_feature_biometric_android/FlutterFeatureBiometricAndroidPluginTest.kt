@@ -1,4 +1,4 @@
-package com.example.flutter_feature_biometric_android
+package com.fadlurahmanfdev.flutter_feature_biometric_android
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

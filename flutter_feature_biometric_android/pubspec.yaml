@@ -40,7 +40,7 @@ flutter:
     implements: flutter_feature_biometric
     platforms:
       android:
-        package: com.example.flutter_feature_biometric_android
+        package: com.fadlurahmanfdev.flutter_feature_biometric_android
         pluginClass: FlutterFeatureBiometricAndroidPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
