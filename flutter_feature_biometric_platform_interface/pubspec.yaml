@@ -1,7 +1,7 @@
 name: flutter_feature_biometric_platform_interface
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
