@@ -37,6 +37,7 @@ flutter:
   # All these are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
+    implements: flutter_feature_biometric
     platforms:
       android:
         package: com.example.flutter_feature_biometric_android
