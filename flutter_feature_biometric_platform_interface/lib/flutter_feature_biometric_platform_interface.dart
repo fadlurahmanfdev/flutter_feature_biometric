@@ -1,11 +1,7 @@
 library flutter_feature_biometric_platform_interface;
 
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
-  FlutterFeatureBiometricPlatform() : super(token: _token);
-
-  static final Object _token = Object();
-
-  Future<bool> isDeviceSupportBiometric();
+/// A Calculator.
+class Calculator {
+  /// Returns [value] plus 1.
+  int addOne(int value) => value + 1;
 }

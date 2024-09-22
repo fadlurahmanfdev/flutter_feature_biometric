@@ -82,13 +82,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  flutter_feature_biometric_platform_interface:
-    dependency: transitive
-    description:
-      path: "../../flutter_feature_biometric_platform_interface"
-      relative: true
-    source: path
-    version: "0.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:

@@ -20,10 +20,10 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    // FlutterFeatureBiometricAndroid flutterFeatureBiometricAndroidPlugin = FlutterFeatureBiometricAndroid();
-    // MockFlutterFeatureBiometricAndroidPlatform fakePlatform = MockFlutterFeatureBiometricAndroidPlatform();
-    // FlutterFeatureBiometricAndroidPlatform.instance = fakePlatform;
-    //
-    // expect(await flutterFeatureBiometricAndroidPlugin.getPlatformVersion(), '42');
+    FlutterFeatureBiometricAndroid flutterFeatureBiometricAndroidPlugin = FlutterFeatureBiometricAndroid();
+    MockFlutterFeatureBiometricAndroidPlatform fakePlatform = MockFlutterFeatureBiometricAndroidPlatform();
+    FlutterFeatureBiometricAndroidPlatform.instance = fakePlatform;
+
+    expect(await flutterFeatureBiometricAndroidPlugin.getPlatformVersion(), '42');
   });
 }
