@@ -14,4 +14,10 @@ class MethodChannelFlutterFeatureBiometric extends FlutterFeatureBiometricPlatfo
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<bool> isDeviceSupportBiometric() {
+    // TODO: implement isDeviceSupportBiometric
+    throw UnimplementedError();
+  }
 }

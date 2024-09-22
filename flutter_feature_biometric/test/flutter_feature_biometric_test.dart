@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_feature_biometric/flutter_feature_biometric.dart';
+import 'package:flutter_feature_biometric/src/flutter_feature_biometric.dart';
 import 'package:flutter_feature_biometric/flutter_feature_biometric_platform_interface.dart';
 import 'package:flutter_feature_biometric/flutter_feature_biometric_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -10,6 +10,12 @@ class MockFlutterFeatureBiometricPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<bool> isDeviceSupportBiometric() {
+    // TODO: implement isDeviceSupportBiometric
+    throw UnimplementedError();
+  }
 }
 
 void main() {
