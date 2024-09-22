@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/services.dart';
+
 import 'flutter_feature_biometric_platform_interface.dart';
 
 const MethodChannel _channel = MethodChannel('plugins.com.fadlurahmanfdev/flutter_feature_biometric');

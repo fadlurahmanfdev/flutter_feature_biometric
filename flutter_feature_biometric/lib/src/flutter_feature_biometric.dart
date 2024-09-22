@@ -1,18 +1,11 @@
-// You have generated a new plugin project without specifying the `--platforms`
-// flag. A plugin project with no platform support was generated. To add a
-// platform, run `flutter create -t plugin --platforms <platforms> .` under the
-// same directory. You can also find a detailed instruction on how to add
-// platforms in the `pubspec.yaml` at
-// https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
-
-import '../flutter_feature_biometric_platform_interface.dart';
+import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 class FlutterFeatureBiometric {
-  Future<String?> getPlatformVersion() {
-    return FlutterFeatureBiometricPlatform.instance.getPlatformVersion();
+  Future<String?> getPlatformVersion() async {
+    return 'tes';
   }
 
   Future<bool> isDeviceSupportBiometric() async {
-    return FlutterFeatureBiometricPlatform.instance.isDeviceSupportBiometric();
+    return FlutterFeatureBiometricPlatform.instance.isDeviceSupportedBiometric();
   }
 }
