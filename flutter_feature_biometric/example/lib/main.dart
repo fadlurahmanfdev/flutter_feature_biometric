@@ -34,8 +34,9 @@ class _MyAppState extends State<MyApp> {
     // We also handle the message potentially returning null.
     try {
       isSupported = await _flutterFeatureBiometricPlugin.isDeviceSupportBiometric();
-    } on PlatformException {
-      log("failed to get platform exception isSupported");
+      print("masuk sini2");
+    } on PlatformException catch(e) {
+      log("failed: $e");
       isSupported = false;
     }
 

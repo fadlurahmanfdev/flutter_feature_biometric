@@ -24,6 +24,7 @@ allprojects {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+
 android {
     if (project.android.hasProperty("namespace")) {
         namespace 'com.fadlurahmanfdev.flutter_feature_biometric_android'
@@ -65,4 +66,8 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation("com.fadlurahmanfdev:kotlin_feature_identity:0.0.3-beta")
 }

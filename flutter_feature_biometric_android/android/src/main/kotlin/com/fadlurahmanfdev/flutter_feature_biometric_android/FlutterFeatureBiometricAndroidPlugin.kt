@@ -1,35 +1,43 @@
 package com.fadlurahmanfdev.flutter_feature_biometric_android
 
-import androidx.annotation.NonNull
-
+import android.app.Activity
+import com.fadlurahmanfdev.kotlin_feature_identity.plugin.KotlinFeatureBiometric
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
 /** FlutterFeatureBiometricAndroidPlugin */
-class FlutterFeatureBiometricAndroidPlugin: FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
+    FlutterFeatureBiometricApi {
+    var activity: Activity? = null
+    lateinit var kotlinFeatureBiometric: KotlinFeatureBiometric
 
-  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_feature_biometric_android")
-    channel.setMethodCallHandler(this)
-  }
-
-  override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        FlutterFeatureBiometricApi.setUp(flutterPluginBinding.getBinaryMessenger(), this)
+        kotlinFeatureBiometric = KotlinFeatureBiometric(activity!!)
     }
-  }
 
-  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        FlutterFeatureBiometricApi.setUp(binding.getBinaryMessenger(), null)
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activity = null
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
+    }
+
+    override fun onReattachedToActivityForConfigChanges(p0: ActivityPluginBinding) {
+        activity = p0.activity
+    }
+
+    override fun isDeviceSupportBiometric(): Boolean {
+        return kotlinFeatureBiometric.haveFeatureBiometric()
+    }
 }
