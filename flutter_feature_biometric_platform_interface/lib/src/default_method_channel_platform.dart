@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/services.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/can_authenticate_type.dart';
 
 import 'flutter_feature_biometric_platform_interface.dart';
 
@@ -25,5 +26,19 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     // If anything, including the 'undefined' sentinel, is returned, then there
     // is device support for biometrics.
     return availableBiometrics.isNotEmpty;
+  }
+
+  @override
+  Future<bool> canAuthenticate() async {
+    return (await _channel.invokeMethod<bool>(
+          'canAuthenticate',
+        )) ??
+        false;
+  }
+
+  @override
+  Future<CanAuthenticateType> canAuthenticateWithReason() {
+    // TODO: implement canAuthenticateWithReason
+    throw UnimplementedError();
   }
 }

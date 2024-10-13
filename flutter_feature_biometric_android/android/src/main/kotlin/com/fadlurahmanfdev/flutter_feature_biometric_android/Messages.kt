@@ -35,6 +35,9 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error",  "Unable to establish connection on channel: '$channelName'.", "")}
+
 /**
  * Error class for passing custom error details to Flutter via a thrown PlatformException.
  * @property code The error code.
@@ -46,34 +49,182 @@ class FlutterError (
   override val message: String? = null,
   val details: Any? = null
 ) : Throwable()
-private open class MessagesPigeonCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return     super.readValueOfType(type, buffer)
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
-    super.writeValue(stream, value)
+
+enum class NativeBiometricType(val raw: Int) {
+  WEAK(0),
+  STRONG(1),
+  DEVICE_CREDENTIAL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): NativeBiometricType? {
+      return values().firstOrNull { it.raw == raw }
+    }
   }
 }
 
-/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface FlutterFeatureBiometricApi {
-  fun isDeviceSupportBiometric(): Boolean
+enum class NativeAndroidBiometricStatus(val raw: Int) {
+  SUCCESS(0),
+  NO_BIOMETRIC_AVAILABLE(1),
+  UNAVAILABLE(2),
+  NONE_ENROLLED(3),
+  UNKNOWN(4);
 
   companion object {
-    /** The codec used by FlutterFeatureBiometricApi. */
+    fun ofRaw(raw: Int): NativeAndroidBiometricStatus? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+private open class MessagesPigeonCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      129.toByte() -> {
+        return (readValue(buffer) as Long?)?.let {
+          NativeBiometricType.ofRaw(it.toInt())
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as Long?)?.let {
+          NativeAndroidBiometricStatus.ofRaw(it.toInt())
+        }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
+    when (value) {
+      is NativeBiometricType -> {
+        stream.write(129)
+        writeValue(stream, value.raw)
+      }
+      is NativeAndroidBiometricStatus -> {
+        stream.write(130)
+        writeValue(stream, value.raw)
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
+class NativeFeatureBiometricCallback(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
+  companion object {
+    /** The codec used by NativeFeatureBiometricCallback. */
     val codec: MessageCodec<Any?> by lazy {
       MessagesPigeonCodec()
     }
-    /** Sets up an instance of `FlutterFeatureBiometricApi` to handle messages through the `binaryMessenger`. */
+  }
+  fun onSuccessAuthenticate(callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.flutter_feature_biometric_android.NativeFeatureBiometricCallback.onSuccessAuthenticate$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(null) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      } 
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface HostFeatureBiometricApi {
+  fun haveFeatureBiometric(): Boolean
+  fun haveFaceDetection(): Boolean
+  fun canAuthenticate(authenticator: NativeBiometricType): Boolean
+  fun checkBiometricStatus(type: NativeBiometricType): NativeAndroidBiometricStatus
+  fun authenticate(type: NativeBiometricType, title: String, description: String, negativeText: String)
+
+  companion object {
+    /** The codec used by HostFeatureBiometricApi. */
+    val codec: MessageCodec<Any?> by lazy {
+      MessagesPigeonCodec()
+    }
+    /** Sets up an instance of `HostFeatureBiometricApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: FlutterFeatureBiometricApi?, messageChannelSuffix: String = "") {
+    fun setUp(binaryMessenger: BinaryMessenger, api: HostFeatureBiometricApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportBiometric$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.haveFeatureBiometric$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              listOf(api.isDeviceSupportBiometric())
+              listOf(api.haveFeatureBiometric())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.haveFaceDetection$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.haveFaceDetection())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.canAuthenticate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val authenticatorArg = args[0] as NativeBiometricType
+            val wrapped: List<Any?> = try {
+              listOf(api.canAuthenticate(authenticatorArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.checkBiometricStatus$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val typeArg = args[0] as NativeBiometricType
+            val wrapped: List<Any?> = try {
+              listOf(api.checkBiometricStatus(typeArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.authenticate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val typeArg = args[0] as NativeBiometricType
+            val titleArg = args[1] as String
+            val descriptionArg = args[2] as String
+            val negativeTextArg = args[3] as String
+            val wrapped: List<Any?> = try {
+              api.authenticate(typeArg, titleArg, descriptionArg, negativeTextArg)
+              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }
