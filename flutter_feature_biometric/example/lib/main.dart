@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      isSupported = await _flutterFeatureBiometricPlugin.isDeviceSupportBiometric();
+      isSupported = await _flutterFeatureBiometricPlugin.isDeviceSupportedBiometric();
       print("masuk sini2");
     } on PlatformException catch(e) {
       log("failed: $e");

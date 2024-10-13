@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter_feature_biometric_platform_interface/src/enum/can_authenticate_type.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/check_biometric_status.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/feature_biometric_type.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'default_method_channel_platform.dart';
@@ -37,7 +38,14 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
 
   Future<bool> isDeviceSupportedBiometric();
 
-  Future<bool> canAuthenticate();
+  Future<bool> canAuthenticate(FeatureBiometricType type);
 
-  Future<CanAuthenticateType> canAuthenticateWithReason();
+  Future<CheckBiometricStatus> checkBiometricStatus(FeatureBiometricType type);
+
+  Future<void> authenticate({
+    required FeatureBiometricType type,
+    required String title,
+    required String description,
+    required String negativeText,
+  });
 }

@@ -18,11 +18,6 @@ enum NativeAndroidBiometricStatus {
   unknown,
 }
 
-@FlutterApi()
-abstract class NativeFeatureBiometricCallback {
-  void onSuccessAuthenticate();
-}
-
 @HostApi()
 abstract class HostFeatureBiometricApi {
   bool haveFeatureBiometric();
@@ -33,7 +28,8 @@ abstract class HostFeatureBiometricApi {
 
   NativeAndroidBiometricStatus checkBiometricStatus(NativeBiometricType type);
 
-  void authenticate({
+  @async
+  String authenticate({
     required NativeBiometricType type,
     required String title,
     required String description,

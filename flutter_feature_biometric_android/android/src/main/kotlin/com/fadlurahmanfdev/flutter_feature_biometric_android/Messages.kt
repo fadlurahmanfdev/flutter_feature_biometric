@@ -35,9 +35,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error",  "Unable to establish connection on channel: '$channelName'.", "")}
-
 /**
  * Error class for passing custom error details to Flutter via a thrown PlatformException.
  * @property code The error code.
@@ -106,39 +103,14 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class NativeFeatureBiometricCallback(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by NativeFeatureBiometricCallback. */
-    val codec: MessageCodec<Any?> by lazy {
-      MessagesPigeonCodec()
-    }
-  }
-  fun onSuccessAuthenticate(callback: (Result<Unit>) -> Unit)
-{
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.flutter_feature_biometric_android.NativeFeatureBiometricCallback.onSuccessAuthenticate$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(null) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      } 
-    }
-  }
-}
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface HostFeatureBiometricApi {
   fun haveFeatureBiometric(): Boolean
   fun haveFaceDetection(): Boolean
   fun canAuthenticate(authenticator: NativeBiometricType): Boolean
   fun checkBiometricStatus(type: NativeBiometricType): NativeAndroidBiometricStatus
-  fun authenticate(type: NativeBiometricType, title: String, description: String, negativeText: String)
+  fun authenticate(type: NativeBiometricType, title: String, description: String, negativeText: String, callback: (Result<String>) -> Unit)
 
   companion object {
     /** The codec used by HostFeatureBiometricApi. */
@@ -222,13 +194,15 @@ interface HostFeatureBiometricApi {
             val titleArg = args[1] as String
             val descriptionArg = args[2] as String
             val negativeTextArg = args[3] as String
-            val wrapped: List<Any?> = try {
-              api.authenticate(typeArg, titleArg, descriptionArg, negativeTextArg)
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
+            api.authenticate(typeArg, titleArg, descriptionArg, negativeTextArg) { result: Result<String> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
             }
-            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

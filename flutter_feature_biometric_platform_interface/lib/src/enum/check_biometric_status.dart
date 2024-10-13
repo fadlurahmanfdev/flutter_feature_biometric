@@ -1,6 +1,7 @@
-enum CanAuthenticateType {
+enum CheckBiometricStatus {
   success,
   noBiometricAvailable,
   unavailable,
   noneEnrolled,
+  unknown,
 }

@@ -18,16 +18,6 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
-  if (empty) {
-    return <Object?>[];
-  }
-  if (error == null) {
-    return <Object?>[result];
-  }
-  return <Object?>[error.code, error.message, error.details];
-}
-
 enum NativeBiometricType {
   weak,
   strong,
@@ -72,35 +62,6 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : NativeAndroidBiometricStatus.values[value];
       default:
         return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-abstract class NativeFeatureBiometricCallback {
-  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
-
-  void onSuccessAuthenticate();
-
-  static void setUp(NativeFeatureBiometricCallback? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_feature_biometric_android.NativeFeatureBiometricCallback.onSuccessAuthenticate$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          try {
-            api.onSuccessAuthenticate();
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
     }
   }
 }
@@ -226,7 +187,7 @@ class HostFeatureBiometricApi {
     }
   }
 
-  Future<void> authenticate({required NativeBiometricType type, required String title, required String description, required String negativeText,}) async {
+  Future<String> authenticate({required NativeBiometricType type, required String title, required String description, required String negativeText,}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.HostFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -243,8 +204,13 @@ class HostFeatureBiometricApi {
         message: pigeonVar_replyList[1] as String?,
         details: pigeonVar_replyList[2],
       );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return;
+      return (pigeonVar_replyList[0] as String?)!;
     }
   }
 }

@@ -3,7 +3,8 @@
 // found in the LICENSE file.
 
 import 'package:flutter/services.dart';
-import 'package:flutter_feature_biometric_platform_interface/src/enum/can_authenticate_type.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/check_biometric_status.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/feature_biometric_type.dart';
 
 import 'flutter_feature_biometric_platform_interface.dart';
 
@@ -29,16 +30,20 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<bool> canAuthenticate() async {
-    return (await _channel.invokeMethod<bool>(
-          'canAuthenticate',
-        )) ??
-        false;
+  Future<bool> canAuthenticate(FeatureBiometricType type) {
+    // TODO: implement canAuthenticate
+    throw UnimplementedError();
   }
 
   @override
-  Future<CanAuthenticateType> canAuthenticateWithReason() {
-    // TODO: implement canAuthenticateWithReason
+  Future<CheckBiometricStatus> checkBiometricStatus(FeatureBiometricType type) {
+    // TODO: implement checkBiometricStatus
+    throw UnimplementedError();
+  }
+
+@override
+  Future<void> authenticate({required FeatureBiometricType type, required String title, required String description, required String negativeText}) {
+    // TODO: implement authenticate
     throw UnimplementedError();
   }
 }
