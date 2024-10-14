@@ -1,0 +1,1 @@
+export 'src/flutter_feature_biometric.dart';
