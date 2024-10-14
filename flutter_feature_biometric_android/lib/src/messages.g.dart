@@ -18,6 +18,20 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
+enum NativeBiometricStatus {
+  success,
+  noAvailable,
+  unavailable,
+  noneEnrolled,
+  unknown,
+}
+
+enum NativeBiometricAuthenticator {
+  weak,
+  strong,
+  deviceCredential,
+}
+
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -26,6 +40,12 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
+    }    else if (value is NativeBiometricStatus) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.index);
+    }    else if (value is NativeBiometricAuthenticator) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.index);
     } else {
       super.writeValue(buffer, value);
     }
@@ -34,6 +54,12 @@ class _PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
+      case 129: 
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : NativeBiometricStatus.values[value];
+      case 130: 
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : NativeBiometricAuthenticator.values[value];
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -77,6 +103,33 @@ class FlutterFeatureBiometricApi {
       );
     } else {
       return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<NativeBiometricStatus> checkBiometricStatus(NativeBiometricAuthenticator authenticator) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkBiometricStatus$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[authenticator]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as NativeBiometricStatus?)!;
     }
   }
 }

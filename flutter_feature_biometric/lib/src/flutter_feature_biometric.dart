@@ -4,4 +4,8 @@ class FlutterFeatureBiometric {
   Future<bool> deviceSupportsBiometrics() {
     return FlutterFeatureBiometricPlatform.instance.deviceSupportsBiometrics();
   }
+
+  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
+    return FlutterFeatureBiometricPlatform.instance.checkBiometricStatus(authenticator);
+  }
 }

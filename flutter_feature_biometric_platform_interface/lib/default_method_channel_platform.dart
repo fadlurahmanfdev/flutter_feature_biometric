@@ -21,4 +21,10 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     // TODO: implement deviceSupportsBiometrics
     return super.deviceSupportsBiometrics();
   }
+
+  @override
+  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
+    // TODO: implement checkBiometricStatus
+    return super.checkBiometricStatus(authenticator);
+  }
 }

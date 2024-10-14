@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_feature_biometric/flutter_feature_biometric.dart';
+import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
     try {
       deviceSupportsBiometrics =
           await _flutterFeatureBiometricPlugin.deviceSupportsBiometrics();
+      _flutterFeatureBiometricPlugin.checkBiometricStatus(BiometricAuthenticator.weak).then((value){
+        print("masuk sini -> $value");
+      });
     } on PlatformException {
       deviceSupportsBiometrics = false;
     }

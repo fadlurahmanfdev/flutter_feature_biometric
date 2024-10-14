@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+export 'src/enum/biometric_authenticator.dart';
+export 'src/enum/biometric_status.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_status.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'default_method_channel_platform.dart';
@@ -39,5 +43,9 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   /// This will return true even if there are no biometrics currently enrolled.
   Future<bool> deviceSupportsBiometrics() async {
     throw UnimplementedError('canCheckBiometrics() has not been implemented.');
+  }
+
+  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) async {
+    throw UnimplementedError('checkBiometricStatus() has not been implemented.');
   }
 }

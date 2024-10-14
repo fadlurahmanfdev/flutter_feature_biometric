@@ -11,7 +11,22 @@ import 'package:pigeon/pigeon.dart';
   copyrightHeader: 'pigeons/copyright.txt',
 ))
 
+enum NativeBiometricStatus {
+  success,
+  noAvailable,
+  unavailable,
+  noneEnrolled,
+  unknown,
+}
+
+enum NativeBiometricAuthenticator {
+  weak,
+  strong,
+  deviceCredential,
+}
+
 @HostApi()
 abstract class FlutterFeatureBiometricApi {
   bool deviceCanSupportBiometrics();
+  NativeBiometricStatus checkBiometricStatus(NativeBiometricAuthenticator authenticator);
 }

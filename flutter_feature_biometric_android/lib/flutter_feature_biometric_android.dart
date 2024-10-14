@@ -5,6 +5,7 @@
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_feature_biometric_android/src/messages.g.dart';
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
+export 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 /// The implementation of [FlutterFeatureBiometricPlatform] for Android.
 class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
@@ -23,5 +24,31 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   @override
   Future<bool> deviceSupportsBiometrics() async {
     return _api.deviceCanSupportBiometrics();
+  }
+
+  @override
+  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) async {
+    NativeBiometricAuthenticator nativeAuthenticator;
+    switch (authenticator) {
+      case BiometricAuthenticator.weak:
+        nativeAuthenticator = NativeBiometricAuthenticator.weak;
+      case BiometricAuthenticator.strong:
+        nativeAuthenticator = NativeBiometricAuthenticator.strong;
+      case BiometricAuthenticator.deviceCredential:
+        nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
+    }
+    final nativeStatus = await _api.checkBiometricStatus(nativeAuthenticator);
+    switch (nativeStatus) {
+      case NativeBiometricStatus.success:
+        return BiometricStatus.success;
+      case NativeBiometricStatus.noAvailable:
+        return BiometricStatus.noAvailable;
+      case NativeBiometricStatus.unavailable:
+        return BiometricStatus.unavailable;
+      case NativeBiometricStatus.noneEnrolled:
+        return BiometricStatus.noneEnrolled;
+      case NativeBiometricStatus.unknown:
+        return BiometricStatus.unknown;
+    }
   }
 }
