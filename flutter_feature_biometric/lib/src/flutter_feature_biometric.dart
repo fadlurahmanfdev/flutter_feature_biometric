@@ -8,4 +8,18 @@ class FlutterFeatureBiometric {
   Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
     return FlutterFeatureBiometricPlatform.instance.checkBiometricStatus(authenticator);
   }
+
+  Future<void> authenticate({
+    required BiometricAuthenticator authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  }) {
+    return FlutterFeatureBiometricPlatform.instance.authenticate(
+      authenticator: authenticator,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+  }
 }

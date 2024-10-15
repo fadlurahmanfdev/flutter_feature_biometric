@@ -32,9 +32,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      deviceSupportsBiometrics =
-          await _flutterFeatureBiometricPlugin.deviceSupportsBiometrics();
-      _flutterFeatureBiometricPlugin.checkBiometricStatus(BiometricAuthenticator.weak).then((value){
+      deviceSupportsBiometrics = await _flutterFeatureBiometricPlugin.deviceSupportsBiometrics();
+      _flutterFeatureBiometricPlugin.checkBiometricStatus(BiometricAuthenticator.weak).then((value) {
         print("masuk sini -> $value");
       });
     } on PlatformException {
@@ -58,8 +57,25 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('deviceSupportsBiometrics: $_deviceSupportsBiometrics\n'),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Center(
+                child: Text('deviceSupportsBiometrics: $_deviceSupportsBiometrics\n'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await _flutterFeatureBiometricPlugin.authenticate(
+                    authenticator: BiometricAuthenticator.weak,
+                    title: "Flutter Title",
+                    description: "Flutter Desc",
+                    negativeText: "Flutter Neg Text",
+                  );
+                },
+                child: const Text('Authenticate'),
+              ),
+            ],
+          ),
         ),
       ),
     );

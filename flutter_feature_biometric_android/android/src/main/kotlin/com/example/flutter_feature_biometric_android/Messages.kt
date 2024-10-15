@@ -107,6 +107,7 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
 interface FlutterFeatureBiometricApi {
   fun deviceCanSupportBiometrics(): Boolean
   fun checkBiometricStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus
+  fun authenticate(authenticator: NativeBiometricAuthenticator, title: String, description: String, negativeText: String)
 
   companion object {
     /** The codec used by FlutterFeatureBiometricApi. */
@@ -140,6 +141,27 @@ interface FlutterFeatureBiometricApi {
             val authenticatorArg = args[0] as NativeBiometricAuthenticator
             val wrapped: List<Any?> = try {
               listOf(api.checkBiometricStatus(authenticatorArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val authenticatorArg = args[0] as NativeBiometricAuthenticator
+            val titleArg = args[1] as String
+            val descriptionArg = args[2] as String
+            val negativeTextArg = args[3] as String
+            val wrapped: List<Any?> = try {
+              api.authenticate(authenticatorArg, titleArg, descriptionArg, negativeTextArg)
+              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }

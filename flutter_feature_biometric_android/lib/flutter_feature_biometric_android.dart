@@ -51,4 +51,19 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         return BiometricStatus.unknown;
     }
   }
+
+  @override
+  Future<void> authenticate({required BiometricAuthenticator authenticator, required String title, required String description, required String negativeText}) {
+    NativeBiometricAuthenticator nativeAuthenticator;
+    switch (authenticator) {
+      case BiometricAuthenticator.weak:
+        nativeAuthenticator = NativeBiometricAuthenticator.weak;
+      case BiometricAuthenticator.strong:
+        nativeAuthenticator = NativeBiometricAuthenticator.strong;
+      case BiometricAuthenticator.deviceCredential:
+        nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
+    }
+
+    return _api.authenticate(authenticator: nativeAuthenticator, title: title, description: description, negativeText: negativeText);
+  }
 }

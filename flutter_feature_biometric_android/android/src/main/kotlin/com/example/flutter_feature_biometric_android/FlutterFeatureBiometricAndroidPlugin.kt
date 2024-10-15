@@ -1,8 +1,11 @@
 package com.example.flutter_feature_biometric_android
 
 import android.app.Activity
+import android.os.CancellationSignal
 import androidx.biometric.BiometricManager.Authenticators
 import com.example.flutter_feature_biometric_android.NativeBiometricAuthenticator.*
+import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometricCallBack
+import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.BiometricType
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus.*
 import com.fadlurahmanfdev.kotlin_feature_identity.plugin.KotlinFeatureBiometric
@@ -81,5 +84,31 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
             NONE_ENROLLED -> NativeBiometricStatus.NONE_ENROLLED
             UNKNOWN -> NativeBiometricStatus.UNKNOWN
         }
+    }
+
+    override fun authenticate(
+        authenticator: NativeBiometricAuthenticator,
+        title: String,
+        description: String,
+        negativeText: String
+    ) {
+        val nativeType = when (authenticator) {
+            WEAK -> BiometricType.WEAK
+            STRONG -> BiometricType.STRONG
+            DEVICE_CREDENTIAL -> BiometricType.DEVICE_CREDENTIAL
+        }
+        val cancellationSignal = CancellationSignal()
+        kotlinFeatureBiometric?.authenticate(
+            type = nativeType,
+            title = title,
+            description = description,
+            negativeText = negativeText,
+            cancellationSignal = cancellationSignal,
+            callBack = object : FeatureBiometricCallBack {
+                override fun onSuccessAuthenticate() {
+                    println("MASUK SINI onSuccessAuthenticate")
+                }
+            }
+        )
     }
 }

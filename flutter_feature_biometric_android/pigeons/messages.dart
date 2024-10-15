@@ -29,4 +29,5 @@ enum NativeBiometricAuthenticator {
 abstract class FlutterFeatureBiometricApi {
   bool deviceCanSupportBiometrics();
   NativeBiometricStatus checkBiometricStatus(NativeBiometricAuthenticator authenticator);
+  void authenticate({required NativeBiometricAuthenticator authenticator, required String title, required String description, required String negativeText});
 }

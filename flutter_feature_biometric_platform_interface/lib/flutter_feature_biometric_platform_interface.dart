@@ -48,4 +48,13 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) async {
     throw UnimplementedError('checkBiometricStatus() has not been implemented.');
   }
+
+  Future<void> authenticate({
+    required BiometricAuthenticator authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  }) async {
+    throw UnimplementedError('authenticate() has not been implemented.');
+  }
 }

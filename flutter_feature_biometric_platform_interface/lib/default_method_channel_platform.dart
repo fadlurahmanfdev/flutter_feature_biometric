@@ -15,7 +15,6 @@ const MethodChannel _channel = MethodChannel('plugins.flutter.io/flutter_feature
 /// clients that were relying on internal details of the method channel
 /// in the pre-federated plugin.
 class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlatform {
-
   @override
   Future<bool> deviceSupportsBiometrics() {
     // TODO: implement deviceSupportsBiometrics
@@ -26,5 +25,21 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
     // TODO: implement checkBiometricStatus
     return super.checkBiometricStatus(authenticator);
+  }
+
+  @override
+  Future<void> authenticate({
+    required BiometricAuthenticator authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  }) async {
+    // TODO: implement authenticate
+    return super.authenticate(
+      authenticator: authenticator,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
   }
 }
