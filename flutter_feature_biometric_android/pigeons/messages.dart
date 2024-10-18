@@ -10,7 +10,6 @@ import 'package:pigeon/pigeon.dart';
   kotlinOptions: KotlinOptions(package: 'com.example.flutter_feature_biometric_android'),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
-
 enum NativeBiometricStatus {
   success,
   noAvailable,
@@ -25,9 +24,42 @@ enum NativeBiometricAuthenticator {
   deviceCredential,
 }
 
+enum NativeAuthResultStatus {
+  success,
+  failed,
+  error,
+  dialogClicked,
+}
+
+class NativeAuthDialogClickResult {
+  int which;
+
+  NativeAuthDialogClickResult({required this.which});
+}
+
+class NativeAuthResult {
+  NativeAuthResultStatus status;
+  NativeAuthDialogClickResult? dialogClickResult;
+
+  NativeAuthResult({
+    required this.status,
+    this.dialogClickResult,
+  });
+}
+
 @HostApi()
 abstract class FlutterFeatureBiometricApi {
-  bool deviceCanSupportBiometrics();
+  bool isDeviceSupportBiometric();
+
+  bool isDeviceSupportFaceAuth();
+
   NativeBiometricStatus checkBiometricStatus(NativeBiometricAuthenticator authenticator);
-  void authenticate({required NativeBiometricAuthenticator authenticator, required String title, required String description, required String negativeText});
+
+  @async
+  NativeAuthResult authenticate({
+    required NativeBiometricAuthenticator authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  });
 }

@@ -72,6 +72,58 @@ enum class NativeBiometricAuthenticator(val raw: Int) {
     }
   }
 }
+
+enum class NativeAuthResultStatus(val raw: Int) {
+  SUCCESS(0),
+  FAILED(1),
+  ERROR(2),
+  DIALOG_CLICKED(3);
+
+  companion object {
+    fun ofRaw(raw: Int): NativeAuthResultStatus? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class NativeAuthDialogClickResult (
+  val which: Long
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): NativeAuthDialogClickResult {
+      val which = pigeonVar_list[0] as Long
+      return NativeAuthDialogClickResult(which)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      which,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class NativeAuthResult (
+  val status: NativeAuthResultStatus,
+  val dialogClickResult: NativeAuthDialogClickResult? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): NativeAuthResult {
+      val status = pigeonVar_list[0] as NativeAuthResultStatus
+      val dialogClickResult = pigeonVar_list[1] as NativeAuthDialogClickResult?
+      return NativeAuthResult(status, dialogClickResult)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      status,
+      dialogClickResult,
+    )
+  }
+}
 private open class MessagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -83,6 +135,21 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
           NativeBiometricAuthenticator.ofRaw(it.toInt())
+        }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as Long?)?.let {
+          NativeAuthResultStatus.ofRaw(it.toInt())
+        }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NativeAuthDialogClickResult.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NativeAuthResult.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -98,16 +165,30 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(130)
         writeValue(stream, value.raw)
       }
+      is NativeAuthResultStatus -> {
+        stream.write(131)
+        writeValue(stream, value.raw)
+      }
+      is NativeAuthDialogClickResult -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is NativeAuthResult -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
 }
 
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface FlutterFeatureBiometricApi {
-  fun deviceCanSupportBiometrics(): Boolean
+  fun isDeviceSupportBiometric(): Boolean
+  fun isDeviceSupportFaceAuth(): Boolean
   fun checkBiometricStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus
-  fun authenticate(authenticator: NativeBiometricAuthenticator, title: String, description: String, negativeText: String)
+  fun authenticate(authenticator: NativeBiometricAuthenticator, title: String, description: String, negativeText: String, callback: (Result<NativeAuthResult>) -> Unit)
 
   companion object {
     /** The codec used by FlutterFeatureBiometricApi. */
@@ -119,11 +200,26 @@ interface FlutterFeatureBiometricApi {
     fun setUp(binaryMessenger: BinaryMessenger, api: FlutterFeatureBiometricApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.deviceCanSupportBiometrics$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportBiometric$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              listOf(api.deviceCanSupportBiometrics())
+              listOf(api.isDeviceSupportBiometric())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFaceAuth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isDeviceSupportFaceAuth())
             } catch (exception: Throwable) {
               wrapError(exception)
             }
@@ -159,13 +255,15 @@ interface FlutterFeatureBiometricApi {
             val titleArg = args[1] as String
             val descriptionArg = args[2] as String
             val negativeTextArg = args[3] as String
-            val wrapped: List<Any?> = try {
-              api.authenticate(authenticatorArg, titleArg, descriptionArg, negativeTextArg)
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
+            api.authenticate(authenticatorArg, titleArg, descriptionArg, negativeTextArg) { result: Result<NativeAuthResult> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
             }
-            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

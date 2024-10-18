@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/services.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/model/biometric_authenticate_result.dart';
 import 'flutter_feature_biometric_platform_interface.dart';
 
 const MethodChannel _channel = MethodChannel('plugins.flutter.io/flutter_feature_biometric');
@@ -16,9 +17,15 @@ const MethodChannel _channel = MethodChannel('plugins.flutter.io/flutter_feature
 /// in the pre-federated plugin.
 class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlatform {
   @override
-  Future<bool> deviceSupportsBiometrics() {
-    // TODO: implement deviceSupportsBiometrics
-    return super.deviceSupportsBiometrics();
+  Future<bool> isDeviceSupportBiometric() {
+    // TODO: implement isDeviceSupportBiometric
+    return super.isDeviceSupportBiometric();
+  }
+
+  @override
+  Future<bool> isDeviceSupportFaceAuth() {
+    // TODO: implement isDeviceSupportFaceAuth
+    return super.isDeviceSupportFaceAuth();
   }
 
   @override
@@ -28,7 +35,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<void> authenticate({
+  Future<BiometricAuthenticateResult> authenticate({
     required BiometricAuthenticator authenticator,
     required String title,
     required String description,

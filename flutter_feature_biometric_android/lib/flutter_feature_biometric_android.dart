@@ -22,8 +22,14 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   final FlutterFeatureBiometricApi _api;
 
   @override
-  Future<bool> deviceSupportsBiometrics() async {
-    return _api.deviceCanSupportBiometrics();
+  Future<bool> isDeviceSupportBiometric() async {
+    return _api.isDeviceSupportBiometric();
+  }
+
+  @override
+  Future<bool> isDeviceSupportFaceAuth() {
+    // TODO: implement isSupportFaceAuth
+    return super.isDeviceSupportFaceAuth();
   }
 
   @override
@@ -53,7 +59,12 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<void> authenticate({required BiometricAuthenticator authenticator, required String title, required String description, required String negativeText}) {
+  Future<BiometricAuthenticateResult> authenticate({
+    required BiometricAuthenticator authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  }) async {
     NativeBiometricAuthenticator nativeAuthenticator;
     switch (authenticator) {
       case BiometricAuthenticator.weak:
@@ -64,6 +75,26 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
     }
 
-    return _api.authenticate(authenticator: nativeAuthenticator, title: title, description: description, negativeText: negativeText);
+    final result = await _api.authenticate(
+      authenticator: nativeAuthenticator,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+      case NativeAuthResultStatus.failed:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+      case NativeAuthResultStatus.error:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+      case NativeAuthResultStatus.dialogClicked:
+        return BiometricAuthenticateResult(
+          status: BiometricAuthenticateStatus.dialogClicked,
+          dialogClickResult: BiometricAuthenticateDialogClickResult(
+            which: result.dialogClickResult?.which ?? -1,
+          ),
+        );
+    }
   }
 }

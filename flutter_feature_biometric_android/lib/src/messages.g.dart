@@ -32,6 +32,60 @@ enum NativeBiometricAuthenticator {
   deviceCredential,
 }
 
+enum NativeAuthResultStatus {
+  success,
+  failed,
+  error,
+  dialogClicked,
+}
+
+class NativeAuthDialogClickResult {
+  NativeAuthDialogClickResult({
+    required this.which,
+  });
+
+  int which;
+
+  Object encode() {
+    return <Object?>[
+      which,
+    ];
+  }
+
+  static NativeAuthDialogClickResult decode(Object result) {
+    result as List<Object?>;
+    return NativeAuthDialogClickResult(
+      which: result[0]! as int,
+    );
+  }
+}
+
+class NativeAuthResult {
+  NativeAuthResult({
+    required this.status,
+    this.dialogClickResult,
+  });
+
+  NativeAuthResultStatus status;
+
+  NativeAuthDialogClickResult? dialogClickResult;
+
+  Object encode() {
+    return <Object?>[
+      status,
+      dialogClickResult,
+    ];
+  }
+
+  static NativeAuthResult decode(Object result) {
+    result as List<Object?>;
+    return NativeAuthResult(
+      status: result[0]! as NativeAuthResultStatus,
+      dialogClickResult: result[1] as NativeAuthDialogClickResult?,
+    );
+  }
+}
+
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -46,6 +100,15 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is NativeBiometricAuthenticator) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
+    }    else if (value is NativeAuthResultStatus) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.index);
+    }    else if (value is NativeAuthDialogClickResult) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    }    else if (value is NativeAuthResult) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -60,6 +123,13 @@ class _PigeonCodec extends StandardMessageCodec {
       case 130: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : NativeBiometricAuthenticator.values[value];
+      case 131: 
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : NativeAuthResultStatus.values[value];
+      case 132: 
+        return NativeAuthDialogClickResult.decode(readValue(buffer)!);
+      case 133: 
+        return NativeAuthResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -79,8 +149,35 @@ class FlutterFeatureBiometricApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<bool> deviceCanSupportBiometrics() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.deviceCanSupportBiometrics$pigeonVar_messageChannelSuffix';
+  Future<bool> isDeviceSupportBiometric() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportBiometric$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> isDeviceSupportFaceAuth() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFaceAuth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -133,7 +230,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<void> authenticate({required NativeBiometricAuthenticator authenticator, required String title, required String description, required String negativeText,}) async {
+  Future<NativeAuthResult> authenticate({required NativeBiometricAuthenticator authenticator, required String title, required String description, required String negativeText,}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -150,8 +247,13 @@ class FlutterFeatureBiometricApi {
         message: pigeonVar_replyList[1] as String?,
         details: pigeonVar_replyList[2],
       );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return;
+      return (pigeonVar_replyList[0] as NativeAuthResult?)!;
     }
   }
 }

@@ -1,6 +1,7 @@
 package com.example.flutter_feature_biometric_android
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.CancellationSignal
 import androidx.biometric.BiometricManager.Authenticators
 import com.example.flutter_feature_biometric_android.NativeBiometricAuthenticator.*
@@ -8,6 +9,7 @@ import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometri
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.BiometricType
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus.*
+import com.fadlurahmanfdev.kotlin_feature_identity.data.exception.FeatureBiometricException
 import com.fadlurahmanfdev.kotlin_feature_identity.plugin.KotlinFeatureBiometric
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -29,20 +31,8 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-//        channel =
-//            MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_feature_biometric_android")
-//        channel.setMethodCallHandler(this)
         FlutterFeatureBiometricApi.setUp(flutterPluginBinding.binaryMessenger, this)
     }
-
-
-//    override fun onMethodCall(call: MethodCall, result: Result) {
-//        if (call.method == "getPlatformVersion") {
-//            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-//        } else {
-//            result.notImplemented()
-//        }
-//    }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
@@ -65,8 +55,12 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
         kotlinFeatureBiometric = null
     }
 
-    override fun deviceCanSupportBiometrics(): Boolean {
+    override fun isDeviceSupportBiometric(): Boolean {
         return kotlinFeatureBiometric?.haveFeatureBiometric() ?: false
+    }
+
+    override fun isDeviceSupportFaceAuth(): Boolean {
+        return kotlinFeatureBiometric?.haveFaceDetection() ?: false
     }
 
     override fun checkBiometricStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus {
@@ -90,7 +84,8 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
         authenticator: NativeBiometricAuthenticator,
         title: String,
         description: String,
-        negativeText: String
+        negativeText: String,
+        callback: (Result<NativeAuthResult>) -> Unit
     ) {
         val nativeType = when (authenticator) {
             WEAK -> BiometricType.WEAK
@@ -107,6 +102,50 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
             callBack = object : FeatureBiometricCallBack {
                 override fun onSuccessAuthenticate() {
                     println("MASUK SINI onSuccessAuthenticate")
+                    callback.invoke(
+                        Result.success(
+                            NativeAuthResult(
+                                status = NativeAuthResultStatus.SUCCESS
+                            )
+                        )
+                    )
+                }
+
+                override fun onFailedAuthenticate() {
+                    super.onFailedAuthenticate()
+                    println("MASUK SINI onFailedAuthenticate")
+                    callback.invoke(
+                        Result.success(
+                            NativeAuthResult(
+                                status = NativeAuthResultStatus.FAILED
+                            )
+                        )
+                    )
+                }
+
+                override fun onErrorAuthenticate(exception: FeatureBiometricException) {
+                    super.onErrorAuthenticate(exception)
+                    println("MASUK SINI onErrorAuthenticate")
+                    callback.invoke(
+                        Result.success(
+                            NativeAuthResult(
+                                status = NativeAuthResultStatus.ERROR
+                            )
+                        )
+                    )
+                }
+
+                override fun onDialogClick(dialogInterface: DialogInterface?, which: Int) {
+                    super.onDialogClick(dialogInterface, which)
+                    println("MASUK SINI onDialogClick")
+                    callback.invoke(
+                        Result.success(
+                            NativeAuthResult(
+                                status = NativeAuthResultStatus.SUCCESS,
+                                dialogClickResult = NativeAuthDialogClickResult(which = which.toLong())
+                            )
+                        )
+                    )
                 }
             }
         )

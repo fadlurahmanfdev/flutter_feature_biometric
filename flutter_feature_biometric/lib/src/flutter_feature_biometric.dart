@@ -1,8 +1,12 @@
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 class FlutterFeatureBiometric {
-  Future<bool> deviceSupportsBiometrics() {
-    return FlutterFeatureBiometricPlatform.instance.deviceSupportsBiometrics();
+  Future<bool> isDeviceSupportBiometric() {
+    return FlutterFeatureBiometricPlatform.instance.isDeviceSupportBiometric();
+  }
+
+  Future<bool> isDeviceSupportFaceAuth() {
+    return FlutterFeatureBiometricPlatform.instance.isDeviceSupportFaceAuth();
   }
 
   Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
