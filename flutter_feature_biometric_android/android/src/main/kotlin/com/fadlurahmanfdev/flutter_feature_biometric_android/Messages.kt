@@ -5,7 +5,7 @@
 // See also: https://pub.dev/packages/pigeon
 @file:Suppress("UNCHECKED_CAST", "ArrayInDataClass")
 
-package com.example.flutter_feature_biometric_android
+package com.fadlurahmanfdev.flutter_feature_biometric_android
 
 import android.util.Log
 import io.flutter.plugin.common.BasicMessageChannel

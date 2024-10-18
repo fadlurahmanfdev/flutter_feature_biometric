@@ -1,0 +1,1 @@
+cd flutter_feature_biometric_android && flutter pub run pigeon --input pigeons/messages.dart && cd ..

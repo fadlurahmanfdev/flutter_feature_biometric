@@ -1,4 +1,4 @@
-group 'com.example.flutter_feature_biometric_android'
+group 'com.fadlurahmanfdev.flutter_feature_biometric_android'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.example.flutter_feature_biometric_android'
+        namespace 'com.fadlurahmanfdev.flutter_feature_biometric_android'
     }
 
     compileSdk 34

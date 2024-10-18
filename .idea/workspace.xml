@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="fix biometric authentication">
-      <change afterPath="$PROJECT_DIR$/setup.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="sync">
+      <change afterPath="$PROJECT_DIR$/setup_pigeon.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/example/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/example/flutter_feature_biometric_android/Messages.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/Messages.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/test/kotlin/com/example/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPluginTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/test/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPluginTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729255407654</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="sync">
+      <option name="closed" value="true" />
+      <created>1729257015760</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1729257015760</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -265,6 +278,7 @@
     <MESSAGE value="setup" />
     <MESSAGE value="setup authenticate" />
     <MESSAGE value="fix biometric authentication" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix biometric authentication" />
+    <MESSAGE value="sync" />
+    <option name="LAST_COMMIT_MESSAGE" value="sync" />
   </component>
 </project>

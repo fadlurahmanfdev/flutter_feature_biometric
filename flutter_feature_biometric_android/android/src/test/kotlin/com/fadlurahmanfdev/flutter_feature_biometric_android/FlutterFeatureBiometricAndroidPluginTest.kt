@@ -1,5 +1,6 @@
 package com.example.flutter_feature_biometric_android
 
+import com.fadlurahmanfdev.flutter_feature_biometric_android.FlutterFeatureBiometricAndroidPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlin.test.Test

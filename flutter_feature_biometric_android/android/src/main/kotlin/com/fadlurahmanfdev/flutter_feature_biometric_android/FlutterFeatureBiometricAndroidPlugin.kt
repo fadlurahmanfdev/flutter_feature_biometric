@@ -1,13 +1,12 @@
-package com.example.flutter_feature_biometric_android
+package com.fadlurahmanfdev.flutter_feature_biometric_android
 
 import android.app.Activity
 import android.content.DialogInterface
 import android.os.CancellationSignal
 import androidx.biometric.BiometricManager.Authenticators
-import com.example.flutter_feature_biometric_android.NativeBiometricAuthenticator.*
+import com.fadlurahmanfdev.flutter_feature_biometric_android.NativeBiometricAuthenticator.*
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometricCallBack
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.BiometricType
-import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus.*
 import com.fadlurahmanfdev.kotlin_feature_identity.data.exception.FeatureBiometricException
 import com.fadlurahmanfdev.kotlin_feature_identity.plugin.KotlinFeatureBiometric
@@ -15,7 +14,6 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
-import java.util.Calendar
 
 /** FlutterFeatureBiometricAndroidPlugin */
 class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
@@ -65,7 +63,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
     override fun checkBiometricStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus {
         val flutterAuthenticator = when (authenticator) {
-            WEAK -> Authenticators.BIOMETRIC_WEAK
+            NativeBiometricAuthenticator.WEAK -> Authenticators.BIOMETRIC_WEAK
             STRONG -> Authenticators.BIOMETRIC_STRONG
             DEVICE_CREDENTIAL -> Authenticators.DEVICE_CREDENTIAL
         }
