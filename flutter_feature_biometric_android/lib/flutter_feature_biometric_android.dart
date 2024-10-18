@@ -27,23 +27,14 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<bool> isDeviceSupportFaceAuth() {
-    // TODO: implement isSupportFaceAuth
-    return super.isDeviceSupportFaceAuth();
-  }
-
-  @override
-  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) async {
-    NativeBiometricAuthenticator nativeAuthenticator;
+  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
+    NativeBiometricStatus nativeStatus;
     switch (authenticator) {
-      case BiometricAuthenticator.weak:
-        nativeAuthenticator = NativeBiometricAuthenticator.weak;
-      case BiometricAuthenticator.strong:
-        nativeAuthenticator = NativeBiometricAuthenticator.strong;
-      case BiometricAuthenticator.deviceCredential:
-        nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
+      case BiometricAuthenticatorType.biometric:
+        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.weak);
+      case BiometricAuthenticatorType.deviceCredential:
+        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.deviceCredential);
     }
-    final nativeStatus = await _api.checkBiometricStatus(nativeAuthenticator);
     switch (nativeStatus) {
       case NativeBiometricStatus.success:
         return BiometricStatus.success;
@@ -59,24 +50,52 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
+  Future<bool> canSecureAuthenticate() async {
+    return (await _api.checkBiometricStatus(NativeBiometricAuthenticator.strong)) == NativeBiometricStatus.success;
+  }
+
+  @override
   Future<BiometricAuthenticateResult> authenticate({
-    required BiometricAuthenticator authenticator,
+    required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
   }) async {
     NativeBiometricAuthenticator nativeAuthenticator;
     switch (authenticator) {
-      case BiometricAuthenticator.weak:
+      case BiometricAuthenticatorType.biometric:
         nativeAuthenticator = NativeBiometricAuthenticator.weak;
-      case BiometricAuthenticator.strong:
-        nativeAuthenticator = NativeBiometricAuthenticator.strong;
-      case BiometricAuthenticator.deviceCredential:
+      case BiometricAuthenticatorType.deviceCredential:
         nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
     }
 
     final result = await _api.authenticate(
       authenticator: nativeAuthenticator,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+      case NativeAuthResultStatus.failed:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+      case NativeAuthResultStatus.error:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+      case NativeAuthResultStatus.dialogClicked:
+        return BiometricAuthenticateResult(
+          status: BiometricAuthenticateStatus.dialogClicked,
+          dialogClickResult: BiometricAuthenticateDialogClickResult(
+            which: result.dialogClickResult?.which ?? -1,
+          ),
+        );
+    }
+  }
+
+  @override
+  Future<BiometricAuthenticateResult> secureAuthenticate({required String title, required String description, required String negativeText}) async {
+    final result = await _api.authenticate(
+      authenticator: NativeBiometricAuthenticator.strong,
       title: title,
       description: description,
       negativeText: negativeText,

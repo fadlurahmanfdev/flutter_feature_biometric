@@ -5,22 +5,34 @@ class FlutterFeatureBiometric {
     return FlutterFeatureBiometricPlatform.instance.isDeviceSupportBiometric();
   }
 
-  Future<bool> isDeviceSupportFaceAuth() {
-    return FlutterFeatureBiometricPlatform.instance.isDeviceSupportFaceAuth();
+  Future<BiometricStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticator) {
+    return FlutterFeatureBiometricPlatform.instance.checkAuthenticationTypeStatus(authenticator);
   }
 
-  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
-    return FlutterFeatureBiometricPlatform.instance.checkBiometricStatus(authenticator);
+  Future<bool> canSecureAuthenticate() {
+    return FlutterFeatureBiometricPlatform.instance.canSecureAuthenticate();
   }
 
   Future<void> authenticate({
-    required BiometricAuthenticator authenticator,
+    required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticate(
       authenticator: authenticator,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+  }
+
+  Future<void> secureAuthenticate({
+    required String title,
+    required String description,
+    required String negativeText,
+  }) {
+    return FlutterFeatureBiometricPlatform.instance.secureAuthenticate(
       title: title,
       description: description,
       negativeText: negativeText,

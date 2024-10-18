@@ -23,20 +23,14 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<bool> isDeviceSupportFaceAuth() {
-    // TODO: implement isDeviceSupportFaceAuth
-    return super.isDeviceSupportFaceAuth();
-  }
-
-  @override
-  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) {
+  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) {
     // TODO: implement checkBiometricStatus
-    return super.checkBiometricStatus(authenticator);
+    return super.checkAuthenticationTypeStatus(authenticator);
   }
 
   @override
   Future<BiometricAuthenticateResult> authenticate({
-    required BiometricAuthenticator authenticator,
+    required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,

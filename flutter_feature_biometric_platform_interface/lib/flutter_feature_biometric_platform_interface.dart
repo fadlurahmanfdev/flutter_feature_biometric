@@ -3,12 +3,12 @@
 // found in the LICENSE file.
 
 export 'src/enum/biometric_authenticate_status.dart';
-export 'src/enum/biometric_authenticator.dart';
+export 'src/enum/biometric_authenticator_type.dart';
 
 export 'src/enum/biometric_status.dart';
 export 'src/model/biometric_authenticate_result.dart';
 
-import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator_type.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_status.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/model/biometric_authenticate_result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -50,16 +50,36 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 
-  Future<bool> isDeviceSupportFaceAuth(){
-    throw UnimplementedError('isDeviceSupportFaceAuth() has not been implemented.');
+  /// Check whether biometric status, whether can authenticate or not
+  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
+    throw UnimplementedError('checkAuthenticationTypeStatus() has not been implemented.');
   }
 
-  Future<BiometricStatus> checkBiometricStatus(BiometricAuthenticator authenticator) async {
-    throw UnimplementedError('checkBiometricStatus() has not been implemented.');
+  /// Check if device can secure authenticate
+  Future<bool> canSecureAuthenticate() async {
+    throw UnimplementedError('isSupportSecureBiometric() has not been implemented.');
   }
 
+  /// Authenticate Using Biometric
+  ///
+  /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
+  /// - [description] - the description of explanation why it need use a biometric
+  /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
   Future<BiometricAuthenticateResult> authenticate({
-    required BiometricAuthenticator authenticator,
+    required BiometricAuthenticatorType authenticator,
+    required String title,
+    required String description,
+    required String negativeText,
+  }) async {
+    throw UnimplementedError('authenticate() has not been implemented.');
+  }
+
+  /// Authenticate Using Secure Biometric
+  ///
+  /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
+  /// - [description] - the description of explanation why it need use a biometric
+  /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
+  Future<BiometricAuthenticateResult> secureAuthenticate({
     required String title,
     required String description,
     required String negativeText,

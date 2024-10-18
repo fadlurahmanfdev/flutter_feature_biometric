@@ -53,7 +53,7 @@ abstract class FlutterFeatureBiometricApi {
 
   bool isDeviceSupportFaceAuth();
 
-  NativeBiometricStatus checkBiometricStatus(NativeBiometricAuthenticator authenticator);
+  NativeBiometricStatus checkAuthenticationStatus(NativeBiometricAuthenticator authenticator);
 
   @async
   NativeAuthResult authenticate({

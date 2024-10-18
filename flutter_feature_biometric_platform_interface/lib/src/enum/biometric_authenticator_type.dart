@@ -1,0 +1,4 @@
+enum BiometricAuthenticatorType {
+  biometric,
+  deviceCredential
+}

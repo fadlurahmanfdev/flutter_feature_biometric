@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
     // We also handle the message potentially returning null.
     try {
       deviceSupportsBiometrics = await _flutterFeatureBiometricPlugin.isDeviceSupportBiometric();
-      _flutterFeatureBiometricPlugin.checkBiometricStatus(BiometricAuthenticator.weak).then((value) {
+      _flutterFeatureBiometricPlugin.checkAuthenticatorStatus(BiometricAuthenticatorType.deviceCredential).then((value) {
         print("masuk sini -> $value");
       });
     } on PlatformException {
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () async {
                   _flutterFeatureBiometricPlugin.authenticate(
-                    authenticator: BiometricAuthenticator.weak,
+                    authenticator: BiometricAuthenticatorType.deviceCredential,
                     title: "Flutter Title",
                     description: "Flutter Desc",
                     negativeText: "Flutter Neg Text",
