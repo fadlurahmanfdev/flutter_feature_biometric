@@ -10,7 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.1.8
+  plugin_platform_interface: ^2.0.2
+
   flutter_feature_biometric_platform_interface:
     path: ../flutter_feature_biometric_platform_interface
 
@@ -18,8 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  pigeon: ^22.4.0
-  change_app_package_name: ^1.4.0
+  pigeon: ^22.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -42,6 +42,7 @@ flutter:
       android:
         package: com.fadlurahmanfdev.flutter_feature_biometric_android
         pluginClass: FlutterFeatureBiometricAndroidPlugin
+        dartPluginClass: FlutterFeatureBiometricAndroid
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

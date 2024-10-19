@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_feature_biometric/flutter_feature_biometric.dart';
+import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,26 +17,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool _deviceSupportsBiometrics = false;
   final _flutterFeatureBiometricPlugin = FlutterFeatureBiometric();
 
-  bool isSupported = false;
   @override
   void initState() {
     super.initState();
-    test();
+    initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> test() async {
-
+  Future<void> initPlatformState() async {
+    bool deviceSupportsBiometrics;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      isSupported = await _flutterFeatureBiometricPlugin.isDeviceSupportedBiometric();
-      print("masuk sini2");
-    } on PlatformException catch(e) {
-      log("failed: $e");
-      isSupported = false;
+      deviceSupportsBiometrics = await _flutterFeatureBiometricPlugin.isDeviceSupportBiometric();
+      _flutterFeatureBiometricPlugin.checkAuthenticatorStatus(BiometricAuthenticatorType.deviceCredential).then((value) {
+        print("masuk sini -> $value");
+      });
+    } on PlatformException {
+      deviceSupportsBiometrics = false;
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -45,7 +45,9 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    setState(() {});
+    setState(() {
+      _deviceSupportsBiometrics = deviceSupportsBiometrics;
+    });
   }
 
   @override
@@ -55,8 +57,27 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Is Device Support Biometric: $isSupported'),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Center(
+                child: Text('deviceSupportsBiometrics: $_deviceSupportsBiometrics\n'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  _flutterFeatureBiometricPlugin.authenticate(
+                    authenticator: BiometricAuthenticatorType.deviceCredential,
+                    title: "Flutter Title",
+                    description: "Flutter Desc",
+                    negativeText: "Flutter Neg Text",
+                  ).then((value){
+
+                  });
+                },
+                child: const Text('Authenticate'),
+              ),
+            ],
+          ),
         ),
       ),
     );

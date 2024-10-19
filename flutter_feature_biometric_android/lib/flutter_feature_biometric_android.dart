@@ -1,66 +1,119 @@
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_feature_biometric_android/src/messages.g.dart';
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
+export 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
-
+/// The implementation of [FlutterFeatureBiometricPlatform] for Android.
 class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
-  final _hostApi = HostFeatureBiometricApi();
+  /// Creates a new plugin implementation instance.
+  FlutterFeatureBiometricAndroid({
+    @visibleForTesting FlutterFeatureBiometricApi? api,
+  }) : _api = api ?? FlutterFeatureBiometricApi();
+
+  /// Registers this class as the default instance of [FlutterFeatureBiometricPlatform].
+  static void registerWith() {
+    FlutterFeatureBiometricPlatform.instance = FlutterFeatureBiometricAndroid();
+  }
+
+  final FlutterFeatureBiometricApi _api;
 
   @override
-  Future<bool> isDeviceSupportedBiometric() async {
-    return (await _hostApi.haveFeatureBiometric()) || (await _hostApi.haveFaceDetection());
+  Future<bool> isDeviceSupportBiometric() async {
+    return _api.isDeviceSupportBiometric();
   }
 
   @override
-  Future<bool> canAuthenticate(FeatureBiometricType type) {
-    final nativeType = switch (type) {
-      FeatureBiometricType.weak => NativeBiometricType.weak,
-      FeatureBiometricType.strong => NativeBiometricType.strong,
-      FeatureBiometricType.deviceCredential => NativeBiometricType.deviceCredential,
-    };
-    return _hostApi.canAuthenticate(nativeType);
-  }
-
-  @override
-  Future<CheckBiometricStatus> checkBiometricStatus(FeatureBiometricType type) async {
-    final nativeType = switch (type) {
-      FeatureBiometricType.weak => NativeBiometricType.weak,
-      FeatureBiometricType.strong => NativeBiometricType.strong,
-      FeatureBiometricType.deviceCredential => NativeBiometricType.deviceCredential,
-    };
-
-    final nativeStatus = await _hostApi.checkBiometricStatus(nativeType);
+  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
+    NativeBiometricStatus nativeStatus;
+    switch (authenticator) {
+      case BiometricAuthenticatorType.biometric:
+        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.weak);
+      case BiometricAuthenticatorType.deviceCredential:
+        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.deviceCredential);
+    }
     switch (nativeStatus) {
-      case NativeAndroidBiometricStatus.success:
-        return CheckBiometricStatus.success;
-      case NativeAndroidBiometricStatus.noBiometricAvailable:
-        return CheckBiometricStatus.noBiometricAvailable;
-      case NativeAndroidBiometricStatus.unavailable:
-        return CheckBiometricStatus.unavailable;
-      case NativeAndroidBiometricStatus.noneEnrolled:
-        return CheckBiometricStatus.noneEnrolled;
-      case NativeAndroidBiometricStatus.unknown:
-        return CheckBiometricStatus.unknown;
+      case NativeBiometricStatus.success:
+        return BiometricStatus.success;
+      case NativeBiometricStatus.noAvailable:
+        return BiometricStatus.noAvailable;
+      case NativeBiometricStatus.unavailable:
+        return BiometricStatus.unavailable;
+      case NativeBiometricStatus.noneEnrolled:
+        return BiometricStatus.noneEnrolled;
+      case NativeBiometricStatus.unknown:
+        return BiometricStatus.unknown;
     }
   }
 
   @override
-  Future<void> authenticate({
-    required FeatureBiometricType type,
+  Future<bool> canSecureAuthenticate() async {
+    return (await _api.checkBiometricStatus(NativeBiometricAuthenticator.strong)) == NativeBiometricStatus.success;
+  }
+
+  @override
+  Future<BiometricAuthenticateResult> authenticate({
+    required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
   }) async {
-    final nativeType = switch (type) {
-      FeatureBiometricType.weak => NativeBiometricType.weak,
-      FeatureBiometricType.strong => NativeBiometricType.strong,
-      FeatureBiometricType.deviceCredential => NativeBiometricType.deviceCredential,
-    };
-    final res = await _hostApi.authenticate(
-      type: nativeType,
+    NativeBiometricAuthenticator nativeAuthenticator;
+    switch (authenticator) {
+      case BiometricAuthenticatorType.biometric:
+        nativeAuthenticator = NativeBiometricAuthenticator.weak;
+      case BiometricAuthenticatorType.deviceCredential:
+        nativeAuthenticator = NativeBiometricAuthenticator.deviceCredential;
+    }
+
+    final result = await _api.authenticate(
+      authenticator: nativeAuthenticator,
       title: title,
       description: description,
       negativeText: negativeText,
     );
-    print("masuk result: $res");
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+      case NativeAuthResultStatus.failed:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+      case NativeAuthResultStatus.error:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+      case NativeAuthResultStatus.dialogClicked:
+        return BiometricAuthenticateResult(
+          status: BiometricAuthenticateStatus.dialogClicked,
+          dialogClickResult: BiometricAuthenticateDialogClickResult(
+            which: result.dialogClickResult?.which ?? -1,
+          ),
+        );
+    }
+  }
+
+  @override
+  Future<BiometricAuthenticateResult> secureAuthenticate({required String title, required String description, required String negativeText}) async {
+    final result = await _api.authenticate(
+      authenticator: NativeBiometricAuthenticator.strong,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+      case NativeAuthResultStatus.failed:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+      case NativeAuthResultStatus.error:
+        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+      case NativeAuthResultStatus.dialogClicked:
+        return BiometricAuthenticateResult(
+          status: BiometricAuthenticateStatus.dialogClicked,
+          dialogClickResult: BiometricAuthenticateDialogClickResult(
+            which: result.dialogClickResult?.which ?? -1,
+          ),
+        );
+    }
   }
 }

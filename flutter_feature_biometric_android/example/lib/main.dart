@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isSupportedBiometric = false;
+  String _platformVersion = 'Unknown';
   final _flutterFeatureBiometricAndroidPlugin = FlutterFeatureBiometricAndroid();
 
   @override
@@ -27,14 +27,14 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    bool isSupportedBiometric;
+    String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      isSupportedBiometric =
-          await _flutterFeatureBiometricAndroidPlugin.isDeviceSupportedBiometric();
+      // platformVersion =
+      //     await _flutterFeatureBiometricAndroidPlugin.getPlatformVersion() ?? 'Unknown platform version';
     } on PlatformException {
-      isSupportedBiometric = false;
+      platformVersion = 'Failed to get platform version.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _isSupportedBiometric = isSupportedBiometric;
+      // _platformVersion = platformVersion;
     });
   }
 
@@ -52,10 +52,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Android Plugin example app'),
+          title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Is supported biometric: $_isSupportedBiometric\n'),
+          child: Text('Running on: $_platformVersion\n'),
         ),
       ),
     );
