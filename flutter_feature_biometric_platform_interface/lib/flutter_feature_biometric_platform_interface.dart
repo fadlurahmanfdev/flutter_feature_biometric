@@ -47,6 +47,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   ///
   /// This will return true even if there are no biometrics currently enrolled.
   Future<bool> isDeviceSupportBiometric() async {
+    print("masuk sini");
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 

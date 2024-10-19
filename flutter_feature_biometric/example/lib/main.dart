@@ -33,9 +33,9 @@ class _MyAppState extends State<MyApp> {
     // We also handle the message potentially returning null.
     try {
       deviceSupportsBiometrics = await _flutterFeatureBiometricPlugin.isDeviceSupportBiometric();
-      _flutterFeatureBiometricPlugin.checkAuthenticatorStatus(BiometricAuthenticatorType.deviceCredential).then((value) {
-        print("masuk sini -> $value");
-      });
+      // _flutterFeatureBiometricPlugin.checkAuthenticatorStatus(BiometricAuthenticatorType.deviceCredential).then((value) {
+      //   print("masuk sini -> $value");
+      // });
     } on PlatformException {
       deviceSupportsBiometrics = false;
     }
@@ -70,9 +70,7 @@ class _MyAppState extends State<MyApp> {
                     title: "Flutter Title",
                     description: "Flutter Desc",
                     negativeText: "Flutter Neg Text",
-                  ).then((value){
-
-                  });
+                  ).then((value){});
                 },
                 child: const Text('Authenticate'),
               ),

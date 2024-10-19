@@ -89,6 +89,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  flutter_feature_biometric_ios:
+    dependency: transitive
+    description:
+      path: "../../flutter_feature_biometric_ios"
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter_feature_biometric_platform_interface:
     dependency: transitive
     description:

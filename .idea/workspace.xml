@@ -4,14 +4,18 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="enhance plugin android">
+    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="setup android using ios">
+      <change beforePath="$PROJECT_DIR$/.idea/flutter_feature_biometric.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flutter_feature_biometric.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcworkspace/contents.xcworkspacedata" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/biometric_authenticator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/biometric_authenticator_type.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/setup.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup_pigeon.sh" beforeDir="false" afterPath="$PROJECT_DIR$/setup_pigeon.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +23,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ClangdSettings">
+    <option name="clangTidyViaClangd" value="false" />
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -65,13 +70,14 @@
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/taufikfadlurahmanfajari/StudioProjects/Starter App Flutter/library/flutter_feature_biometric&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/taufikfadlurahmanfajari/StudioProjects/Starter App Flutter/library/flutter_feature_biometric/flutter_feature_biometric_ios/pigeons&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -272,7 +278,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729257593428</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="setup android using ios">
+      <option name="closed" value="true" />
+      <created>1729295179542</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1729295179542</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -290,6 +304,7 @@
     <MESSAGE value="fix biometric authentication" />
     <MESSAGE value="sync" />
     <MESSAGE value="enhance plugin android" />
-    <option name="LAST_COMMIT_MESSAGE" value="enhance plugin android" />
+    <MESSAGE value="setup android using ios" />
+    <option name="LAST_COMMIT_MESSAGE" value="setup android using ios" />
   </component>
 </project>

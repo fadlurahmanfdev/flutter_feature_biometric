@@ -954,6 +954,24 @@
       <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_platform_interface/.fvm/flutter_sdk/packages/integration_test/integration_test_macos/build" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_platform_interface/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_platform_interface/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_feature_biometric_ios/example/ios/.symlinks/plugins/flutter_feature_biometric_ios/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
