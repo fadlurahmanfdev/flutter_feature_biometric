@@ -100,9 +100,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required String description,
     required String negativeText,
     required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
-    required Function() onFailed,
-    required Function(String code, String message) onError,
-    required Function(int which) onDialogClicked,
+    Function()? onFailed,
+    Function(String code, String message)? onError,
+    Function(int which)? onDialogClicked,
   }) async {
     final result = await _api.secureEncryptAuthenticate(
       alias: key,
@@ -115,11 +115,17 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
       case NativeAuthResultStatus.success:
         onSuccessAuthenticate(result.encodedIVKey!, result.encryptedResult!);
       case NativeAuthResultStatus.failed:
-        onFailed();
+        if (onFailed != null) {
+          onFailed();
+        }
       case NativeAuthResultStatus.error:
-        onError(result.failure!.code, result.failure!.message);
+        if (onError != null) {
+          onError(result.failure!.code, result.failure!.message);
+        }
       case NativeAuthResultStatus.dialogClicked:
-        onDialogClicked(result.dialogClickResult!.which);
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
     }
   }
 }
