@@ -10,7 +10,28 @@ import 'package:pigeon/pigeon.dart';
   swiftOptions: SwiftOptions(),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
+enum NativeBiometricAuthenticatorType {
+  biometric,
+  deviceCredential,
+}
+
+enum NativeAuthResultStatus {
+  success,
+  canceled,
+}
+
+class NativeAuthResult {
+  NativeAuthResultStatus status;
+
+  NativeAuthResult({required this.status});
+}
+
 @HostApi()
 abstract class FlutterFeatureBiometricApi {
   bool isDeviceSupportBiometric();
+
+  bool canAuthenticate(NativeBiometricAuthenticatorType authenticatorType);
+
+  @async
+  NativeAuthResult authenticate(NativeBiometricAuthenticatorType authenticatorType, String description);
 }

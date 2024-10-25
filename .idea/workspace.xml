@@ -4,17 +4,23 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="setup android using ios">
+    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="setup ios plugin">
       <change beforePath="$PROJECT_DIR$/.idea/flutter_feature_biometric.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flutter_feature_biometric.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/ios/Runner.xcworkspace/contents.xcworkspacedata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/Messages.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/Messages.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/FlutterFeatureBiometricIosPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/FlutterFeatureBiometricIosPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/setup.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup_pigeon.sh" beforeDir="false" afterPath="$PROJECT_DIR$/setup_pigeon.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -286,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729295179542</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="setup ios plugin">
+      <option name="closed" value="true" />
+      <created>1729322822028</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1729322822028</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -305,6 +319,7 @@
     <MESSAGE value="sync" />
     <MESSAGE value="enhance plugin android" />
     <MESSAGE value="setup android using ios" />
-    <option name="LAST_COMMIT_MESSAGE" value="setup android using ios" />
+    <MESSAGE value="setup ios plugin" />
+    <option name="LAST_COMMIT_MESSAGE" value="setup ios plugin" />
   </component>
 </project>

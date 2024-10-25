@@ -43,4 +43,31 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       negativeText: negativeText,
     );
   }
+
+
+  @override
+  Future<void> secureEncryptAuthenticate({
+    required String key,
+    required Map<String, String> requestForEncrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
+    required Function() onFailed,
+    required Function(String code, String message) onError,
+    required Function(int which) onDialogClicked,
+  }) async {
+    // TODO: implement secureEncryptAuthenticate
+    return super.secureEncryptAuthenticate(
+      key: key,
+      requestForEncrypt: requestForEncrypt,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+      onSuccessAuthenticate: onSuccessAuthenticate,
+      onFailed: onFailed,
+      onError: onError,
+      onDialogClicked: onDialogClicked,
+    );
+  }
 }

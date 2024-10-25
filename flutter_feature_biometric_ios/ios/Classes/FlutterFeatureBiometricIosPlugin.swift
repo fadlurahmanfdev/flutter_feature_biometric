@@ -1,5 +1,6 @@
 import Flutter
 import SwiftFeatureBiometric
+import LocalAuthentication
 import UIKit
 
 public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
@@ -19,5 +20,37 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
             return true
         }
         return false
+    }
+
+    func canAuthenticate(authenticatorType: NativeBiometricAuthenticatorType)
+        throws -> Bool
+    {
+        switch authenticatorType {
+        case .biometric:
+            return repository.canAuthenticate(
+                policy: .deviceOwnerAuthenticationWithBiometrics)
+        case .deviceCredential:
+            return repository.canAuthenticate(
+                policy: .deviceOwnerAuthentication)
+        }
+    }
+    
+    func authenticate(authenticatorType: NativeBiometricAuthenticatorType, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+        var policy:LAPolicy
+        switch authenticatorType {
+        case .biometric:
+            policy = LAPolicy.deviceOwnerAuthenticationWithBiometrics
+            break
+        case .deviceCredential:
+            policy = LAPolicy.deviceOwnerAuthentication
+            break;
+        }
+        
+        repository.authenticate(key: "biometricID", policy: policy, localizedReason: description){ result in
+            switch result {
+            case .success(encodedDomainState: <#T##String?#>)
+            }
+            result("")
+        }
     }
 }

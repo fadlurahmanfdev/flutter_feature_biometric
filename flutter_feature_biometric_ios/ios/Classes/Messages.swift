@@ -67,10 +67,75 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+enum NativeBiometricAuthenticatorType: Int {
+  case biometric = 0
+  case deviceCredential = 1
+}
+
+enum NativeAuthResultStatus: Int {
+  case success = 0
+  case canceled = 1
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct NativeAuthResult {
+  var status: NativeAuthResultStatus
+
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> NativeAuthResult? {
+    let status = pigeonVar_list[0] as! NativeAuthResultStatus
+
+    return NativeAuthResult(
+      status: status
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      status
+    ]
+  }
+}
+
 private class MessagesPigeonCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+    case 129:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return NativeBiometricAuthenticatorType(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 130:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return NativeAuthResultStatus(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 131:
+      return NativeAuthResult.fromList(self.readValue() as! [Any?])
+    default:
+      return super.readValue(ofType: type)
+    }
+  }
 }
 
 private class MessagesPigeonCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? NativeBiometricAuthenticatorType {
+      super.writeByte(129)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? NativeAuthResultStatus {
+      super.writeByte(130)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? NativeAuthResult {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else {
+      super.writeValue(value)
+    }
+  }
 }
 
 private class MessagesPigeonCodecReaderWriter: FlutterStandardReaderWriter {
@@ -87,9 +152,12 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = MessagesPigeonCodec(readerWriter: MessagesPigeonCodecReaderWriter())
 }
 
+
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
+  func canAuthenticate(authenticatorType: NativeBiometricAuthenticatorType) throws -> Bool
+  func authenticate(authenticatorType: NativeBiometricAuthenticatorType, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -110,6 +178,39 @@ class FlutterFeatureBiometricApiSetup {
       }
     } else {
       isDeviceSupportBiometricChannel.setMessageHandler(nil)
+    }
+    let canAuthenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.canAuthenticate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      canAuthenticateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        do {
+          let result = try api.canAuthenticate(authenticatorType: authenticatorTypeArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      canAuthenticateChannel.setMessageHandler(nil)
+    }
+    let authenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      authenticateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        let descriptionArg = args[1] as! String
+        api.authenticate(authenticatorType: authenticatorTypeArg, description: descriptionArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      authenticateChannel.setMessageHandler(nil)
     }
   }
 }

@@ -47,7 +47,6 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   ///
   /// This will return true even if there are no biometrics currently enrolled.
   Future<bool> isDeviceSupportBiometric() async {
-    print("masuk sini");
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 
@@ -75,16 +74,17 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     throw UnimplementedError('authenticate() has not been implemented.');
   }
 
-  /// Authenticate Using Secure Biometric
-  ///
-  /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
-  /// - [description] - the description of explanation why it need use a biometric
-  /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
-  Future<BiometricAuthenticateResult> secureAuthenticate({
+  Future<void> secureEncryptAuthenticate({
+    required String key,
+    required Map<String, String> requestForEncrypt,
     required String title,
     required String description,
     required String negativeText,
+    required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
+    required Function() onFailed,
+    required Function(String code, String message) onError,
+    required Function(int which) onDialogClicked,
   }) async {
-    throw UnimplementedError('authenticate() has not been implemented.');
+    throw UnimplementedError('secureEncryptAuthenticate() has not been implemented.');
   }
 }
