@@ -75,9 +75,10 @@ enum class NativeBiometricAuthenticator(val raw: Int) {
 
 enum class NativeAuthResultStatus(val raw: Int) {
   SUCCESS(0),
-  FAILED(1),
-  ERROR(2),
-  DIALOG_CLICKED(3);
+  CANCELED(1),
+  FAILED(2),
+  ERROR(3),
+  DIALOG_CLICKED(4);
 
   companion object {
     fun ofRaw(raw: Int): NativeAuthResultStatus? {
@@ -107,13 +108,13 @@ data class NativeAuthDialogClickResult (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class NativeAuthFailure (
   val code: String,
-  val message: String
+  val message: String? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NativeAuthFailure {
       val code = pigeonVar_list[0] as String
-      val message = pigeonVar_list[1] as String
+      val message = pigeonVar_list[1] as String?
       return NativeAuthFailure(code, message)
     }
   }
@@ -128,19 +129,22 @@ data class NativeAuthFailure (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class NativeAuthResult (
   val status: NativeAuthResultStatus,
+  val failure: NativeAuthFailure? = null,
   val dialogClickResult: NativeAuthDialogClickResult? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NativeAuthResult {
       val status = pigeonVar_list[0] as NativeAuthResultStatus
-      val dialogClickResult = pigeonVar_list[1] as NativeAuthDialogClickResult?
-      return NativeAuthResult(status, dialogClickResult)
+      val failure = pigeonVar_list[1] as NativeAuthFailure?
+      val dialogClickResult = pigeonVar_list[2] as NativeAuthDialogClickResult?
+      return NativeAuthResult(status, failure, dialogClickResult)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       status,
+      failure,
       dialogClickResult,
     )
   }

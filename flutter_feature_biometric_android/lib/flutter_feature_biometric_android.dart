@@ -55,11 +55,16 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<BiometricAuthenticateResult> authenticate({
+  Future<void> authenticate({
     required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     NativeBiometricAuthenticator nativeAuthenticator;
     switch (authenticator) {
@@ -77,18 +82,23 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+        onSuccessAuthenticate();
       case NativeAuthResultStatus.failed:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+        if (onFailed != null) {
+          onFailed();
+        }
       case NativeAuthResultStatus.error:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+        if (onError != null) {
+          onError(result.failure!.code, result.failure?.message);
+        }
       case NativeAuthResultStatus.dialogClicked:
-        return BiometricAuthenticateResult(
-          status: BiometricAuthenticateStatus.dialogClicked,
-          dialogClickResult: BiometricAuthenticateDialogClickResult(
-            which: result.dialogClickResult?.which ?? -1,
-          ),
-        );
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
     }
   }
 
@@ -101,8 +111,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required String negativeText,
     required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
-    Function(String code, String message)? onError,
+    Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     final result = await _api.secureEncryptAuthenticate(
       alias: key,
@@ -120,17 +131,33 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         }
       case NativeAuthResultStatus.error:
         if (onError != null) {
-          onError(result.failure!.code, result.failure!.message);
+          onError(result.failure!.code, result.failure?.message);
         }
       case NativeAuthResultStatus.dialogClicked:
         if (onDialogClicked != null) {
           onDialogClicked(result.dialogClickResult!.which);
         }
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
     }
   }
 
   @override
-  Future<void> secureDecryptAuthenticate({required String key, required String encodedIVKey, required Map<String, String> requestForDecrypt, required String title, required String description, required String negativeText, required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate, Function()? onFailed, Function(String code, String message)? onError, Function(int which)? onDialogClicked}) async {
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
     final result = await _api.secureDecryptAuthenticate(
       alias: key,
       encodedIVKey: encodedIVKey,
@@ -148,11 +175,15 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         }
       case NativeAuthResultStatus.error:
         if (onError != null) {
-          onError(result.failure!.code, result.failure!.message);
+          onError(result.failure!.code, result.failure?.message);
         }
       case NativeAuthResultStatus.dialogClicked:
         if (onDialogClicked != null) {
           onDialogClicked(result.dialogClickResult!.which);
+        }
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
         }
     }
   }

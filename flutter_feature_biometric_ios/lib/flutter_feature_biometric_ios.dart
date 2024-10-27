@@ -23,7 +23,58 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<bool> isDeviceSupportBiometric() {
-    print("masuk ios sini");
     return _hostApi.isDeviceSupportBiometric();
+  }
+
+  @override
+  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
+    NativeBiometricAuthenticatorType type;
+    switch (authenticator) {
+      case BiometricAuthenticatorType.biometric:
+        type = NativeBiometricAuthenticatorType.biometric;
+      case BiometricAuthenticatorType.deviceCredential:
+        type = NativeBiometricAuthenticatorType.deviceCredential;
+    }
+    final canAuthenticate = await _hostApi.canAuthenticate(type);
+    switch (canAuthenticate) {
+      case true:
+        return BiometricStatus.success;
+      default:
+        return BiometricStatus.unavailable;
+    }
+  }
+
+  @override
+  Future<bool> canSecureAuthenticate() async {
+    return true;
+  }
+
+  @override
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    final result = await _hostApi.authenticateSecure(
+      NativeBiometricAuthenticatorType.biometric,
+      key,
+      description,
+    );
+    switch(result.status){
+      case NativeAuthResultStatus.success:
+        // TODO: Handle this case.
+      case NativeAuthResultStatus.biometricChanged:
+        // TODO: Handle this case.
+      case NativeAuthResultStatus.canceled:
+        // TODO: Handle this case.
+    }
   }
 }

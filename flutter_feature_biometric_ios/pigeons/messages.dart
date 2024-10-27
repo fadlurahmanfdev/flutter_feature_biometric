@@ -17,6 +17,7 @@ enum NativeBiometricAuthenticatorType {
 
 enum NativeAuthResultStatus {
   success,
+  biometricChanged,
   canceled,
 }
 
@@ -34,4 +35,7 @@ abstract class FlutterFeatureBiometricApi {
 
   @async
   NativeAuthResult authenticate(NativeBiometricAuthenticatorType authenticatorType, String description);
+
+  @async
+  NativeAuthResult authenticateSecure(NativeBiometricAuthenticatorType authenticatorType, String key, String description);
 }

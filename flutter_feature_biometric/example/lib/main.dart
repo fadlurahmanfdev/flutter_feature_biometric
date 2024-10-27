@@ -68,6 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
       key: 'CAN_AUTHENTICATE_BIOMETRIC',
     ),
     FeatureModel(
+      title: 'Standard Authenticate',
+      desc: 'Standard Authenticate',
+      key: 'STANDARD_BIOMETRIC_AUTHENTICATE',
+    ),
+    FeatureModel(
+      title: 'Credential Authenticate',
+      desc: 'Credential Authenticate',
+      key: 'CREDENTIAL_AUTHENTICATE',
+    ),
+    FeatureModel(
       title: 'Can Secure Authenticate',
       desc: 'Check whether device can secure authenticate',
       key: 'CAN_SECURE_AUTHENTICATE',
@@ -114,6 +124,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       await flutterFeatureBiometric.checkAuthenticatorStatus(BiometricAuthenticatorType.biometric);
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
+                case "CREDENTIAL_AUTHENTICATE":
+                  flutterFeatureBiometric.authenticate(
+                    authenticator: BiometricAuthenticatorType.deviceCredential,
+                    title: "Title - Credential Authenticate",
+                    description: "Description - Credential Authenticate",
+                    negativeText: "Batal",
+                    onSuccessAuthenticate: () {
+                      print("${Platform.operatingSystem} - Success authenticate credential");
+                    },
+                    onCanceled: (){
+                      print("onCanceled");
+                    }
+                  );
                 case "CAN_SECURE_AUTHENTICATE":
                   final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");

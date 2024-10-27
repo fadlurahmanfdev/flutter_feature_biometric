@@ -34,6 +34,7 @@ enum NativeBiometricAuthenticator {
 
 enum NativeAuthResultStatus {
   success,
+  canceled,
   failed,
   error,
   dialogClicked,
@@ -63,12 +64,12 @@ class NativeAuthDialogClickResult {
 class NativeAuthFailure {
   NativeAuthFailure({
     required this.code,
-    required this.message,
+    this.message,
   });
 
   String code;
 
-  String message;
+  String? message;
 
   Object encode() {
     return <Object?>[
@@ -81,7 +82,7 @@ class NativeAuthFailure {
     result as List<Object?>;
     return NativeAuthFailure(
       code: result[0]! as String,
-      message: result[1]! as String,
+      message: result[1] as String?,
     );
   }
 }
@@ -89,16 +90,20 @@ class NativeAuthFailure {
 class NativeAuthResult {
   NativeAuthResult({
     required this.status,
+    this.failure,
     this.dialogClickResult,
   });
 
   NativeAuthResultStatus status;
+
+  NativeAuthFailure? failure;
 
   NativeAuthDialogClickResult? dialogClickResult;
 
   Object encode() {
     return <Object?>[
       status,
+      failure,
       dialogClickResult,
     ];
   }
@@ -107,7 +112,8 @@ class NativeAuthResult {
     result as List<Object?>;
     return NativeAuthResult(
       status: result[0]! as NativeAuthResultStatus,
-      dialogClickResult: result[1] as NativeAuthDialogClickResult?,
+      failure: result[1] as NativeAuthFailure?,
+      dialogClickResult: result[2] as NativeAuthDialogClickResult?,
     );
   }
 }

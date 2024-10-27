@@ -65,11 +65,16 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
   /// - [description] - the description of explanation why it need use a biometric
   /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
-  Future<BiometricAuthenticateResult> authenticate({
+  Future<void> authenticate({
     required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticate() has not been implemented.');
   }
@@ -82,8 +87,9 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required String negativeText,
     required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
-    Function(String code, String message)? onError,
+    Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     throw UnimplementedError('secureEncryptAuthenticate() has not been implemented.');
   }
@@ -97,8 +103,9 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required String negativeText,
     required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
-    Function(String code, String message)? onError,
+    Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     throw UnimplementedError('secureDecryptAuthenticate() has not been implemented.');
   }

@@ -74,7 +74,8 @@ enum NativeBiometricAuthenticatorType: Int {
 
 enum NativeAuthResultStatus: Int {
   case success = 0
-  case canceled = 1
+  case biometricChanged = 1
+  case canceled = 2
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
@@ -158,6 +159,7 @@ protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
   func canAuthenticate(authenticatorType: NativeBiometricAuthenticatorType) throws -> Bool
   func authenticate(authenticatorType: NativeBiometricAuthenticatorType, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
+  func authenticateSecure(authenticatorType: NativeBiometricAuthenticatorType, key: String, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -211,6 +213,25 @@ class FlutterFeatureBiometricApiSetup {
       }
     } else {
       authenticateChannel.setMessageHandler(nil)
+    }
+    let authenticateSecureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      authenticateSecureChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        let keyArg = args[1] as! String
+        let descriptionArg = args[2] as! String
+        api.authenticateSecure(authenticatorType: authenticatorTypeArg, key: keyArg, description: descriptionArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      authenticateSecureChannel.setMessageHandler(nil)
     }
   }
 }

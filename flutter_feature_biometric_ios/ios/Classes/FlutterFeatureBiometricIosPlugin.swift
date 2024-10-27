@@ -47,10 +47,17 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         }
         
         repository.authenticate(key: "biometricID", policy: policy, localizedReason: description){ result in
-            switch result {
-            case .success(encodedDomainState: <#T##String?#>)
-            }
-            result("")
+            completion(.success(NativeAuthResult(status: .success)))
+        }
+    }
+    
+    func authenticateSecure(authenticatorType: NativeBiometricAuthenticatorType, key: String, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+        if(repository.isBiometricChanged(key: key)){
+            completion(.success(NativeAuthResult(status: .biometricChanged)))
+        }
+        
+        repository.authenticate(key: key, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
+            completion(.success(NativeAuthResult(status: .success)))
         }
     }
 }

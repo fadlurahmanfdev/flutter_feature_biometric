@@ -19,12 +19,22 @@ class FlutterFeatureBiometric {
     required String title,
     required String description,
     required String negativeText,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticate(
       authenticator: authenticator,
       title: title,
       description: description,
       negativeText: negativeText,
+      onSuccessAuthenticate: onSuccessAuthenticate,
+      onFailed: onFailed,
+      onError: onError,
+      onDialogClicked: onDialogClicked,
+      onCanceled: onCanceled,
     );
   }
 
@@ -36,11 +46,10 @@ class FlutterFeatureBiometric {
     required String negativeText,
     required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
-    Function(String code, String message)? onError,
+    Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) {
-
-
     return FlutterFeatureBiometricPlatform.instance.secureEncryptAuthenticate(
       key: key,
       requestForEncrypt: requestForEncrypt,
@@ -51,6 +60,7 @@ class FlutterFeatureBiometric {
       onFailed: onFailed,
       onError: onError,
       onDialogClicked: onDialogClicked,
+      onCanceled: onCanceled,
     );
   }
 
@@ -63,7 +73,7 @@ class FlutterFeatureBiometric {
     required String negativeText,
     required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
-    Function(String code, String message)? onError,
+    Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
   }) {
     return FlutterFeatureBiometricPlatform.instance.secureDecryptAuthenticate(

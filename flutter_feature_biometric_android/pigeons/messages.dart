@@ -26,6 +26,7 @@ enum NativeBiometricAuthenticator {
 
 enum NativeAuthResultStatus {
   success,
+  canceled,
   failed,
   error,
   dialogClicked,
@@ -39,20 +40,22 @@ class NativeAuthDialogClickResult {
 
 class NativeAuthFailure {
   String code;
-  String message;
+  String? message;
 
   NativeAuthFailure({
     required this.code,
-    required this.message,
+    this.message,
   });
 }
 
 class NativeAuthResult {
   NativeAuthResultStatus status;
+  NativeAuthFailure? failure;
   NativeAuthDialogClickResult? dialogClickResult;
 
   NativeAuthResult({
     required this.status,
+    this.failure,
     this.dialogClickResult,
   });
 }

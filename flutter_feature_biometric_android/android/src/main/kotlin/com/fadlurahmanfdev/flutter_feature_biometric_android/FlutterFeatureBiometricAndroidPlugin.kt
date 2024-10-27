@@ -130,7 +130,11 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     callback.invoke(
                         Result.success(
                             NativeAuthResult(
-                                status = NativeAuthResultStatus.ERROR
+                                status = NativeAuthResultStatus.ERROR,
+                                failure = NativeAuthFailure(
+                                    code = exception.code,
+                                    message = exception.message,
+                                )
                             )
                         )
                     )
@@ -141,8 +145,19 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     callback.invoke(
                         Result.success(
                             NativeAuthResult(
-                                status = NativeAuthResultStatus.SUCCESS,
+                                status = NativeAuthResultStatus.DIALOG_CLICKED,
                                 dialogClickResult = NativeAuthDialogClickResult(which = which.toLong())
+                            )
+                        )
+                    )
+                }
+
+                override fun onCanceled() {
+                    super.onCanceled()
+                    callback.invoke(
+                        Result.success(
+                            NativeAuthResult(
+                                status = NativeAuthResultStatus.CANCELED
                             )
                         )
                     )
@@ -189,7 +204,17 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
                 override fun onErrorAuthenticate(exception: FeatureBiometricException) {
                     super.onErrorAuthenticate(exception)
-                    callback.invoke(Result.failure(exception))
+                    callback.invoke(
+                        Result.success(
+                            NativeSecureEncryptAuthResult(
+                                status = NativeAuthResultStatus.ERROR,
+                                failure = NativeAuthFailure(
+                                    code = exception.code,
+                                    message = exception.message,
+                                )
+                            )
+                        )
+                    )
                 }
 
                 override fun onFailedAuthenticate() {
@@ -212,6 +237,17 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                                 dialogClickResult = NativeAuthDialogClickResult(
                                     which = which.toLong()
                                 )
+                            )
+                        )
+                    )
+                }
+
+                override fun onCanceled() {
+                    super.onCanceled()
+                    callback.invoke(
+                        Result.success(
+                            NativeSecureEncryptAuthResult(
+                                status = NativeAuthResultStatus.CANCELED
                             )
                         )
                     )
@@ -242,11 +278,8 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                 override fun onSuccessAuthenticateDecryptSecureBiometric(cipher: Cipher) {
                     val decryptedResponse: HashMap<String, String?> = hashMapOf()
                     requestForDecrypt.forEach { it ->
-                        println("MASUK BEFORE: ${it.value}")
                         val decoded = Base64.decode(it.value, Base64.NO_WRAP)
-                        println("MASUK AFTER DECODE: ${decoded}")
                         val decrypted = kotlinFeatureBiometric?.decrypt(cipher, decoded)
-                        println("MASUK AFTER DECRYPT: ${decrypted}")
                         decryptedResponse[it.key] = decrypted
 
                     }
@@ -262,7 +295,17 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
                 override fun onErrorAuthenticate(exception: FeatureBiometricException) {
                     super.onErrorAuthenticate(exception)
-                    callback.invoke(Result.failure(exception))
+                    callback.invoke(
+                        Result.success(
+                            NativeSecureDecryptAuthResult(
+                                status = NativeAuthResultStatus.ERROR,
+                                failure = NativeAuthFailure(
+                                    code = exception.code,
+                                    message = exception.message,
+                                )
+                            )
+                        )
+                    )
                 }
 
                 override fun onFailedAuthenticate() {
@@ -285,6 +328,17 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                                 dialogClickResult = NativeAuthDialogClickResult(
                                     which = which.toLong()
                                 )
+                            )
+                        )
+                    )
+                }
+
+                override fun onCanceled() {
+                    super.onCanceled()
+                    callback.invoke(
+                        Result.success(
+                            NativeSecureDecryptAuthResult(
+                                status = NativeAuthResultStatus.CANCELED
                             )
                         )
                     )
