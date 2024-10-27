@@ -335,6 +335,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
                 override fun onCanceled() {
                     super.onCanceled()
+                    println("MASUK SINI CANCEL")
                     callback.invoke(
                         Result.success(
                             NativeSecureDecryptAuthResult(

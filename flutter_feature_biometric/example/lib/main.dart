@@ -175,8 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 case "SECURE_DECRYPT_AUTHENTICATE":
                   flutterFeatureBiometric.secureDecryptAuthenticate(
                     key: "flutterBiometricKey",
-                    encodedIVKey: encodedIVKey,
-                    requestForDecrypt: encryptedResult,
+                    encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
+                    requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
                     title: "Secure Decrypt Authenticate",
                     description: "Secure Decrypt Authenticate",
                     negativeText: "Batal",
@@ -190,11 +190,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       print("onFailed");
                     },
                     onError: (code, message) {
-                      print("onError: $code - $message");
+                      print("onErrorXXX: $code - $message");
                     },
                     onDialogClicked: (which) {
                       print("onDialogClicked: $which");
                     },
+                    onCanceled: (){
+                      print("onCanceled");
+                    }
                   );
                   break;
               }

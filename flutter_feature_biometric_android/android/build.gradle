@@ -68,5 +68,5 @@ android {
 }
 
 dependencies {
-    implementation("com.fadlurahmanfdev:kotlin_feature_identity:0.0.6-beta-flutter")
+    implementation("com.fadlurahmanfdev:kotlin_feature_identity:0.0.7-beta-flutter")
 }

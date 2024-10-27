@@ -75,6 +75,7 @@ class FlutterFeatureBiometric {
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.secureDecryptAuthenticate(
       key: key,
@@ -87,6 +88,7 @@ class FlutterFeatureBiometric {
       onFailed: onFailed,
       onError: onError,
       onDialogClicked: onDialogClicked,
+      onCanceled: onCanceled,
     );
   }
 }
