@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 class FlutterFeatureBiometric {
@@ -34,13 +35,41 @@ class FlutterFeatureBiometric {
     required String description,
     required String negativeText,
     required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
-    required Function() onFailed,
-    required Function(String code, String message) onError,
-    required Function(int which) onDialogClicked,
+    Function()? onFailed,
+    Function(String code, String message)? onError,
+    Function(int which)? onDialogClicked,
   }) {
+
+
     return FlutterFeatureBiometricPlatform.instance.secureEncryptAuthenticate(
       key: key,
       requestForEncrypt: requestForEncrypt,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+      onSuccessAuthenticate: onSuccessAuthenticate,
+      onFailed: onFailed,
+      onError: onError,
+      onDialogClicked: onDialogClicked,
+    );
+  }
+
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String message)? onError,
+    Function(int which)? onDialogClicked,
+  }) {
+    return FlutterFeatureBiometricPlatform.instance.secureDecryptAuthenticate(
+      key: key,
+      encodedIVKey: encodedIVKey,
+      requestForDecrypt: requestForDecrypt,
       title: title,
       description: description,
       negativeText: negativeText,

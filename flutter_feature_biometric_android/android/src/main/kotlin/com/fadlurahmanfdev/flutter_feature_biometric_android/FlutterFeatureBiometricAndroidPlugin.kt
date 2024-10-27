@@ -17,6 +17,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
 import javax.crypto.Cipher
+import android.util.Base64
 
 /** FlutterFeatureBiometricAndroidPlugin */
 class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
@@ -104,7 +105,6 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
             cancellationSignal = cancellationSignal,
             callBack = object : FeatureBiometricCallBack {
                 override fun onSuccessAuthenticate() {
-                    println("MASUK SINI onSuccessAuthenticate")
                     callback.invoke(
                         Result.success(
                             NativeAuthResult(
@@ -242,8 +242,13 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                 override fun onSuccessAuthenticateDecryptSecureBiometric(cipher: Cipher) {
                     val decryptedResponse: HashMap<String, String?> = hashMapOf()
                     requestForDecrypt.forEach { it ->
-                        decryptedResponse[it.key] =
-                            kotlinFeatureBiometric?.decrypt(cipher, it.value)
+                        println("MASUK BEFORE: ${it.value}")
+                        val decoded = Base64.decode(it.value, Base64.NO_WRAP)
+                        println("MASUK AFTER DECODE: ${decoded}")
+                        val decrypted = kotlinFeatureBiometric?.decrypt(cipher, decoded)
+                        println("MASUK AFTER DECRYPT: ${decrypted}")
+                        decryptedResponse[it.key] = decrypted
+
                     }
                     callback.invoke(
                         Result.success(

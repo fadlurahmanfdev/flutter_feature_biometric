@@ -87,4 +87,19 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   }) async {
     throw UnimplementedError('secureEncryptAuthenticate() has not been implemented.');
   }
+
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String message)? onError,
+    Function(int which)? onDialogClicked,
+  }) async {
+    throw UnimplementedError('secureDecryptAuthenticate() has not been implemented.');
+  }
 }

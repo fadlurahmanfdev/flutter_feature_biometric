@@ -128,4 +128,32 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         }
     }
   }
+
+  @override
+  Future<void> secureDecryptAuthenticate({required String key, required String encodedIVKey, required Map<String, String> requestForDecrypt, required String title, required String description, required String negativeText, required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate, Function()? onFailed, Function(String code, String message)? onError, Function(int which)? onDialogClicked}) async {
+    final result = await _api.secureDecryptAuthenticate(
+      alias: key,
+      encodedIVKey: encodedIVKey,
+      requestForDecrypt: requestForDecrypt,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        onSuccessAuthenticate(result.decryptedResult!);
+      case NativeAuthResultStatus.failed:
+        if (onFailed != null) {
+          onFailed();
+        }
+      case NativeAuthResultStatus.error:
+        if (onError != null) {
+          onError(result.failure!.code, result.failure!.message);
+        }
+      case NativeAuthResultStatus.dialogClicked:
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
+    }
+  }
 }
