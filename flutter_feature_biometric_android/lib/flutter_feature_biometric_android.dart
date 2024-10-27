@@ -114,7 +114,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required String title,
     required String description,
     required String negativeText,
-    required Function(String? encodedIVKey, Map<String, String?>? encryptedResult) onSuccessAuthenticate,
+    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
@@ -131,7 +131,12 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        onSuccessAuthenticate(result.encodedIVKey!, result.encryptedResult!);
+        onSuccessAuthenticate(
+          SuccessAuthenticateEncryptAndroid(
+            encodedIVKey: result.encodedIVKey!,
+            encryptedResult: result.encryptedResult!,
+          ),
+        );
         break;
       case NativeAuthResultStatus.failed:
         if (onFailed != null) {
@@ -164,7 +169,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required String title,
     required String description,
     required String negativeText,
-    required Function(Map<String, String?>? decryptedResult) onSuccessAuthenticate,
+    required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
@@ -182,7 +187,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        onSuccessAuthenticate(result.decryptedResult!);
+        onSuccessAuthenticate(SuccessAuthenticateDecryptAndroid(decryptedResult: result.decryptedResult!));
         break;
       case NativeAuthResultStatus.failed:
         if (onFailed != null) {

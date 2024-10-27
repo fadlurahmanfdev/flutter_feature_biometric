@@ -91,6 +91,41 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
+  Future<void> secureEncryptAuthenticate({
+    required String key,
+    Map<String, String>? requestForEncrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    final result = await _hostApi.authenticateSecure(
+      NativeLAPolicy.biometric,
+      key,
+      description,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        onSuccessAuthenticate(SuccessAuthenticateEncryptIOS());
+        break;
+      case NativeAuthResultStatus.biometricChanged:
+        if (onError != null) {
+          onError("-", "-");
+        }
+        break;
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
+    }
+  }
+
+  @override
   Future<void> secureDecryptAuthenticate({
     required String key,
     String? encodedIVKey,
@@ -98,7 +133,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     required String title,
     required String description,
     required String negativeText,
-    required Function(Map<String, String?>? decryptedResult) onSuccessAuthenticate,
+    required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String message)? onError,
     Function(int which)? onDialogClicked,
@@ -111,7 +146,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        onSuccessAuthenticate(null);
+        onSuccessAuthenticate(SuccessAuthenticateDecryptIOS());
         break;
       case NativeAuthResultStatus.biometricChanged:
         if (onError != null) {

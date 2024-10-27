@@ -150,14 +150,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: "Secure Encrypt Authenticate",
                     description: "Secure Encrypt Authenticate",
                     negativeText: "Batal",
-                    onSuccessAuthenticate: (encodedIVKey, encryptedResult) {
-                      this.encodedIVKey = encodedIVKey;
-                      encryptedResult.forEach((key, value) {
-                        this.encryptedResult[key] = "$value";
-                      });
-                      print("${Platform.operatingSystem} - Success Encrypt Authenticate");
-                      print("Encoded IV Key: $encodedIVKey");
-                      print("Result: $encryptedResult");
+                    onSuccessAuthenticate: (state) {
+                      if(state is SuccessAuthenticateEncryptAndroid){
+                        encodedIVKey = state.encodedIVKey;
+                        state.encryptedResult.forEach((key, value) {
+                          encryptedResult[key] = "$value";
+                        });
+                        print("${Platform.operatingSystem} - Success Encrypt Authenticate");
+                        print("Encoded IV Key: $encodedIVKey");
+                        print("Result: $encryptedResult");
+                      }
                     },
                     onFailed: () {
                       print("onFailed");
@@ -178,9 +180,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: "Secure Decrypt Authenticate",
                     description: "Secure Decrypt Authenticate",
                     negativeText: "Batal",
-                    onSuccessAuthenticate: (decryptedResult) {
+                    onSuccessAuthenticate: (state) {
                       print("${Platform.operatingSystem} - Success Decrypt Authenticate");
-                      print("Result: $decryptedResult");
+                      if(state is SuccessAuthenticateDecryptAndroid){
+                        print("Result: ${state.decryptedResult}");
+                      }
                     },
                     onFailed: () {
                       print("onFailed");
