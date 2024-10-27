@@ -6,11 +6,9 @@ export 'src/enum/biometric_authenticate_status.dart';
 export 'src/enum/biometric_authenticator_type.dart';
 
 export 'src/enum/biometric_status.dart';
-export 'src/model/biometric_authenticate_result.dart';
 
 import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator_type.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_status.dart';
-import 'package:flutter_feature_biometric_platform_interface/src/model/biometric_authenticate_result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'default_method_channel_platform.dart';
@@ -81,11 +79,11 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
 
   Future<void> secureEncryptAuthenticate({
     required String key,
-    required Map<String, String> requestForEncrypt,
+    Map<String, String>? requestForEncrypt,
     required String title,
     required String description,
     required String negativeText,
-    required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
+    required Function(String? encodedIVKey, Map<String, String?>? encryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
@@ -96,12 +94,12 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
 
   Future<void> secureDecryptAuthenticate({
     required String key,
-    required String encodedIVKey,
-    required Map<String, String> requestForDecrypt,
+    String? encodedIVKey,
+    Map<String, String>? requestForDecrypt,
     required String title,
     required String description,
     required String negativeText,
-    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    required Function(Map<String, String?>? decryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,

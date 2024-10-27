@@ -83,41 +83,48 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     switch (result.status) {
       case NativeAuthResultStatus.success:
         onSuccessAuthenticate();
+        break;
       case NativeAuthResultStatus.failed:
         if (onFailed != null) {
           onFailed();
         }
+        break;
       case NativeAuthResultStatus.error:
         if (onError != null) {
           onError(result.failure!.code, result.failure?.message);
         }
+        break;
       case NativeAuthResultStatus.dialogClicked:
         if (onDialogClicked != null) {
           onDialogClicked(result.dialogClickResult!.which);
         }
+        break;
       case NativeAuthResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
     }
   }
 
   @override
   Future<void> secureEncryptAuthenticate({
     required String key,
-    required Map<String, String> requestForEncrypt,
+    Map<String, String>? requestForEncrypt,
     required String title,
     required String description,
     required String negativeText,
-    required Function(String encodedIVKey, Map<String, String?> encryptedResult) onSuccessAuthenticate,
+    required Function(String? encodedIVKey, Map<String, String?>? encryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) async {
+    assert(requestForEncrypt != null, true);
+
     final result = await _api.secureEncryptAuthenticate(
       alias: key,
-      requestForEncrypt: requestForEncrypt,
+      requestForEncrypt: requestForEncrypt!,
       title: title,
       description: description,
       negativeText: negativeText,
@@ -125,43 +132,50 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     switch (result.status) {
       case NativeAuthResultStatus.success:
         onSuccessAuthenticate(result.encodedIVKey!, result.encryptedResult!);
+        break;
       case NativeAuthResultStatus.failed:
         if (onFailed != null) {
           onFailed();
         }
+        break;
       case NativeAuthResultStatus.error:
         if (onError != null) {
           onError(result.failure!.code, result.failure?.message);
         }
+        break;
       case NativeAuthResultStatus.dialogClicked:
         if (onDialogClicked != null) {
           onDialogClicked(result.dialogClickResult!.which);
         }
+        break;
       case NativeAuthResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
     }
   }
 
   @override
   Future<void> secureDecryptAuthenticate({
     required String key,
-    required String encodedIVKey,
-    required Map<String, String> requestForDecrypt,
+    String? encodedIVKey,
+    Map<String, String>? requestForDecrypt,
     required String title,
     required String description,
     required String negativeText,
-    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    required Function(Map<String, String?>? decryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String? message)? onError,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) async {
+    assert(encodedIVKey != null, true);
+    assert(requestForDecrypt != null, true);
     final result = await _api.secureDecryptAuthenticate(
       alias: key,
-      encodedIVKey: encodedIVKey,
-      requestForDecrypt: requestForDecrypt,
+      encodedIVKey: encodedIVKey!,
+      requestForDecrypt: requestForDecrypt!,
       title: title,
       description: description,
       negativeText: negativeText,
@@ -169,22 +183,27 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     switch (result.status) {
       case NativeAuthResultStatus.success:
         onSuccessAuthenticate(result.decryptedResult!);
+        break;
       case NativeAuthResultStatus.failed:
         if (onFailed != null) {
           onFailed();
         }
+        break;
       case NativeAuthResultStatus.error:
         if (onError != null) {
           onError(result.failure!.code, result.failure?.message);
         }
+        break;
       case NativeAuthResultStatus.dialogClicked:
         if (onDialogClicked != null) {
           onDialogClicked(result.dialogClickResult!.which);
         }
+        break;
       case NativeAuthResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
     }
   }
 }

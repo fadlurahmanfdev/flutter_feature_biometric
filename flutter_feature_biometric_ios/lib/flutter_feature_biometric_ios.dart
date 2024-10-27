@@ -28,19 +28,19 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
-    NativeBiometricAuthenticatorType type;
+    NativeLAPolicy policy;
     switch (authenticator) {
       case BiometricAuthenticatorType.biometric:
-        type = NativeBiometricAuthenticatorType.biometric;
+        policy = NativeLAPolicy.biometric;
       case BiometricAuthenticatorType.deviceCredential:
-        type = NativeBiometricAuthenticatorType.deviceCredential;
+        policy = NativeLAPolicy.deviceCredential;
     }
-    final canAuthenticate = await _hostApi.canAuthenticate(type);
+    final canAuthenticate = await _hostApi.canAuthenticate(policy);
     switch (canAuthenticate) {
       case true:
         return BiometricStatus.success;
       default:
-        return BiometricStatus.unavailable;
+        return BiometricStatus.noneEnrolled;
     }
   }
 
@@ -50,31 +50,79 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<void> secureDecryptAuthenticate({
-    required String key,
-    required String encodedIVKey,
-    required Map<String, String> requestForDecrypt,
+  Future<void> authenticate({
+    required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
-    required Function(Map<String, String?> decryptedResult) onSuccessAuthenticate,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    NativeLAPolicy policy;
+    switch (authenticator) {
+      case BiometricAuthenticatorType.biometric:
+        policy = NativeLAPolicy.biometric;
+      case BiometricAuthenticatorType.deviceCredential:
+        policy = NativeLAPolicy.deviceCredential;
+    }
+
+    final result = await _hostApi.authenticate(
+      policy,
+      description,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        onSuccessAuthenticate();
+        break;
+      case NativeAuthResultStatus.biometricChanged:
+        if (onError != null) {
+          onError("-", "-");
+        }
+        break;
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
+    }
+  }
+
+  @override
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    String? encodedIVKey,
+    Map<String, String>? requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(Map<String, String?>? decryptedResult) onSuccessAuthenticate,
     Function()? onFailed,
     Function(String code, String message)? onError,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticateSecure(
-      NativeBiometricAuthenticatorType.biometric,
+      NativeLAPolicy.biometric,
       key,
       description,
     );
-    switch(result.status){
+    switch (result.status) {
       case NativeAuthResultStatus.success:
-        // TODO: Handle this case.
+        onSuccessAuthenticate(null);
+        break;
       case NativeAuthResultStatus.biometricChanged:
-        // TODO: Handle this case.
+        if (onError != null) {
+          onError("-", "-");
+        }
+        break;
       case NativeAuthResultStatus.canceled:
-        // TODO: Handle this case.
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
     }
   }
 }

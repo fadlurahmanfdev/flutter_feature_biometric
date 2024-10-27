@@ -10,7 +10,7 @@ import 'package:pigeon/pigeon.dart';
   swiftOptions: SwiftOptions(),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
-enum NativeBiometricAuthenticatorType {
+enum NativeLAPolicy {
   biometric,
   deviceCredential,
 }
@@ -31,11 +31,11 @@ class NativeAuthResult {
 abstract class FlutterFeatureBiometricApi {
   bool isDeviceSupportBiometric();
 
-  bool canAuthenticate(NativeBiometricAuthenticatorType authenticatorType);
+  bool canAuthenticate(NativeLAPolicy policy);
 
   @async
-  NativeAuthResult authenticate(NativeBiometricAuthenticatorType authenticatorType, String description);
+  NativeAuthResult authenticate(NativeLAPolicy policy, String description);
 
   @async
-  NativeAuthResult authenticateSecure(NativeBiometricAuthenticatorType authenticatorType, String key, String description);
+  NativeAuthResult authenticateSecure(NativeLAPolicy policy, String key, String description);
 }

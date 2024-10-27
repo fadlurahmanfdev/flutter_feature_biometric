@@ -18,7 +18,7 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-enum NativeBiometricAuthenticatorType {
+enum NativeLAPolicy {
   biometric,
   deviceCredential,
 }
@@ -58,7 +58,7 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is NativeBiometricAuthenticatorType) {
+    }    else if (value is NativeLAPolicy) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
     }    else if (value is NativeAuthResultStatus) {
@@ -77,7 +77,7 @@ class _PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeBiometricAuthenticatorType.values[value];
+        return value == null ? null : NativeLAPolicy.values[value];
       case 130: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : NativeAuthResultStatus.values[value];
@@ -129,7 +129,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<bool> canAuthenticate(NativeBiometricAuthenticatorType authenticatorType) async {
+  Future<bool> canAuthenticate(NativeLAPolicy policy) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.canAuthenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -137,7 +137,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticatorType]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[policy]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -156,7 +156,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<NativeAuthResult> authenticate(NativeBiometricAuthenticatorType authenticatorType, String description) async {
+  Future<NativeAuthResult> authenticate(NativeLAPolicy policy, String description) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -164,7 +164,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticatorType, description]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[policy, description]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -183,7 +183,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<NativeAuthResult> authenticateSecure(NativeBiometricAuthenticatorType authenticatorType, String key, String description) async {
+  Future<NativeAuthResult> authenticateSecure(NativeLAPolicy policy, String key, String description) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -191,7 +191,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticatorType, key, description]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[policy, key, description]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

@@ -67,7 +67,7 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-enum NativeBiometricAuthenticatorType: Int {
+enum NativeLAPolicy: Int {
   case biometric = 0
   case deviceCredential = 1
 }
@@ -105,7 +105,7 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return NativeBiometricAuthenticatorType(rawValue: enumResultAsInt)
+        return NativeLAPolicy(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
@@ -124,7 +124,7 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
 
 private class MessagesPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? NativeBiometricAuthenticatorType {
+    if let value = value as? NativeLAPolicy {
       super.writeByte(129)
       super.writeValue(value.rawValue)
     } else if let value = value as? NativeAuthResultStatus {
@@ -157,9 +157,9 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
-  func canAuthenticate(authenticatorType: NativeBiometricAuthenticatorType) throws -> Bool
-  func authenticate(authenticatorType: NativeBiometricAuthenticatorType, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
-  func authenticateSecure(authenticatorType: NativeBiometricAuthenticatorType, key: String, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
+  func canAuthenticate(policy: NativeLAPolicy) throws -> Bool
+  func authenticate(policy: NativeLAPolicy, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
+  func authenticateSecure(policy: NativeLAPolicy, key: String, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -185,9 +185,9 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       canAuthenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        let policyArg = args[0] as! NativeLAPolicy
         do {
-          let result = try api.canAuthenticate(authenticatorType: authenticatorTypeArg)
+          let result = try api.canAuthenticate(policy: policyArg)
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
@@ -200,9 +200,9 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       authenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        let policyArg = args[0] as! NativeLAPolicy
         let descriptionArg = args[1] as! String
-        api.authenticate(authenticatorType: authenticatorTypeArg, description: descriptionArg) { result in
+        api.authenticate(policy: policyArg, description: descriptionArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -218,10 +218,10 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       authenticateSecureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let authenticatorTypeArg = args[0] as! NativeBiometricAuthenticatorType
+        let policyArg = args[0] as! NativeLAPolicy
         let keyArg = args[1] as! String
         let descriptionArg = args[2] as! String
-        api.authenticateSecure(authenticatorType: authenticatorTypeArg, key: keyArg, description: descriptionArg) { result in
+        api.authenticateSecure(policy: policyArg, key: keyArg, description: descriptionArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

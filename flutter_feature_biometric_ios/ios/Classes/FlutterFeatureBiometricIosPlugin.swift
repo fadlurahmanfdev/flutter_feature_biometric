@@ -21,11 +21,9 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         }
         return false
     }
-
-    func canAuthenticate(authenticatorType: NativeBiometricAuthenticatorType)
-        throws -> Bool
-    {
-        switch authenticatorType {
+    
+    func canAuthenticate(policy: NativeLAPolicy) throws -> Bool {
+        switch policy {
         case .biometric:
             return repository.canAuthenticate(
                 policy: .deviceOwnerAuthenticationWithBiometrics)
@@ -35,25 +33,26 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         }
     }
     
-    func authenticate(authenticatorType: NativeBiometricAuthenticatorType, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
-        var policy:LAPolicy
-        switch authenticatorType {
+    func authenticate(policy: NativeLAPolicy, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+        var iosPolicy:LAPolicy
+        switch policy {
         case .biometric:
-            policy = LAPolicy.deviceOwnerAuthenticationWithBiometrics
+            iosPolicy = LAPolicy.deviceOwnerAuthenticationWithBiometrics
             break
         case .deviceCredential:
-            policy = LAPolicy.deviceOwnerAuthentication
+            iosPolicy = LAPolicy.deviceOwnerAuthentication
             break;
         }
         
-        repository.authenticate(key: "biometricID", policy: policy, localizedReason: description){ result in
+        repository.authenticate(key: "biometricID", policy: iosPolicy, localizedReason: description){ result in
             completion(.success(NativeAuthResult(status: .success)))
         }
     }
     
-    func authenticateSecure(authenticatorType: NativeBiometricAuthenticatorType, key: String, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+    func authenticateSecure(policy: NativeLAPolicy, key: String, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
         if(repository.isBiometricChanged(key: key)){
             completion(.success(NativeAuthResult(status: .biometricChanged)))
+            return
         }
         
         repository.authenticate(key: key, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
