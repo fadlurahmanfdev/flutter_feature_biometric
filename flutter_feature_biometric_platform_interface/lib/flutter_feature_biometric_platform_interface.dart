@@ -4,13 +4,15 @@
 
 export 'src/enum/biometric_authenticate_status.dart';
 export 'src/enum/biometric_authenticator_type.dart';
-
 export 'src/enum/biometric_status.dart';
-export 'src/model/biometric_authenticate_result.dart';
+
+export 'src/state/success_authenticate_encrypt_state.dart';
+export 'src/state/success_authenticate_decrypt_state.dart';
 
 import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator_type.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_status.dart';
-import 'package:flutter_feature_biometric_platform_interface/src/model/biometric_authenticate_result.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_decrypt_state.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_encrypt_state.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'default_method_channel_platform.dart';
@@ -65,25 +67,48 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
   /// - [description] - the description of explanation why it need use a biometric
   /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
-  Future<BiometricAuthenticateResult> authenticate({
+  Future<void> authenticate({
     required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticate() has not been implemented.');
   }
 
-  /// Authenticate Using Secure Biometric
-  ///
-  /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
-  /// - [description] - the description of explanation why it need use a biometric
-  /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
-  Future<BiometricAuthenticateResult> secureAuthenticate({
+  Future<void> secureEncryptAuthenticate({
+    required String key,
+    Map<String, String>? requestForEncrypt,
     required String title,
     required String description,
     required String negativeText,
+    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
-    throw UnimplementedError('authenticate() has not been implemented.');
+    throw UnimplementedError('secureEncryptAuthenticate() has not been implemented.');
+  }
+
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    String? encodedIVKey,
+    Map<String, String>? requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    throw UnimplementedError('secureDecryptAuthenticate() has not been implemented.');
   }
 }

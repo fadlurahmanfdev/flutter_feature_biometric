@@ -31,9 +31,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     NativeBiometricStatus nativeStatus;
     switch (authenticator) {
       case BiometricAuthenticatorType.biometric:
-        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.weak);
+        nativeStatus = await _api.checkAuthenticationStatus(NativeBiometricAuthenticator.weak);
       case BiometricAuthenticatorType.deviceCredential:
-        nativeStatus = await _api.checkBiometricStatus(NativeBiometricAuthenticator.deviceCredential);
+        nativeStatus = await _api.checkAuthenticationStatus(NativeBiometricAuthenticator.deviceCredential);
     }
     switch (nativeStatus) {
       case NativeBiometricStatus.success:
@@ -51,15 +51,20 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<bool> canSecureAuthenticate() async {
-    return (await _api.checkBiometricStatus(NativeBiometricAuthenticator.strong)) == NativeBiometricStatus.success;
+    return (await _api.checkAuthenticationStatus(NativeBiometricAuthenticator.strong)) == NativeBiometricStatus.success;
   }
 
   @override
-  Future<BiometricAuthenticateResult> authenticate({
+  Future<void> authenticate({
     required BiometricAuthenticatorType authenticator,
     required String title,
     required String description,
     required String negativeText,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
   }) async {
     NativeBiometricAuthenticator nativeAuthenticator;
     switch (authenticator) {
@@ -77,43 +82,133 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
+        onSuccessAuthenticate();
+        break;
       case NativeAuthResultStatus.failed:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
+        if (onFailed != null) {
+          onFailed();
+        }
+        break;
       case NativeAuthResultStatus.error:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
+        if (onError != null) {
+          onError(result.failure!.code, result.failure?.message);
+        }
+        break;
       case NativeAuthResultStatus.dialogClicked:
-        return BiometricAuthenticateResult(
-          status: BiometricAuthenticateStatus.dialogClicked,
-          dialogClickResult: BiometricAuthenticateDialogClickResult(
-            which: result.dialogClickResult?.which ?? -1,
-          ),
-        );
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
+        break;
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
     }
   }
 
   @override
-  Future<BiometricAuthenticateResult> secureAuthenticate({required String title, required String description, required String negativeText}) async {
-    final result = await _api.authenticate(
-      authenticator: NativeBiometricAuthenticator.strong,
+  Future<void> secureEncryptAuthenticate({
+    required String key,
+    Map<String, String>? requestForEncrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    assert(requestForEncrypt != null, true);
+
+    final result = await _api.secureEncryptAuthenticate(
+      alias: key,
+      requestForEncrypt: requestForEncrypt!,
       title: title,
       description: description,
       negativeText: negativeText,
     );
     switch (result.status) {
       case NativeAuthResultStatus.success:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.success);
-      case NativeAuthResultStatus.failed:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.failed);
-      case NativeAuthResultStatus.error:
-        return BiometricAuthenticateResult(status: BiometricAuthenticateStatus.error);
-      case NativeAuthResultStatus.dialogClicked:
-        return BiometricAuthenticateResult(
-          status: BiometricAuthenticateStatus.dialogClicked,
-          dialogClickResult: BiometricAuthenticateDialogClickResult(
-            which: result.dialogClickResult?.which ?? -1,
+        onSuccessAuthenticate(
+          SuccessAuthenticateEncryptAndroid(
+            encodedIVKey: result.encodedIVKey!,
+            encryptedResult: result.encryptedResult!,
           ),
         );
+        break;
+      case NativeAuthResultStatus.failed:
+        if (onFailed != null) {
+          onFailed();
+        }
+        break;
+      case NativeAuthResultStatus.error:
+        if (onError != null) {
+          onError(result.failure!.code, result.failure?.message);
+        }
+        break;
+      case NativeAuthResultStatus.dialogClicked:
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
+        break;
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
+    }
+  }
+
+  @override
+  Future<void> secureDecryptAuthenticate({
+    required String key,
+    String? encodedIVKey,
+    Map<String, String>? requestForDecrypt,
+    required String title,
+    required String description,
+    required String negativeText,
+    required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
+    Function()? onFailed,
+    Function(String code, String? message)? onError,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) async {
+    assert(encodedIVKey != null, true);
+    assert(requestForDecrypt != null, true);
+    final result = await _api.secureDecryptAuthenticate(
+      alias: key,
+      encodedIVKey: encodedIVKey!,
+      requestForDecrypt: requestForDecrypt!,
+      title: title,
+      description: description,
+      negativeText: negativeText,
+    );
+    switch (result.status) {
+      case NativeAuthResultStatus.success:
+        onSuccessAuthenticate(SuccessAuthenticateDecryptAndroid(decryptedResult: result.decryptedResult!));
+        break;
+      case NativeAuthResultStatus.failed:
+        if (onFailed != null) {
+          onFailed();
+        }
+        break;
+      case NativeAuthResultStatus.error:
+        if (onError != null) {
+          onError(result.failure!.code, result.failure?.message);
+        }
+        break;
+      case NativeAuthResultStatus.dialogClicked:
+        if (onDialogClicked != null) {
+          onDialogClicked(result.dialogClickResult!.which);
+        }
+        break;
+      case NativeAuthResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
     }
   }
 }
