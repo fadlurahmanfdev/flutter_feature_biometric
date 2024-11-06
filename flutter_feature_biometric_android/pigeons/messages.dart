@@ -30,13 +30,7 @@ enum AndroidAuthenticationResultStatus {
   canceled,
   failed,
   error,
-  dialogClicked,
-}
-
-class AndroidAuthenticationDialogClickResult {
-  int which;
-
-  AndroidAuthenticationDialogClickResult({required this.which});
+  negativeButtonClicked,
 }
 
 class AndroidAuthenticationFailure {
@@ -52,12 +46,10 @@ class AndroidAuthenticationFailure {
 class AndroidAuthenticationResult {
   AndroidAuthenticationResultStatus status;
   AndroidAuthenticationFailure? failure;
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   AndroidAuthenticationResult({
     required this.status,
     this.failure,
-    this.dialogClickResult,
   });
 }
 
@@ -66,14 +58,12 @@ class AndroidSecureEncryptAuthResult {
   String? encodedIVKey;
   Map<String, String?>? encryptedResult;
   AndroidAuthenticationFailure? failure;
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   AndroidSecureEncryptAuthResult({
     required this.status,
     this.encodedIVKey,
     this.encryptedResult,
     this.failure,
-    this.dialogClickResult,
   });
 }
 
@@ -81,13 +71,11 @@ class AndroidSecureDecryptAuthResult {
   AndroidAuthenticationResultStatus status;
   Map<String, String?>? decryptedResult;
   AndroidAuthenticationFailure? failure;
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   AndroidSecureDecryptAuthResult({
     required this.status,
     this.decryptedResult,
     this.failure,
-    this.dialogClickResult,
   });
 }
 

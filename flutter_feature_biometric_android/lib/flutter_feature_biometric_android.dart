@@ -68,7 +68,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateDeviceCredential(
@@ -94,9 +94,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
       case AndroidAuthenticationResultStatus.error:
         onErrorAuthenticate(result.failure!.code, result.failure?.message);
         break;
-      case AndroidAuthenticationResultStatus.dialogClicked:
-        if (onDialogClicked != null) {
-          onDialogClicked(result.dialogClickResult!.which);
+      case AndroidAuthenticationResultStatus.negativeButtonClicked:
+        if (onNegativeButtonClicked != null) {
+          onNegativeButtonClicked();
         }
         break;
     }
@@ -112,7 +112,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometric(
@@ -138,9 +138,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
       case AndroidAuthenticationResultStatus.error:
         onErrorAuthenticate(result.failure!.code, result.failure?.message);
         break;
-      case AndroidAuthenticationResultStatus.dialogClicked:
-        if (onDialogClicked != null) {
-          onDialogClicked(result.dialogClickResult!.which);
+      case AndroidAuthenticationResultStatus.negativeButtonClicked:
+        if (onNegativeButtonClicked != null) {
+          onNegativeButtonClicked();
         }
         break;
     }
@@ -158,7 +158,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureEncrypt(
@@ -186,9 +186,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
       case AndroidAuthenticationResultStatus.error:
         onErrorAuthenticate(result.failure!.code, result.failure?.message);
         break;
-      case AndroidAuthenticationResultStatus.dialogClicked:
-        if (onDialogClicked != null) {
-          onDialogClicked(result.dialogClickResult!.which);
+      case AndroidAuthenticationResultStatus.negativeButtonClicked:
+        if (onNegativeButtonClicked != null) {
+          onNegativeButtonClicked();
         }
         break;
       case AndroidAuthenticationResultStatus.canceled:
@@ -212,7 +212,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureDecrypt(
@@ -236,9 +236,9 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
       case AndroidAuthenticationResultStatus.error:
         onErrorAuthenticate(result.failure!.code, result.failure?.message);
         break;
-      case AndroidAuthenticationResultStatus.dialogClicked:
-        if (onDialogClicked != null) {
-          onDialogClicked(result.dialogClickResult!.which);
+      case AndroidAuthenticationResultStatus.negativeButtonClicked:
+        if (onNegativeButtonClicked != null) {
+          onNegativeButtonClicked();
         }
         break;
       case AndroidAuthenticationResultStatus.canceled:

@@ -38,28 +38,7 @@ enum AndroidAuthenticationResultStatus {
   canceled,
   failed,
   error,
-  dialogClicked,
-}
-
-class AndroidAuthenticationDialogClickResult {
-  AndroidAuthenticationDialogClickResult({
-    required this.which,
-  });
-
-  int which;
-
-  Object encode() {
-    return <Object?>[
-      which,
-    ];
-  }
-
-  static AndroidAuthenticationDialogClickResult decode(Object result) {
-    result as List<Object?>;
-    return AndroidAuthenticationDialogClickResult(
-      which: result[0]! as int,
-    );
-  }
+  negativeButtonClicked,
 }
 
 class AndroidAuthenticationFailure {
@@ -92,20 +71,16 @@ class AndroidAuthenticationResult {
   AndroidAuthenticationResult({
     required this.status,
     this.failure,
-    this.dialogClickResult,
   });
 
   AndroidAuthenticationResultStatus status;
 
   AndroidAuthenticationFailure? failure;
 
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
-
   Object encode() {
     return <Object?>[
       status,
       failure,
-      dialogClickResult,
     ];
   }
 
@@ -114,7 +89,6 @@ class AndroidAuthenticationResult {
     return AndroidAuthenticationResult(
       status: result[0]! as AndroidAuthenticationResultStatus,
       failure: result[1] as AndroidAuthenticationFailure?,
-      dialogClickResult: result[2] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
@@ -125,7 +99,6 @@ class AndroidSecureEncryptAuthResult {
     this.encodedIVKey,
     this.encryptedResult,
     this.failure,
-    this.dialogClickResult,
   });
 
   AndroidAuthenticationResultStatus status;
@@ -136,15 +109,12 @@ class AndroidSecureEncryptAuthResult {
 
   AndroidAuthenticationFailure? failure;
 
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
-
   Object encode() {
     return <Object?>[
       status,
       encodedIVKey,
       encryptedResult,
       failure,
-      dialogClickResult,
     ];
   }
 
@@ -155,7 +125,6 @@ class AndroidSecureEncryptAuthResult {
       encodedIVKey: result[1] as String?,
       encryptedResult: (result[2] as Map<Object?, Object?>?)?.cast<String, String?>(),
       failure: result[3] as AndroidAuthenticationFailure?,
-      dialogClickResult: result[4] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
@@ -165,7 +134,6 @@ class AndroidSecureDecryptAuthResult {
     required this.status,
     this.decryptedResult,
     this.failure,
-    this.dialogClickResult,
   });
 
   AndroidAuthenticationResultStatus status;
@@ -174,14 +142,11 @@ class AndroidSecureDecryptAuthResult {
 
   AndroidAuthenticationFailure? failure;
 
-  AndroidAuthenticationDialogClickResult? dialogClickResult;
-
   Object encode() {
     return <Object?>[
       status,
       decryptedResult,
       failure,
-      dialogClickResult,
     ];
   }
 
@@ -191,7 +156,6 @@ class AndroidSecureDecryptAuthResult {
       status: result[0]! as AndroidAuthenticationResultStatus,
       decryptedResult: (result[1] as Map<Object?, Object?>?)?.cast<String, String?>(),
       failure: result[2] as AndroidAuthenticationFailure?,
-      dialogClickResult: result[3] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
@@ -213,20 +177,17 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is AndroidAuthenticationResultStatus) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    }    else if (value is AndroidAuthenticationDialogClickResult) {
+    }    else if (value is AndroidAuthenticationFailure) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is AndroidAuthenticationFailure) {
+    }    else if (value is AndroidAuthenticationResult) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is AndroidAuthenticationResult) {
+    }    else if (value is AndroidSecureEncryptAuthResult) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    }    else if (value is AndroidSecureEncryptAuthResult) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
     }    else if (value is AndroidSecureDecryptAuthResult) {
-      buffer.putUint8(136);
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -246,14 +207,12 @@ class _PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : AndroidAuthenticationResultStatus.values[value];
       case 132: 
-        return AndroidAuthenticationDialogClickResult.decode(readValue(buffer)!);
-      case 133: 
         return AndroidAuthenticationFailure.decode(readValue(buffer)!);
-      case 134: 
+      case 133: 
         return AndroidAuthenticationResult.decode(readValue(buffer)!);
-      case 135: 
+      case 134: 
         return AndroidSecureEncryptAuthResult.decode(readValue(buffer)!);
-      case 136: 
+      case 135: 
         return AndroidSecureDecryptAuthResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

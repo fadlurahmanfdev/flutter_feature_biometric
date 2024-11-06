@@ -79,30 +79,12 @@ enum class AndroidAuthenticationResultStatus(val raw: Int) {
   CANCELED(1),
   FAILED(2),
   ERROR(3),
-  DIALOG_CLICKED(4);
+  NEGATIVE_BUTTON_CLICKED(4);
 
   companion object {
     fun ofRaw(raw: Int): AndroidAuthenticationResultStatus? {
       return values().firstOrNull { it.raw == raw }
     }
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class AndroidAuthenticationDialogClickResult (
-  val which: Long
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationDialogClickResult {
-      val which = pigeonVar_list[0] as Long
-      return AndroidAuthenticationDialogClickResult(which)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      which,
-    )
   }
 }
 
@@ -130,23 +112,20 @@ data class AndroidAuthenticationFailure (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class AndroidAuthenticationResult (
   val status: AndroidAuthenticationResultStatus,
-  val failure: AndroidAuthenticationFailure? = null,
-  val dialogClickResult: AndroidAuthenticationDialogClickResult? = null
+  val failure: AndroidAuthenticationFailure? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationResult {
       val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val failure = pigeonVar_list[1] as AndroidAuthenticationFailure?
-      val dialogClickResult = pigeonVar_list[2] as AndroidAuthenticationDialogClickResult?
-      return AndroidAuthenticationResult(status, failure, dialogClickResult)
+      return AndroidAuthenticationResult(status, failure)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       status,
       failure,
-      dialogClickResult,
     )
   }
 }
@@ -156,8 +135,7 @@ data class AndroidSecureEncryptAuthResult (
   val status: AndroidAuthenticationResultStatus,
   val encodedIVKey: String? = null,
   val encryptedResult: Map<String, String?>? = null,
-  val failure: AndroidAuthenticationFailure? = null,
-  val dialogClickResult: AndroidAuthenticationDialogClickResult? = null
+  val failure: AndroidAuthenticationFailure? = null
 )
  {
   companion object {
@@ -166,8 +144,7 @@ data class AndroidSecureEncryptAuthResult (
       val encodedIVKey = pigeonVar_list[1] as String?
       val encryptedResult = pigeonVar_list[2] as Map<String, String?>?
       val failure = pigeonVar_list[3] as AndroidAuthenticationFailure?
-      val dialogClickResult = pigeonVar_list[4] as AndroidAuthenticationDialogClickResult?
-      return AndroidSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure, dialogClickResult)
+      return AndroidSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure)
     }
   }
   fun toList(): List<Any?> {
@@ -176,7 +153,6 @@ data class AndroidSecureEncryptAuthResult (
       encodedIVKey,
       encryptedResult,
       failure,
-      dialogClickResult,
     )
   }
 }
@@ -185,8 +161,7 @@ data class AndroidSecureEncryptAuthResult (
 data class AndroidSecureDecryptAuthResult (
   val status: AndroidAuthenticationResultStatus,
   val decryptedResult: Map<String, String?>? = null,
-  val failure: AndroidAuthenticationFailure? = null,
-  val dialogClickResult: AndroidAuthenticationDialogClickResult? = null
+  val failure: AndroidAuthenticationFailure? = null
 )
  {
   companion object {
@@ -194,8 +169,7 @@ data class AndroidSecureDecryptAuthResult (
       val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val decryptedResult = pigeonVar_list[1] as Map<String, String?>?
       val failure = pigeonVar_list[2] as AndroidAuthenticationFailure?
-      val dialogClickResult = pigeonVar_list[3] as AndroidAuthenticationDialogClickResult?
-      return AndroidSecureDecryptAuthResult(status, decryptedResult, failure, dialogClickResult)
+      return AndroidSecureDecryptAuthResult(status, decryptedResult, failure)
     }
   }
   fun toList(): List<Any?> {
@@ -203,7 +177,6 @@ data class AndroidSecureDecryptAuthResult (
       status,
       decryptedResult,
       failure,
-      dialogClickResult,
     )
   }
 }
@@ -227,25 +200,20 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AndroidAuthenticationDialogClickResult.fromList(it)
+          AndroidAuthenticationFailure.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AndroidAuthenticationFailure.fromList(it)
+          AndroidAuthenticationResult.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AndroidAuthenticationResult.fromList(it)
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           AndroidSecureEncryptAuthResult.fromList(it)
         }
       }
-      136.toByte() -> {
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           AndroidSecureDecryptAuthResult.fromList(it)
         }
@@ -267,24 +235,20 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is AndroidAuthenticationDialogClickResult -> {
+      is AndroidAuthenticationFailure -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is AndroidAuthenticationFailure -> {
+      is AndroidAuthenticationResult -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is AndroidAuthenticationResult -> {
+      is AndroidSecureEncryptAuthResult -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is AndroidSecureEncryptAuthResult -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
       is AndroidSecureDecryptAuthResult -> {
-        stream.write(136)
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

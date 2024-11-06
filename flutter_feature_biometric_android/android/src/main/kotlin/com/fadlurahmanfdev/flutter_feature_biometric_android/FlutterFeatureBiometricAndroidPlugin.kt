@@ -40,7 +40,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        featureAuthentication = FeatureAuthentication(binding.activity.applicationContext)
+        featureAuthentication = FeatureAuthentication(binding.activity)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -48,7 +48,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        featureAuthentication = FeatureAuthentication(binding.activity.applicationContext)
+        featureAuthentication = FeatureAuthentication(binding.activity)
     }
 
     override fun onDetachedFromActivity() {
@@ -171,13 +171,12 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked(which: Int) {
-                    super.onNegativeButtonClicked(which)
+                override fun onNegativeButtonClicked() {
+                    super.onNegativeButtonClicked()
                     callback.invoke(
                         Result.success(
                             AndroidAuthenticationResult(
-                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = AndroidAuthenticationDialogClickResult(which = which.toLong())
+                                status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
                             )
                         )
                     )
@@ -246,13 +245,12 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked(which: Int) {
-                    super.onNegativeButtonClicked(which)
+                override fun onNegativeButtonClicked() {
+                    super.onNegativeButtonClicked()
                     callback.invoke(
                         Result.success(
                             AndroidAuthenticationResult(
-                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = AndroidAuthenticationDialogClickResult(which = which.toLong())
+                                status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
                             )
                         )
                     )
@@ -340,15 +338,12 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked(which: Int) {
-                    super.onNegativeButtonClicked(which)
+                override fun onNegativeButtonClicked() {
+                    super.onNegativeButtonClicked()
                     callback.invoke(
                         Result.success(
                             AndroidSecureEncryptAuthResult(
-                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = AndroidAuthenticationDialogClickResult(
-                                    which = which.toLong()
-                                )
+                                status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
                             )
                         )
                     )
@@ -430,15 +425,12 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked(which: Int) {
-                    super.onNegativeButtonClicked(which)
+                override fun onNegativeButtonClicked() {
+                    super.onNegativeButtonClicked()
                     callback.invoke(
                         Result.success(
                             AndroidSecureDecryptAuthResult(
-                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = AndroidAuthenticationDialogClickResult(
-                                    which = which.toLong()
-                                )
+                                status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
                             )
                         )
                     )

@@ -124,20 +124,40 @@ class _MyHomePageState extends State<MyHomePage> {
                       await flutterFeatureBiometric.checkAuthenticatorStatus(BiometricAuthenticatorType.biometric);
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
+                case "STANDARD_BIOMETRIC_AUTHENTICATE":
+                  flutterFeatureBiometric.authenticateBiometric(
+                    title: "Title - Credential Authenticate",
+                    description: "Description - Credential Authenticate",
+                    confirmationRequired: true,
+                    negativeText: "Batal",
+                    onSuccessAuthenticate: () {
+                      print("${Platform.operatingSystem} - Success authenticate credential");
+                    },
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                    },
+                    onCanceled: () {
+                      print("${Platform.operatingSystem} - On Canceled");
+                    },
+                  );
+                  break;
                 case "CREDENTIAL_AUTHENTICATE":
                   flutterFeatureBiometric.authenticateDeviceCredential(
-                      title: "Title - Credential Authenticate",
-                      description: "Description - Credential Authenticate",
-                      negativeText: "Batal",
-                      onSuccessAuthenticate: () {
-                        print("${Platform.operatingSystem} - Success authenticate credential");
-                      },
-                      onErrorAuthenticate: (code, message) {
-                        print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
-                      },
-                      onCanceled: () {
-                        print("onCanceled");
-                      });
+                    title: "Title - Credential Authenticate",
+                    description: "Description - Credential Authenticate",
+                    confirmationRequired: true,
+                    negativeText: "Batal",
+                    onSuccessAuthenticate: () {
+                      print("${Platform.operatingSystem} - Success authenticate credential");
+                    },
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                    },
+                    onCanceled: () {
+                      print("${Platform.operatingSystem} - On Canceled");
+                    },
+                  );
+                  break;
                 case "CAN_SECURE_AUTHENTICATE":
                   final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
@@ -168,8 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     onErrorAuthenticate: (code, message) {
                       print("${Platform.operatingSystem} - Error Encrypt Authenticate: $code - $message");
                     },
-                    onDialogClicked: (which) {
-                      print("onDialogClicked: $which");
+                    onNegativeButtonClicked: () {
+                      print("onNegativeButtonClicked");
                     },
                   );
                   break;
@@ -193,8 +213,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       onErrorAuthenticate: (code, message) {
                         print("${Platform.operatingSystem} - Error Decrypt Authenticate: $code - $message");
                       },
-                      onDialogClicked: (which) {
-                        print("onDialogClicked: $which");
+                      onNegativeButtonClicked: () {
+                        print("onNegativeButtonClicked");
                       },
                       onCanceled: () {
                         print("onCanceled");

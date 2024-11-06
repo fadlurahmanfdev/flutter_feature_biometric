@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="fix(platformInterface): change readme">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="setup refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" afterDir="false" />
@@ -15,14 +14,9 @@
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/flutter_feature_biometric_ios.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/flutter_feature_biometric_ios.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/biometric_status.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/authenticator_status.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -400,11 +394,18 @@
       <option name="project" value="LOCAL" />
       <updated>1730161592952</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="setup refactor">
+      <option name="closed" value="true" />
+      <created>1730861975830</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1730861975830</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="setup platform interface" />
     <MESSAGE value="setup base plugin" />
     <MESSAGE value="setup host biometric API" />
     <MESSAGE value="setup platform interface package" />
@@ -429,6 +430,7 @@
     <MESSAGE value="fix(platformInterface): change release version" />
     <MESSAGE value="fix(platformInterface): add description" />
     <MESSAGE value="fix(platformInterface): change readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(platformInterface): change readme" />
+    <MESSAGE value="setup refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="setup refactor" />
   </component>
 </project>

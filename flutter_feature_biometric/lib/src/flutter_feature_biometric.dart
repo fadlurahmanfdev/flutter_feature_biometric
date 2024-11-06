@@ -22,7 +22,7 @@ class FlutterFeatureBiometric {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateDeviceCredential(
@@ -34,7 +34,7 @@ class FlutterFeatureBiometric {
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
@@ -48,7 +48,7 @@ class FlutterFeatureBiometric {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateBiometric(
@@ -60,7 +60,7 @@ class FlutterFeatureBiometric {
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
@@ -76,7 +76,7 @@ class FlutterFeatureBiometric {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureEncrypt(
@@ -89,7 +89,7 @@ class FlutterFeatureBiometric {
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
@@ -106,7 +106,7 @@ class FlutterFeatureBiometric {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureDecrypt(
@@ -120,7 +120,7 @@ class FlutterFeatureBiometric {
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }

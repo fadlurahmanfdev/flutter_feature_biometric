@@ -37,7 +37,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     // TODO: implement authenticateDeviceCredential
@@ -50,7 +50,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
@@ -65,7 +65,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     // TODO: implement authenticateBiometric
@@ -78,7 +78,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
@@ -95,7 +95,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     // TODO: implement secureEncryptAuthenticate
@@ -108,7 +108,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
     );
   }
 
@@ -125,7 +125,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onDialogClicked,
+    Function()? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     // TODO: implement secureEncryptAuthenticate
@@ -139,7 +139,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       onSuccessAuthenticate: onSuccessAuthenticate,
       onFailedAuthenticate: onFailedAuthenticate,
       onErrorAuthenticate: onErrorAuthenticate,
-      onDialogClicked: onDialogClicked,
+      onNegativeButtonClicked: onNegativeButtonClicked,
     );
   }
 }
