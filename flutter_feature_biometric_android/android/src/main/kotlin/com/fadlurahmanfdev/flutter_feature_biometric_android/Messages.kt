@@ -110,22 +110,43 @@ data class AndroidAuthenticationFailure (
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class AndroidAuthenticationNegativeButtonClickResult (
+  val which: Long
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationNegativeButtonClickResult {
+      val which = pigeonVar_list[0] as Long
+      return AndroidAuthenticationNegativeButtonClickResult(which)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      which,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class AndroidAuthenticationResult (
   val status: AndroidAuthenticationResultStatus,
-  val failure: AndroidAuthenticationFailure? = null
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationResult {
       val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val failure = pigeonVar_list[1] as AndroidAuthenticationFailure?
-      return AndroidAuthenticationResult(status, failure)
+      val negativeButtonClickResult = pigeonVar_list[2] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidAuthenticationResult(status, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       status,
       failure,
+      negativeButtonClickResult,
     )
   }
 }
@@ -135,7 +156,8 @@ data class AndroidSecureEncryptAuthResult (
   val status: AndroidAuthenticationResultStatus,
   val encodedIVKey: String? = null,
   val encryptedResult: Map<String, String?>? = null,
-  val failure: AndroidAuthenticationFailure? = null
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
 )
  {
   companion object {
@@ -144,7 +166,8 @@ data class AndroidSecureEncryptAuthResult (
       val encodedIVKey = pigeonVar_list[1] as String?
       val encryptedResult = pigeonVar_list[2] as Map<String, String?>?
       val failure = pigeonVar_list[3] as AndroidAuthenticationFailure?
-      return AndroidSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure)
+      val negativeButtonClickResult = pigeonVar_list[4] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
@@ -153,6 +176,7 @@ data class AndroidSecureEncryptAuthResult (
       encodedIVKey,
       encryptedResult,
       failure,
+      negativeButtonClickResult,
     )
   }
 }
@@ -161,7 +185,8 @@ data class AndroidSecureEncryptAuthResult (
 data class AndroidSecureDecryptAuthResult (
   val status: AndroidAuthenticationResultStatus,
   val decryptedResult: Map<String, String?>? = null,
-  val failure: AndroidAuthenticationFailure? = null
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
 )
  {
   companion object {
@@ -169,7 +194,8 @@ data class AndroidSecureDecryptAuthResult (
       val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val decryptedResult = pigeonVar_list[1] as Map<String, String?>?
       val failure = pigeonVar_list[2] as AndroidAuthenticationFailure?
-      return AndroidSecureDecryptAuthResult(status, decryptedResult, failure)
+      val negativeButtonClickResult = pigeonVar_list[3] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidSecureDecryptAuthResult(status, decryptedResult, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
@@ -177,6 +203,7 @@ data class AndroidSecureDecryptAuthResult (
       status,
       decryptedResult,
       failure,
+      negativeButtonClickResult,
     )
   }
 }
@@ -205,15 +232,20 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AndroidAuthenticationResult.fromList(it)
+          AndroidAuthenticationNegativeButtonClickResult.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AndroidSecureEncryptAuthResult.fromList(it)
+          AndroidAuthenticationResult.fromList(it)
         }
       }
       135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AndroidSecureEncryptAuthResult.fromList(it)
+        }
+      }
+      136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           AndroidSecureDecryptAuthResult.fromList(it)
         }
@@ -239,16 +271,20 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is AndroidAuthenticationResult -> {
+      is AndroidAuthenticationNegativeButtonClickResult -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is AndroidSecureEncryptAuthResult -> {
+      is AndroidAuthenticationResult -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is AndroidSecureDecryptAuthResult -> {
+      is AndroidSecureEncryptAuthResult -> {
         stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is AndroidSecureDecryptAuthResult -> {
+        stream.write(136)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

@@ -22,7 +22,7 @@ class FlutterFeatureBiometric {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateDeviceCredential(
@@ -48,7 +48,7 @@ class FlutterFeatureBiometric {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateBiometric(
@@ -76,7 +76,7 @@ class FlutterFeatureBiometric {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureEncrypt(
@@ -106,7 +106,7 @@ class FlutterFeatureBiometric {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureDecrypt(

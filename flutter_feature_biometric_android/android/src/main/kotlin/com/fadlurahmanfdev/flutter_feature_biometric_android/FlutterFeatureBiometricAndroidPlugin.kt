@@ -28,39 +28,28 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     private lateinit var channel: MethodChannel
     private var featureAuthentication: FeatureAuthentication? = null
 
-    private var activity: Activity? = null
-
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        kotlin.io.println("MASUK_XXX onAttachedToEngine")
         FlutterFeatureBiometricApi.setUp(flutterPluginBinding.binaryMessenger, this)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        kotlin.io.println("MASUK_XXX onDetachedFromEngine")
         channel.setMethodCallHandler(null)
         FlutterFeatureBiometricApi.setUp(binding.binaryMessenger, this)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        kotlin.io.println("MASUK_XXX onAttachedToActivity")
-        activity = binding.activity
-        featureAuthentication = FeatureAuthentication(activity = activity as FragmentActivity)
+        featureAuthentication = FeatureAuthentication(binding.activity)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        kotlin.io.println("MASUK_XXX onDetachedFromActivityForConfigChanges")
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        kotlin.io.println("MASUK_XXX onReattachedToActivityForConfigChanges")
-        activity = binding.activity
-        featureAuthentication = FeatureAuthentication(activity = activity as FragmentActivity)
+        featureAuthentication = FeatureAuthentication(binding.activity)
     }
 
     override fun onDetachedFromActivity() {
-        kotlin.io.println("MASUK_XXX onDetachedFromActivity")
-        activity = null
         featureAuthentication = null
     }
 
@@ -180,12 +169,14 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked() {
-                    super.onNegativeButtonClicked()
+                override fun onNegativeButtonClicked(which: Int) {
                     callback.invoke(
                         Result.success(
                             AndroidAuthenticationResult(
                                 status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
+                                negativeButtonClickResult = AndroidAuthenticationNegativeButtonClickResult(
+                                    which.toLong()
+                                )
                             )
                         )
                     )
@@ -254,12 +245,14 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked() {
-                    super.onNegativeButtonClicked()
+                override fun onNegativeButtonClicked(which: Int) {
                     callback.invoke(
                         Result.success(
                             AndroidAuthenticationResult(
                                 status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
+                                negativeButtonClickResult = AndroidAuthenticationNegativeButtonClickResult(
+                                    which.toLong()
+                                )
                             )
                         )
                     )
@@ -347,12 +340,14 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked() {
-                    super.onNegativeButtonClicked()
+                override fun onNegativeButtonClicked(which: Int) {
                     callback.invoke(
                         Result.success(
                             AndroidSecureEncryptAuthResult(
                                 status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
+                                negativeButtonClickResult = AndroidAuthenticationNegativeButtonClickResult(
+                                    which.toLong()
+                                )
                             )
                         )
                     )
@@ -434,12 +429,14 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onNegativeButtonClicked() {
-                    super.onNegativeButtonClicked()
+                override fun onNegativeButtonClicked(which: Int) {
                     callback.invoke(
                         Result.success(
                             AndroidSecureDecryptAuthResult(
                                 status = AndroidAuthenticationResultStatus.NEGATIVE_BUTTON_CLICKED,
+                                negativeButtonClickResult = AndroidAuthenticationNegativeButtonClickResult(
+                                    which.toLong()
+                                )
                             )
                         )
                     )

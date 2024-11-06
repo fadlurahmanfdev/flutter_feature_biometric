@@ -68,7 +68,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateDeviceCredential(
@@ -96,7 +96,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         break;
       case AndroidAuthenticationResultStatus.negativeButtonClicked:
         if (onNegativeButtonClicked != null) {
-          onNegativeButtonClicked();
+          onNegativeButtonClicked(result.negativeButtonClickResult!.which);
         }
         break;
     }
@@ -112,7 +112,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometric(
@@ -140,7 +140,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         break;
       case AndroidAuthenticationResultStatus.negativeButtonClicked:
         if (onNegativeButtonClicked != null) {
-          onNegativeButtonClicked();
+          onNegativeButtonClicked(result.negativeButtonClickResult!.which);
         }
         break;
     }
@@ -158,7 +158,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureEncrypt(
@@ -188,7 +188,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         break;
       case AndroidAuthenticationResultStatus.negativeButtonClicked:
         if (onNegativeButtonClicked != null) {
-          onNegativeButtonClicked();
+          onNegativeButtonClicked(result.negativeButtonClickResult!.which);
         }
         break;
       case AndroidAuthenticationResultStatus.canceled:
@@ -212,7 +212,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureDecrypt(
@@ -238,7 +238,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         break;
       case AndroidAuthenticationResultStatus.negativeButtonClicked:
         if (onNegativeButtonClicked != null) {
-          onNegativeButtonClicked();
+          onNegativeButtonClicked(result.negativeButtonClickResult!.which);
         }
         break;
       case AndroidAuthenticationResultStatus.canceled:

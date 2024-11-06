@@ -71,7 +71,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticateDeviceCredential() has not been implemented.');
@@ -91,7 +91,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticateBiometric() has not been implemented.');
@@ -108,7 +108,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticateSecureEncrypt() has not been implemented.');
@@ -126,7 +126,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     throw UnimplementedError('authenticateSecureDecrypt() has not been implemented.');

@@ -43,13 +43,23 @@ class AndroidAuthenticationFailure {
   });
 }
 
+class AndroidAuthenticationNegativeButtonClickResult {
+  int which;
+
+  AndroidAuthenticationNegativeButtonClickResult({
+    required this.which,
+  });
+}
+
 class AndroidAuthenticationResult {
   AndroidAuthenticationResultStatus status;
   AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
 
   AndroidAuthenticationResult({
     required this.status,
     this.failure,
+    this.negativeButtonClickResult,
   });
 }
 
@@ -58,12 +68,14 @@ class AndroidSecureEncryptAuthResult {
   String? encodedIVKey;
   Map<String, String?>? encryptedResult;
   AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
 
   AndroidSecureEncryptAuthResult({
     required this.status,
     this.encodedIVKey,
     this.encryptedResult,
     this.failure,
+    this.negativeButtonClickResult,
   });
 }
 
@@ -71,11 +83,13 @@ class AndroidSecureDecryptAuthResult {
   AndroidAuthenticationResultStatus status;
   Map<String, String?>? decryptedResult;
   AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
 
   AndroidSecureDecryptAuthResult({
     required this.status,
     this.decryptedResult,
     this.failure,
+    this.negativeButtonClickResult,
   });
 }
 

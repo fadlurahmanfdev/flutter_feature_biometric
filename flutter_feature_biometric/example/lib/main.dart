@@ -139,6 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     onCanceled: () {
                       print("${Platform.operatingSystem} - On Canceled");
                     },
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - On Failed Authenticate");
+                    },
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
+                    },
                   );
                   break;
                 case "CREDENTIAL_AUTHENTICATE":
@@ -155,6 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     onCanceled: () {
                       print("${Platform.operatingSystem} - On Canceled");
+                    },
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - On Failed Authenticate");
+                    },
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
                     },
                   );
                   break;
@@ -188,37 +200,38 @@ class _MyHomePageState extends State<MyHomePage> {
                     onErrorAuthenticate: (code, message) {
                       print("${Platform.operatingSystem} - Error Encrypt Authenticate: $code - $message");
                     },
-                    onNegativeButtonClicked: () {
-                      print("onNegativeButtonClicked");
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
                     },
                   );
                   break;
                 case "SECURE_DECRYPT_AUTHENTICATE":
                   flutterFeatureBiometric.authenticateBiometricSecureDecrypt(
-                      key: "flutterBiometricKey",
-                      encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
-                      requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
-                      title: "Secure Decrypt Authenticate",
-                      description: "Secure Decrypt Authenticate",
-                      negativeText: "Batal",
-                      onSuccessAuthenticate: (state) {
-                        print("${Platform.operatingSystem} - Success Decrypt Authenticate");
-                        if (state is SuccessAuthenticateDecryptAndroid) {
-                          print("Result: ${state.decryptedResult}");
-                        }
-                      },
-                      onFailedAuthenticate: () {
-                        print("${Platform.operatingSystem} - Failed Decrypt Authenticate");
-                      },
-                      onErrorAuthenticate: (code, message) {
-                        print("${Platform.operatingSystem} - Error Decrypt Authenticate: $code - $message");
-                      },
-                      onNegativeButtonClicked: () {
-                        print("onNegativeButtonClicked");
-                      },
-                      onCanceled: () {
-                        print("onCanceled");
-                      });
+                    key: "flutterBiometricKey",
+                    encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
+                    requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
+                    title: "Secure Decrypt Authenticate",
+                    description: "Secure Decrypt Authenticate",
+                    negativeText: "Batal",
+                    onSuccessAuthenticate: (state) {
+                      print("${Platform.operatingSystem} - Success Decrypt Authenticate");
+                      if (state is SuccessAuthenticateDecryptAndroid) {
+                        print("Result: ${state.decryptedResult}");
+                      }
+                    },
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - Failed Decrypt Authenticate");
+                    },
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error Decrypt Authenticate: $code - $message");
+                    },
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
+                    },
+                    onCanceled: () {
+                      print("onCanceled");
+                    },
+                  );
                   break;
               }
             },

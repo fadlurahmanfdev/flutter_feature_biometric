@@ -59,7 +59,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticate(
@@ -92,7 +92,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     required Function() onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticate(
@@ -126,7 +126,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticateSecure(
@@ -165,7 +165,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
     Function()? onFailedAuthenticate,
     required Function(String code, String? message) onErrorAuthenticate,
-    Function()? onNegativeButtonClicked,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticateSecure(
