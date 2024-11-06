@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="fix(plugin): setup" />
+    <list default="true" id="0b01a9b1-4985-4678-b742-ebf4aa7f398c" name="Changes" comment="fix(platformInterface): change readme">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric/lib/src/flutter_feature_biometric.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/FlutterFeatureBiometricAndroidPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/Messages.kt" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/android/src/main/kotlin/com/fadlurahmanfdev/flutter_feature_biometric_android/Messages.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/flutter_feature_biometric_android.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/lib/src/messages.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pigeons/messages.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_android/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/ios/Classes/Messages.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/flutter_feature_biometric_ios.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/flutter_feature_biometric_ios.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/lib/src/messages.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_ios/pigeons/messages.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/default_method_channel_platform.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/flutter_feature_biometric_platform_interface.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/biometric_status.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/enum/authenticator_status.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +51,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/fadlurahmanfdev/flutter_feature_biometric.git&quot;,
+    &quot;url&quot;: &quot;https://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@github.com/fadlurahmanfdev/flutter_feature_biometric.git&quot;,
     &quot;accountId&quot;: &quot;6f42988a-17ed-4e05-a6f2-fd368437cd6f&quot;
   }
 }</component>
@@ -45,26 +64,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.android_plugin_example.executor": "Run",
-    "Flutter.plugin_example.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "dev",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/taufikfadlurahmanfajari/StudioProjects/Starter App Flutter/library/flutter_feature_biometric",
-    "settings.editor.selected.configurable": "dart.settings",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.android_plugin_example.executor&quot;: &quot;Run&quot;,
+    &quot;Flutter.plugin_example.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/taufikfadlurahmanfajari/StudioProjects/Starter App Flutter/library/flutter_feature_biometric&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/flutter_feature_biometric_platform_interface/lib/src/state" />
       <recent name="$PROJECT_DIR$/flutter_feature_biometric/example/lib" />
@@ -348,13 +368,42 @@
       <option name="project" value="LOCAL" />
       <updated>1730010045625</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="fix(platformInterface): setup">
+      <option name="closed" value="true" />
+      <created>1730155858140</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1730155858140</updated>
+    </task>
+    <task id="LOCAL-00033" summary="fix(platformInterface): change release version">
+      <option name="closed" value="true" />
+      <created>1730156144500</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1730156144500</updated>
+    </task>
+    <task id="LOCAL-00034" summary="fix(platformInterface): add description">
+      <option name="closed" value="true" />
+      <created>1730156605861</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1730156605861</updated>
+    </task>
+    <task id="LOCAL-00035" summary="fix(platformInterface): change readme">
+      <option name="closed" value="true" />
+      <created>1730161592952</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1730161592952</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initial message" />
-    <MESSAGE value="setup flutter feature biometric android" />
-    <MESSAGE value="setup flutter_feature_biometric_android" />
     <MESSAGE value="setup platform interface" />
     <MESSAGE value="setup base plugin" />
     <MESSAGE value="setup host biometric API" />
@@ -376,6 +425,10 @@
     <MESSAGE value="fix(plugin): setup nullable value" />
     <MESSAGE value="fix(plugin): setup using state" />
     <MESSAGE value="fix(plugin): setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(plugin): setup" />
+    <MESSAGE value="fix(platformInterface): setup" />
+    <MESSAGE value="fix(platformInterface): change release version" />
+    <MESSAGE value="fix(platformInterface): add description" />
+    <MESSAGE value="fix(platformInterface): change readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(platformInterface): change readme" />
   </component>
 </project>

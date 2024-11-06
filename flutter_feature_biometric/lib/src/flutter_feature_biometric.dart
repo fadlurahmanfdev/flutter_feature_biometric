@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 class FlutterFeatureBiometric {
@@ -6,87 +5,121 @@ class FlutterFeatureBiometric {
     return FlutterFeatureBiometricPlatform.instance.isDeviceSupportBiometric();
   }
 
-  Future<BiometricStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticator) {
-    return FlutterFeatureBiometricPlatform.instance.checkAuthenticationTypeStatus(authenticator);
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticator) {
+    return FlutterFeatureBiometricPlatform.instance.checkAuthenticatorStatus(authenticator);
   }
 
   Future<bool> canSecureAuthenticate() {
     return FlutterFeatureBiometricPlatform.instance.canSecureAuthenticate();
   }
 
-  Future<void> authenticate({
-    required BiometricAuthenticatorType authenticator,
+  Future<void> authenticateDeviceCredential({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function() onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) {
-    return FlutterFeatureBiometricPlatform.instance.authenticate(
-      authenticator: authenticator,
+    return FlutterFeatureBiometricPlatform.instance.authenticateDeviceCredential(
       title: title,
+      subTitle: subTitle,
       description: description,
       negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
       onDialogClicked: onDialogClicked,
       onCanceled: onCanceled,
     );
   }
 
-  Future<void> secureEncryptAuthenticate({
-    required String key,
-    required Map<String, String> requestForEncrypt,
+  Future<void> authenticateBiometric({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
-    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
+    bool confirmationRequired = false,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) {
-    return FlutterFeatureBiometricPlatform.instance.secureEncryptAuthenticate(
+    return FlutterFeatureBiometricPlatform.instance.authenticateBiometric(
+      title: title,
+      subTitle: subTitle,
+      description: description,
+      negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
+      onSuccessAuthenticate: onSuccessAuthenticate,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
+      onDialogClicked: onDialogClicked,
+      onCanceled: onCanceled,
+    );
+  }
+
+  Future<void> authenticateBiometricSecureEncrypt({
+    required String key,
+    required Map<String, String> requestForEncrypt,
+    required String title,
+    String? subTitle,
+    required String description,
+    required String negativeText,
+    bool confirmationRequired = false,
+    required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onDialogClicked,
+    Function()? onCanceled,
+  }) {
+    return FlutterFeatureBiometricPlatform.instance.authenticateSecureEncrypt(
       key: key,
       requestForEncrypt: requestForEncrypt,
       title: title,
       description: description,
       negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
       onDialogClicked: onDialogClicked,
       onCanceled: onCanceled,
     );
   }
 
-  Future<void> secureDecryptAuthenticate({
+  Future<void> authenticateBiometricSecureDecrypt({
     required String key,
     required String encodedIVKey,
     required Map<String, String> requestForDecrypt,
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
     Function(int which)? onDialogClicked,
     Function()? onCanceled,
   }) {
-    return FlutterFeatureBiometricPlatform.instance.secureDecryptAuthenticate(
+    return FlutterFeatureBiometricPlatform.instance.authenticateSecureDecrypt(
       key: key,
       encodedIVKey: encodedIVKey,
       requestForDecrypt: requestForDecrypt,
       title: title,
       description: description,
       negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
       onDialogClicked: onDialogClicked,
       onCanceled: onCanceled,
     );

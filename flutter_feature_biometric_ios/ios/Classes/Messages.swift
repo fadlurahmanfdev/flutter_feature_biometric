@@ -67,28 +67,28 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-enum NativeLAPolicy: Int {
+enum IOSLAPolicy: Int {
   case biometric = 0
   case deviceCredential = 1
 }
 
-enum NativeAuthResultStatus: Int {
+enum IOSAuthenticationResultStatus: Int {
   case success = 0
   case biometricChanged = 1
   case canceled = 2
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct NativeAuthResult {
-  var status: NativeAuthResultStatus
+struct IOSAuthenticationResult {
+  var status: IOSAuthenticationResultStatus
 
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> NativeAuthResult? {
-    let status = pigeonVar_list[0] as! NativeAuthResultStatus
+  static func fromList(_ pigeonVar_list: [Any?]) -> IOSAuthenticationResult? {
+    let status = pigeonVar_list[0] as! IOSAuthenticationResultStatus
 
-    return NativeAuthResult(
+    return IOSAuthenticationResult(
       status: status
     )
   }
@@ -105,17 +105,17 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return NativeLAPolicy(rawValue: enumResultAsInt)
+        return IOSLAPolicy(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return NativeAuthResultStatus(rawValue: enumResultAsInt)
+        return IOSAuthenticationResultStatus(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
-      return NativeAuthResult.fromList(self.readValue() as! [Any?])
+      return IOSAuthenticationResult.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -124,13 +124,13 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
 
 private class MessagesPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? NativeLAPolicy {
+    if let value = value as? IOSLAPolicy {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? NativeAuthResultStatus {
+    } else if let value = value as? IOSAuthenticationResultStatus {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? NativeAuthResult {
+    } else if let value = value as? IOSAuthenticationResult {
       super.writeByte(131)
       super.writeValue(value.toList())
     } else {
@@ -157,9 +157,9 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
-  func canAuthenticate(policy: NativeLAPolicy) throws -> Bool
-  func authenticate(policy: NativeLAPolicy, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
-  func authenticateSecure(policy: NativeLAPolicy, key: String, description: String, completion: @escaping (Result<NativeAuthResult, Error>) -> Void)
+  func canAuthenticate(laPolicy: IOSLAPolicy) throws -> Bool
+  func authenticate(policy: IOSLAPolicy, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
+  func authenticateSecure(policy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -185,9 +185,9 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       canAuthenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let policyArg = args[0] as! NativeLAPolicy
+        let laPolicyArg = args[0] as! IOSLAPolicy
         do {
-          let result = try api.canAuthenticate(policy: policyArg)
+          let result = try api.canAuthenticate(laPolicy: laPolicyArg)
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
@@ -200,7 +200,7 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       authenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let policyArg = args[0] as! NativeLAPolicy
+        let policyArg = args[0] as! IOSLAPolicy
         let descriptionArg = args[1] as! String
         api.authenticate(policy: policyArg, description: descriptionArg) { result in
           switch result {
@@ -218,7 +218,7 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       authenticateSecureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let policyArg = args[0] as! NativeLAPolicy
+        let policyArg = args[0] as! IOSLAPolicy
         let keyArg = args[1] as! String
         let descriptionArg = args[2] as! String
         api.authenticateSecure(policy: policyArg, key: keyArg, description: descriptionArg) { result in

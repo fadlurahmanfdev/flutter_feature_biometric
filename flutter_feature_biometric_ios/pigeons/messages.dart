@@ -10,32 +10,32 @@ import 'package:pigeon/pigeon.dart';
   swiftOptions: SwiftOptions(),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
-enum NativeLAPolicy {
+enum IOSLAPolicy {
   biometric,
   deviceCredential,
 }
 
-enum NativeAuthResultStatus {
+enum IOSAuthenticationResultStatus {
   success,
   biometricChanged,
   canceled,
 }
 
-class NativeAuthResult {
-  NativeAuthResultStatus status;
+class IOSAuthenticationResult {
+  IOSAuthenticationResultStatus status;
 
-  NativeAuthResult({required this.status});
+  IOSAuthenticationResult({required this.status});
 }
 
 @HostApi()
 abstract class FlutterFeatureBiometricApi {
   bool isDeviceSupportBiometric();
 
-  bool canAuthenticate(NativeLAPolicy policy);
+  bool canAuthenticate(IOSLAPolicy laPolicy);
 
   @async
-  NativeAuthResult authenticate(NativeLAPolicy policy, String description);
+  IOSAuthenticationResult authenticate(IOSLAPolicy policy, String description);
 
   @async
-  NativeAuthResult authenticateSecure(NativeLAPolicy policy, String key, String description);
+  IOSAuthenticationResult authenticateSecure(IOSLAPolicy policy, String key, String description);
 }

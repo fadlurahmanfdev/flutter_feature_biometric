@@ -18,21 +18,22 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-enum NativeBiometricStatus {
+enum AndroidAuthenticatorStatus {
   success,
-  noAvailable,
+  noHardwareAvailable,
   unavailable,
   noneEnrolled,
+  securityUpdateRequired,
+  unsupportedOSVersion,
   unknown,
 }
 
-enum NativeBiometricAuthenticator {
-  weak,
-  strong,
+enum AndroidAuthenticatorType {
+  biometric,
   deviceCredential,
 }
 
-enum NativeAuthResultStatus {
+enum AndroidAuthenticationResultStatus {
   success,
   canceled,
   failed,
@@ -40,8 +41,8 @@ enum NativeAuthResultStatus {
   dialogClicked,
 }
 
-class NativeAuthDialogClickResult {
-  NativeAuthDialogClickResult({
+class AndroidAuthenticationDialogClickResult {
+  AndroidAuthenticationDialogClickResult({
     required this.which,
   });
 
@@ -53,16 +54,16 @@ class NativeAuthDialogClickResult {
     ];
   }
 
-  static NativeAuthDialogClickResult decode(Object result) {
+  static AndroidAuthenticationDialogClickResult decode(Object result) {
     result as List<Object?>;
-    return NativeAuthDialogClickResult(
+    return AndroidAuthenticationDialogClickResult(
       which: result[0]! as int,
     );
   }
 }
 
-class NativeAuthFailure {
-  NativeAuthFailure({
+class AndroidAuthenticationFailure {
+  AndroidAuthenticationFailure({
     required this.code,
     this.message,
   });
@@ -78,27 +79,27 @@ class NativeAuthFailure {
     ];
   }
 
-  static NativeAuthFailure decode(Object result) {
+  static AndroidAuthenticationFailure decode(Object result) {
     result as List<Object?>;
-    return NativeAuthFailure(
+    return AndroidAuthenticationFailure(
       code: result[0]! as String,
       message: result[1] as String?,
     );
   }
 }
 
-class NativeAuthResult {
-  NativeAuthResult({
+class AndroidAuthenticationResult {
+  AndroidAuthenticationResult({
     required this.status,
     this.failure,
     this.dialogClickResult,
   });
 
-  NativeAuthResultStatus status;
+  AndroidAuthenticationResultStatus status;
 
-  NativeAuthFailure? failure;
+  AndroidAuthenticationFailure? failure;
 
-  NativeAuthDialogClickResult? dialogClickResult;
+  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   Object encode() {
     return <Object?>[
@@ -108,18 +109,18 @@ class NativeAuthResult {
     ];
   }
 
-  static NativeAuthResult decode(Object result) {
+  static AndroidAuthenticationResult decode(Object result) {
     result as List<Object?>;
-    return NativeAuthResult(
-      status: result[0]! as NativeAuthResultStatus,
-      failure: result[1] as NativeAuthFailure?,
-      dialogClickResult: result[2] as NativeAuthDialogClickResult?,
+    return AndroidAuthenticationResult(
+      status: result[0]! as AndroidAuthenticationResultStatus,
+      failure: result[1] as AndroidAuthenticationFailure?,
+      dialogClickResult: result[2] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
 
-class NativeSecureEncryptAuthResult {
-  NativeSecureEncryptAuthResult({
+class AndroidSecureEncryptAuthResult {
+  AndroidSecureEncryptAuthResult({
     required this.status,
     this.encodedIVKey,
     this.encryptedResult,
@@ -127,15 +128,15 @@ class NativeSecureEncryptAuthResult {
     this.dialogClickResult,
   });
 
-  NativeAuthResultStatus status;
+  AndroidAuthenticationResultStatus status;
 
   String? encodedIVKey;
 
   Map<String, String?>? encryptedResult;
 
-  NativeAuthFailure? failure;
+  AndroidAuthenticationFailure? failure;
 
-  NativeAuthDialogClickResult? dialogClickResult;
+  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   Object encode() {
     return <Object?>[
@@ -147,33 +148,33 @@ class NativeSecureEncryptAuthResult {
     ];
   }
 
-  static NativeSecureEncryptAuthResult decode(Object result) {
+  static AndroidSecureEncryptAuthResult decode(Object result) {
     result as List<Object?>;
-    return NativeSecureEncryptAuthResult(
-      status: result[0]! as NativeAuthResultStatus,
+    return AndroidSecureEncryptAuthResult(
+      status: result[0]! as AndroidAuthenticationResultStatus,
       encodedIVKey: result[1] as String?,
       encryptedResult: (result[2] as Map<Object?, Object?>?)?.cast<String, String?>(),
-      failure: result[3] as NativeAuthFailure?,
-      dialogClickResult: result[4] as NativeAuthDialogClickResult?,
+      failure: result[3] as AndroidAuthenticationFailure?,
+      dialogClickResult: result[4] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
 
-class NativeSecureDecryptAuthResult {
-  NativeSecureDecryptAuthResult({
+class AndroidSecureDecryptAuthResult {
+  AndroidSecureDecryptAuthResult({
     required this.status,
     this.decryptedResult,
     this.failure,
     this.dialogClickResult,
   });
 
-  NativeAuthResultStatus status;
+  AndroidAuthenticationResultStatus status;
 
   Map<String, String?>? decryptedResult;
 
-  NativeAuthFailure? failure;
+  AndroidAuthenticationFailure? failure;
 
-  NativeAuthDialogClickResult? dialogClickResult;
+  AndroidAuthenticationDialogClickResult? dialogClickResult;
 
   Object encode() {
     return <Object?>[
@@ -184,13 +185,13 @@ class NativeSecureDecryptAuthResult {
     ];
   }
 
-  static NativeSecureDecryptAuthResult decode(Object result) {
+  static AndroidSecureDecryptAuthResult decode(Object result) {
     result as List<Object?>;
-    return NativeSecureDecryptAuthResult(
-      status: result[0]! as NativeAuthResultStatus,
+    return AndroidSecureDecryptAuthResult(
+      status: result[0]! as AndroidAuthenticationResultStatus,
       decryptedResult: (result[1] as Map<Object?, Object?>?)?.cast<String, String?>(),
-      failure: result[2] as NativeAuthFailure?,
-      dialogClickResult: result[3] as NativeAuthDialogClickResult?,
+      failure: result[2] as AndroidAuthenticationFailure?,
+      dialogClickResult: result[3] as AndroidAuthenticationDialogClickResult?,
     );
   }
 }
@@ -203,28 +204,28 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is NativeBiometricStatus) {
+    }    else if (value is AndroidAuthenticatorStatus) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is NativeBiometricAuthenticator) {
+    }    else if (value is AndroidAuthenticatorType) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    }    else if (value is NativeAuthResultStatus) {
+    }    else if (value is AndroidAuthenticationResultStatus) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    }    else if (value is NativeAuthDialogClickResult) {
+    }    else if (value is AndroidAuthenticationDialogClickResult) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is NativeAuthFailure) {
+    }    else if (value is AndroidAuthenticationFailure) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is NativeAuthResult) {
+    }    else if (value is AndroidAuthenticationResult) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    }    else if (value is NativeSecureEncryptAuthResult) {
+    }    else if (value is AndroidSecureEncryptAuthResult) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    }    else if (value is NativeSecureDecryptAuthResult) {
+    }    else if (value is AndroidSecureDecryptAuthResult) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
     } else {
@@ -237,23 +238,23 @@ class _PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeBiometricStatus.values[value];
+        return value == null ? null : AndroidAuthenticatorStatus.values[value];
       case 130: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeBiometricAuthenticator.values[value];
+        return value == null ? null : AndroidAuthenticatorType.values[value];
       case 131: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeAuthResultStatus.values[value];
+        return value == null ? null : AndroidAuthenticationResultStatus.values[value];
       case 132: 
-        return NativeAuthDialogClickResult.decode(readValue(buffer)!);
+        return AndroidAuthenticationDialogClickResult.decode(readValue(buffer)!);
       case 133: 
-        return NativeAuthFailure.decode(readValue(buffer)!);
+        return AndroidAuthenticationFailure.decode(readValue(buffer)!);
       case 134: 
-        return NativeAuthResult.decode(readValue(buffer)!);
+        return AndroidAuthenticationResult.decode(readValue(buffer)!);
       case 135: 
-        return NativeSecureEncryptAuthResult.decode(readValue(buffer)!);
+        return AndroidSecureEncryptAuthResult.decode(readValue(buffer)!);
       case 136: 
-        return NativeSecureDecryptAuthResult.decode(readValue(buffer)!);
+        return AndroidSecureDecryptAuthResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -272,6 +273,82 @@ class FlutterFeatureBiometricApi {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
+
+  Future<void> deleteSecretKey(String alias) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.deleteSecretKey$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[alias]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isDeviceSupportFingerprint() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFingerprint$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> isDeviceSupportFaceAuth() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFaceAuth$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
 
   Future<bool> isDeviceSupportBiometric() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportBiometric$pigeonVar_messageChannelSuffix';
@@ -300,42 +377,15 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<NativeBiometricStatus> checkAuthenticationStatus(NativeBiometricAuthenticator authenticator) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkAuthenticationStatus$pigeonVar_messageChannelSuffix';
+  Future<bool> isFingerprintEnrolled() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isFingerprintEnrolled$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticator]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as NativeBiometricStatus?)!;
-    }
-  }
-
-  Future<bool> canAuthenticate({required NativeBiometricAuthenticator authenticator}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.canAuthenticate$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticator]) as List<Object?>?;
+        await pigeonVar_channel.send(null) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -354,15 +404,15 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<NativeAuthResult> authenticate({required NativeBiometricAuthenticator authenticator, required String title, required String description, required String negativeText,}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
+  Future<bool> isDeviceCredentialEnrolled() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceCredentialEnrolled$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[authenticator, title, description, negativeText]) as List<Object?>?;
+        await pigeonVar_channel.send(null) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -377,19 +427,19 @@ class FlutterFeatureBiometricApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as NativeAuthResult?)!;
+      return (pigeonVar_replyList[0] as bool?)!;
     }
   }
 
-  Future<NativeSecureEncryptAuthResult> secureEncryptAuthenticate({required String alias, required Map<String, String> requestForEncrypt, required String title, required String description, required String negativeText,}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.secureEncryptAuthenticate$pigeonVar_messageChannelSuffix';
+  Future<AndroidAuthenticatorStatus> checkAuthenticatorStatus(AndroidAuthenticatorType androidAuthenticatorType) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkAuthenticatorStatus$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[alias, requestForEncrypt, title, description, negativeText]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[androidAuthenticatorType]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -404,19 +454,19 @@ class FlutterFeatureBiometricApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as NativeSecureEncryptAuthResult?)!;
+      return (pigeonVar_replyList[0] as AndroidAuthenticatorStatus?)!;
     }
   }
 
-  Future<NativeSecureDecryptAuthResult> secureDecryptAuthenticate({required String alias, required String encodedIVKey, required Map<String, String> requestForDecrypt, required String title, required String description, required String negativeText,}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.secureDecryptAuthenticate$pigeonVar_messageChannelSuffix';
+  Future<AndroidAuthenticatorStatus> checkSecureAuthenticatorStatus() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkSecureAuthenticatorStatus$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[alias, encodedIVKey, requestForDecrypt, title, description, negativeText]) as List<Object?>?;
+        await pigeonVar_channel.send(null) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -431,7 +481,169 @@ class FlutterFeatureBiometricApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as NativeSecureDecryptAuthResult?)!;
+      return (pigeonVar_replyList[0] as AndroidAuthenticatorStatus?)!;
+    }
+  }
+
+  Future<bool> canAuthenticate({required AndroidAuthenticatorType androidAuthenticatorType}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.canAuthenticate$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[androidAuthenticatorType]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<AndroidAuthenticationResult> authenticateDeviceCredential({required String title, String? subTitle, required String description, required String negativeText, required bool confirmationRequired,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateDeviceCredential$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[title, subTitle, description, negativeText, confirmationRequired]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as AndroidAuthenticationResult?)!;
+    }
+  }
+
+  Future<AndroidAuthenticationResult> authenticateBiometric({required String title, String? subTitle, required String description, required String negativeText, required bool confirmationRequired,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometric$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[title, subTitle, description, negativeText, confirmationRequired]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as AndroidAuthenticationResult?)!;
+    }
+  }
+
+  Future<bool> isBiometricChanged({required String alias}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isBiometricChanged$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[alias]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<AndroidSecureEncryptAuthResult> authenticateBiometricSecureEncrypt({required String alias, required Map<String, String> requestForEncrypt, required String title, String? subTitle, required String description, required String negativeText, required bool confirmationRequired,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometricSecureEncrypt$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[alias, requestForEncrypt, title, subTitle, description, negativeText, confirmationRequired]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as AndroidSecureEncryptAuthResult?)!;
+    }
+  }
+
+  Future<AndroidSecureDecryptAuthResult> authenticateBiometricSecureDecrypt({required String alias, required String encodedIVKey, required Map<String, String> requestForDecrypt, required String title, String? subTitle, required String description, required String negativeText, required bool confirmationRequired,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometricSecureDecrypt$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[alias, encodedIVKey, requestForDecrypt, title, subTitle, description, negativeText, confirmationRequired]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as AndroidSecureDecryptAuthResult?)!;
     }
   }
 }

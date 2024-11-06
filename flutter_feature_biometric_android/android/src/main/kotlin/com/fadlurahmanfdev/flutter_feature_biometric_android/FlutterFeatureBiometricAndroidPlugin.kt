@@ -1,23 +1,21 @@
 package com.fadlurahmanfdev.flutter_feature_biometric_android
 
 import android.app.Activity
-import android.content.DialogInterface
-import android.os.CancellationSignal
-import androidx.biometric.BiometricManager.Authenticators
-import com.fadlurahmanfdev.flutter_feature_biometric_android.NativeBiometricAuthenticator.*
-import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometricCallBack
-import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometricDecryptSecureCallBack
-import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.FeatureBiometricEncryptSecureCallBack
-import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.BiometricType
-import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureBiometricStatus.*
-import com.fadlurahmanfdev.kotlin_feature_identity.data.exception.FeatureBiometricException
-import com.fadlurahmanfdev.kotlin_feature_identity.plugin.KotlinFeatureBiometric
+import android.os.Build
+import android.util.Base64
+import androidx.annotation.RequiresApi
+import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.AuthenticationCallBack
+import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationDecryptCallBack
+import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationEncryptCallBack
+import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureAuthenticationStatus
+import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureAuthenticatorType
+import com.fadlurahmanfdev.kotlin_feature_identity.data.exception.FeatureIdentityException
+import com.fadlurahmanfdev.kotlin_feature_identity.plugin.FeatureAuthentication
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
 import javax.crypto.Cipher
-import android.util.Base64
 
 /** FlutterFeatureBiometricAndroidPlugin */
 class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
@@ -27,7 +25,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
-    private var kotlinFeatureBiometric: KotlinFeatureBiometric? = null
+    private var featureAuthentication: FeatureAuthentication? = null
 
     private var activity: Activity? = null
 
@@ -42,7 +40,7 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        kotlinFeatureBiometric = KotlinFeatureBiometric(binding.activity)
+        featureAuthentication = FeatureAuthentication(binding.activity.applicationContext)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -50,88 +48,121 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        kotlinFeatureBiometric = KotlinFeatureBiometric(binding.activity)
+        featureAuthentication = FeatureAuthentication(binding.activity.applicationContext)
     }
 
     override fun onDetachedFromActivity() {
-        kotlinFeatureBiometric = null
+        featureAuthentication = null
+    }
+
+    override fun deleteSecretKey(alias: String) {
+        featureAuthentication?.deleteSecretKey(alias)
+    }
+
+    override fun isDeviceSupportFingerprint(): Boolean {
+        return featureAuthentication?.isDeviceSupportFingerprint() ?: false
+    }
+
+    override fun isDeviceSupportFaceAuth(): Boolean {
+        return featureAuthentication?.isDeviceSupportFaceAuth() ?: false
     }
 
     override fun isDeviceSupportBiometric(): Boolean {
-        return kotlinFeatureBiometric?.haveFeatureBiometric() ?: false
+        return featureAuthentication?.isDeviceSupportBiometric() ?: false
     }
 
-    override fun checkAuthenticationStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus {
-        val flutterAuthenticator = when (authenticator) {
-            WEAK -> Authenticators.BIOMETRIC_WEAK
-            STRONG -> Authenticators.BIOMETRIC_STRONG
-            DEVICE_CREDENTIAL -> Authenticators.DEVICE_CREDENTIAL
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun isFingerprintEnrolled(): Boolean {
+        return featureAuthentication?.isFingerprintEnrolled() ?: false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun isDeviceCredentialEnrolled(): Boolean {
+        return featureAuthentication?.isDeviceCredentialEnrolled() ?: false
+    }
+
+    override fun checkAuthenticatorStatus(androidAuthenticatorType: AndroidAuthenticatorType): AndroidAuthenticatorStatus {
+        val authenticatorType = when (androidAuthenticatorType) {
+            AndroidAuthenticatorType.BIOMETRIC -> FeatureAuthenticatorType.BIOMETRIC
+            AndroidAuthenticatorType.DEVICE_CREDENTIAL -> FeatureAuthenticatorType.DEVICE_CREDENTIAL
         }
-        val nativeBiometricStatus =
-            kotlinFeatureBiometric?.checkBiometricStatus(flutterAuthenticator) ?: UNKNOWN
-        return when (nativeBiometricStatus) {
-            SUCCESS -> NativeBiometricStatus.SUCCESS
-            NO_BIOMETRIC_AVAILABLE -> NativeBiometricStatus.NO_AVAILABLE
-            BIOMETRIC_UNAVAILABLE -> NativeBiometricStatus.UNAVAILABLE
-            NONE_ENROLLED -> NativeBiometricStatus.NONE_ENROLLED
-            UNKNOWN -> NativeBiometricStatus.UNKNOWN
+
+        val authenticatorStatus =
+            featureAuthentication?.checkAuthenticatorStatus(authenticatorType)
+        return when (authenticatorStatus) {
+            FeatureAuthenticationStatus.SUCCESS -> AndroidAuthenticatorStatus.SUCCESS
+            FeatureAuthenticationStatus.NO_HARDWARE -> AndroidAuthenticatorStatus.NO_HARDWARE_AVAILABLE
+            FeatureAuthenticationStatus.UNAVAILABLE -> AndroidAuthenticatorStatus.UNAVAILABLE
+            FeatureAuthenticationStatus.NONE_ENROLLED -> AndroidAuthenticatorStatus.NONE_ENROLLED
+            FeatureAuthenticationStatus.SECURITY_UPDATE_REQUIRED -> AndroidAuthenticatorStatus.SECURITY_UPDATE_REQUIRED
+            FeatureAuthenticationStatus.UNSUPPORTED_OS_VERSION -> AndroidAuthenticatorStatus.UNSUPPORTED_OSVERSION
+            FeatureAuthenticationStatus.UNKNOWN -> AndroidAuthenticatorStatus.UNKNOWN
+            null -> AndroidAuthenticatorStatus.UNKNOWN
+        }
+    }
+
+    override fun checkSecureAuthenticatorStatus(): AndroidAuthenticatorStatus {
+        val authenticatorStatus =
+            featureAuthentication?.checkSecureAuthentication()
+        return when (authenticatorStatus) {
+            FeatureAuthenticationStatus.SUCCESS -> AndroidAuthenticatorStatus.SUCCESS
+            FeatureAuthenticationStatus.NO_HARDWARE -> AndroidAuthenticatorStatus.NO_HARDWARE_AVAILABLE
+            FeatureAuthenticationStatus.UNAVAILABLE -> AndroidAuthenticatorStatus.UNAVAILABLE
+            FeatureAuthenticationStatus.NONE_ENROLLED -> AndroidAuthenticatorStatus.NONE_ENROLLED
+            FeatureAuthenticationStatus.SECURITY_UPDATE_REQUIRED -> AndroidAuthenticatorStatus.SECURITY_UPDATE_REQUIRED
+            FeatureAuthenticationStatus.UNSUPPORTED_OS_VERSION -> AndroidAuthenticatorStatus.UNSUPPORTED_OSVERSION
+            FeatureAuthenticationStatus.UNKNOWN -> AndroidAuthenticatorStatus.UNKNOWN
+            null -> AndroidAuthenticatorStatus.UNKNOWN
         }
     }
 
     override fun canAuthenticate(
-        authenticator: NativeBiometricAuthenticator,
-    ): Boolean {
-        return checkAuthenticationStatus(authenticator) == NativeBiometricStatus.SUCCESS
-    }
+        androidAuthenticatorType: AndroidAuthenticatorType,
+    ): Boolean =
+        checkAuthenticatorStatus(androidAuthenticatorType) == AndroidAuthenticatorStatus.SUCCESS
 
-    override fun authenticate(
-        authenticator: NativeBiometricAuthenticator,
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun authenticateDeviceCredential(
         title: String,
+        subTitle: String?,
         description: String,
         negativeText: String,
-        callback: (Result<NativeAuthResult>) -> Unit
+        confirmationRequired: Boolean,
+        callback: (Result<AndroidAuthenticationResult>) -> Unit
     ) {
-        val nativeType = when (authenticator) {
-            WEAK -> BiometricType.WEAK
-            STRONG -> BiometricType.STRONG
-            DEVICE_CREDENTIAL -> BiometricType.DEVICE_CREDENTIAL
-        }
-        val cancellationSignal = CancellationSignal()
-        kotlinFeatureBiometric?.authenticate(
-            type = nativeType,
+        featureAuthentication?.authenticateDeviceCredential(
             title = title,
+            subTitle = subTitle,
             description = description,
             negativeText = negativeText,
-            cancellationSignal = cancellationSignal,
-            callBack = object : FeatureBiometricCallBack {
+            confirmationRequired = confirmationRequired,
+            callBack = object : AuthenticationCallBack {
                 override fun onSuccessAuthenticate() {
                     callback.invoke(
                         Result.success(
-                            NativeAuthResult(
-                                status = NativeAuthResultStatus.SUCCESS
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.SUCCESS
                             )
                         )
                     )
                 }
 
                 override fun onFailedAuthenticate() {
-                    super.onFailedAuthenticate()
                     callback.invoke(
                         Result.success(
-                            NativeAuthResult(
-                                status = NativeAuthResultStatus.FAILED
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.FAILED
                             )
                         )
                     )
                 }
 
-                override fun onErrorAuthenticate(exception: FeatureBiometricException) {
-                    super.onErrorAuthenticate(exception)
+                override fun onErrorAuthenticate(exception: FeatureIdentityException) {
                     callback.invoke(
                         Result.success(
-                            NativeAuthResult(
-                                status = NativeAuthResultStatus.ERROR,
-                                failure = NativeAuthFailure(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.ERROR,
+                                failure = AndroidAuthenticationFailure(
                                     code = exception.code,
                                     message = exception.message,
                                 )
@@ -140,13 +171,13 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     )
                 }
 
-                override fun onDialogClick(dialogInterface: DialogInterface?, which: Int) {
-                    super.onDialogClick(dialogInterface, which)
+                override fun onNegativeButtonClicked(which: Int) {
+                    super.onNegativeButtonClicked(which)
                     callback.invoke(
                         Result.success(
-                            NativeAuthResult(
-                                status = NativeAuthResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = NativeAuthDialogClickResult(which = which.toLong())
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
+                                dialogClickResult = AndroidAuthenticationDialogClickResult(which = which.toLong())
                             )
                         )
                     )
@@ -156,8 +187,8 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     super.onCanceled()
                     callback.invoke(
                         Result.success(
-                            NativeAuthResult(
-                                status = NativeAuthResultStatus.CANCELED
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.CANCELED
                             )
                         )
                     )
@@ -166,49 +197,131 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
         )
     }
 
-    override fun secureEncryptAuthenticate(
+    override fun authenticateBiometric(
+        title: String,
+        subTitle: String?,
+        description: String,
+        negativeText: String,
+        confirmationRequired: Boolean,
+        callback: (Result<AndroidAuthenticationResult>) -> Unit
+    ) {
+        featureAuthentication?.authenticateBiometric(
+            title = title,
+            subTitle = subTitle,
+            description = description,
+            negativeText = negativeText,
+            confirmationRequired = confirmationRequired,
+            callBack = object : AuthenticationCallBack {
+                override fun onSuccessAuthenticate() {
+                    callback.invoke(
+                        Result.success(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.SUCCESS
+                            )
+                        )
+                    )
+                }
+
+                override fun onFailedAuthenticate() {
+                    callback.invoke(
+                        Result.success(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.FAILED
+                            )
+                        )
+                    )
+                }
+
+                override fun onErrorAuthenticate(exception: FeatureIdentityException) {
+                    callback.invoke(
+                        Result.success(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.ERROR,
+                                failure = AndroidAuthenticationFailure(
+                                    code = exception.code,
+                                    message = exception.message,
+                                )
+                            )
+                        )
+                    )
+                }
+
+                override fun onNegativeButtonClicked(which: Int) {
+                    super.onNegativeButtonClicked(which)
+                    callback.invoke(
+                        Result.success(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
+                                dialogClickResult = AndroidAuthenticationDialogClickResult(which = which.toLong())
+                            )
+                        )
+                    )
+                }
+
+                override fun onCanceled() {
+                    super.onCanceled()
+                    callback.invoke(
+                        Result.success(
+                            AndroidAuthenticationResult(
+                                status = AndroidAuthenticationResultStatus.CANCELED
+                            )
+                        )
+                    )
+                }
+            }
+        )
+    }
+
+    override fun isBiometricChanged(alias: String): Boolean {
+        return featureAuthentication?.isBiometricChanged(alias) ?: throw FeatureIdentityException(
+            code = "FEATURE_AUTHENTICATION_MISSING"
+        )
+    }
+
+    override fun authenticateBiometricSecureEncrypt(
         alias: String,
         requestForEncrypt: Map<String, String>,
         title: String,
+        subTitle: String?,
         description: String,
         negativeText: String,
-        callback: (Result<NativeSecureEncryptAuthResult>) -> Unit
+        confirmationRequired: Boolean,
+        callback: (Result<AndroidSecureEncryptAuthResult>) -> Unit
     ) {
-        val cancellationSignal = CancellationSignal()
-        kotlinFeatureBiometric?.authenticateSecureEncrypt(
+        featureAuthentication?.secureAuthenticateBiometricEncrypt(
             title = title,
+            subTitle = subTitle,
             description = description,
             negativeText = negativeText,
-            cancellationSignal = cancellationSignal,
+            confirmationRequired = confirmationRequired,
             alias = alias,
-            callBack = object : FeatureBiometricEncryptSecureCallBack {
-                override fun onSuccessAuthenticateEncryptSecureBiometric(
+            callBack = object : SecureAuthenticationEncryptCallBack {
+                override fun onSuccessAuthenticate(
                     cipher: Cipher,
-                    encodedIvKey: String
+                    encodedIVKey: String
                 ) {
                     val encryptedResponse: HashMap<String, String?> = hashMapOf()
                     requestForEncrypt.forEach { it ->
                         encryptedResponse[it.key] =
-                            kotlinFeatureBiometric?.encrypt(cipher, it.value)
+                            featureAuthentication?.encrypt(cipher, it.value)
                     }
                     callback.invoke(
                         Result.success(
-                            NativeSecureEncryptAuthResult(
-                                status = NativeAuthResultStatus.SUCCESS,
-                                encodedIVKey = encodedIvKey,
+                            AndroidSecureEncryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.SUCCESS,
+                                encodedIVKey = encodedIVKey,
                                 encryptedResult = encryptedResponse
                             )
                         )
                     )
                 }
 
-                override fun onErrorAuthenticate(exception: FeatureBiometricException) {
-                    super.onErrorAuthenticate(exception)
+                override fun onErrorAuthenticate(exception: FeatureIdentityException) {
                     callback.invoke(
                         Result.success(
-                            NativeSecureEncryptAuthResult(
-                                status = NativeAuthResultStatus.ERROR,
-                                failure = NativeAuthFailure(
+                            AndroidSecureEncryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.ERROR,
+                                failure = AndroidAuthenticationFailure(
                                     code = exception.code,
                                     message = exception.message,
                                 )
@@ -218,23 +331,22 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                 }
 
                 override fun onFailedAuthenticate() {
-                    super.onFailedAuthenticate()
                     callback.invoke(
                         Result.success(
-                            NativeSecureEncryptAuthResult(
-                                status = NativeAuthResultStatus.FAILED,
+                            AndroidSecureEncryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.FAILED,
                             )
                         )
                     )
                 }
 
-                override fun onDialogClick(dialogInterface: DialogInterface?, which: Int) {
-                    super.onDialogClick(dialogInterface, which)
+                override fun onNegativeButtonClicked(which: Int) {
+                    super.onNegativeButtonClicked(which)
                     callback.invoke(
                         Result.success(
-                            NativeSecureEncryptAuthResult(
-                                status = NativeAuthResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = NativeAuthDialogClickResult(
+                            AndroidSecureEncryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
+                                dialogClickResult = AndroidAuthenticationDialogClickResult(
                                     which = which.toLong()
                                 )
                             )
@@ -246,8 +358,8 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                     super.onCanceled()
                     callback.invoke(
                         Result.success(
-                            NativeSecureEncryptAuthResult(
-                                status = NativeAuthResultStatus.CANCELED
+                            AndroidSecureEncryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.CANCELED
                             )
                         )
                     )
@@ -256,50 +368,50 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
         )
     }
 
-    override fun secureDecryptAuthenticate(
+    override fun authenticateBiometricSecureDecrypt(
         alias: String,
         encodedIVKey: String,
         requestForDecrypt: Map<String, String>,
         title: String,
+        subTitle: String?,
         description: String,
         negativeText: String,
-        callback: (Result<NativeSecureDecryptAuthResult>) -> Unit
+        confirmationRequired: Boolean,
+        callback: (Result<AndroidSecureDecryptAuthResult>) -> Unit
     ) {
-        val cancellationSignal = CancellationSignal()
-        kotlinFeatureBiometric?.authenticateSecureDecrypt(
+        featureAuthentication?.secureAuthenticateBiometricDecrypt(
+            encodedIVKey = encodedIVKey,
             title = title,
-            encodedIvKey = encodedIVKey,
+            subTitle = subTitle,
             description = description,
             negativeText = negativeText,
-            cancellationSignal = cancellationSignal,
+            confirmationRequired = confirmationRequired,
             alias = alias,
-            callBack = object : FeatureBiometricDecryptSecureCallBack {
-
-                override fun onSuccessAuthenticateDecryptSecureBiometric(cipher: Cipher) {
+            callBack = object : SecureAuthenticationDecryptCallBack {
+                override fun onSuccessAuthenticate(cipher: Cipher) {
                     val decryptedResponse: HashMap<String, String?> = hashMapOf()
                     requestForDecrypt.forEach { it ->
                         val decoded = Base64.decode(it.value, Base64.NO_WRAP)
-                        val decrypted = kotlinFeatureBiometric?.decrypt(cipher, decoded)
+                        val decrypted = featureAuthentication?.decrypt(cipher, decoded)
                         decryptedResponse[it.key] = decrypted
 
                     }
                     callback.invoke(
                         Result.success(
-                            NativeSecureDecryptAuthResult(
-                                status = NativeAuthResultStatus.SUCCESS,
+                            AndroidSecureDecryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.SUCCESS,
                                 decryptedResult = decryptedResponse,
                             )
                         )
                     )
                 }
 
-                override fun onErrorAuthenticate(exception: FeatureBiometricException) {
-                    super.onErrorAuthenticate(exception)
+                override fun onErrorAuthenticate(exception: FeatureIdentityException) {
                     callback.invoke(
                         Result.success(
-                            NativeSecureDecryptAuthResult(
-                                status = NativeAuthResultStatus.ERROR,
-                                failure = NativeAuthFailure(
+                            AndroidSecureDecryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.ERROR,
+                                failure = AndroidAuthenticationFailure(
                                     code = exception.code,
                                     message = exception.message,
                                 )
@@ -309,23 +421,22 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
                 }
 
                 override fun onFailedAuthenticate() {
-                    super.onFailedAuthenticate()
                     callback.invoke(
                         Result.success(
-                            NativeSecureDecryptAuthResult(
-                                status = NativeAuthResultStatus.FAILED,
+                            AndroidSecureDecryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.FAILED,
                             )
                         )
                     )
                 }
 
-                override fun onDialogClick(dialogInterface: DialogInterface?, which: Int) {
-                    super.onDialogClick(dialogInterface, which)
+                override fun onNegativeButtonClicked(which: Int) {
+                    super.onNegativeButtonClicked(which)
                     callback.invoke(
                         Result.success(
-                            NativeSecureDecryptAuthResult(
-                                status = NativeAuthResultStatus.DIALOG_CLICKED,
-                                dialogClickResult = NativeAuthDialogClickResult(
+                            AndroidSecureDecryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.DIALOG_CLICKED,
+                                dialogClickResult = AndroidAuthenticationDialogClickResult(
                                     which = which.toLong()
                                 )
                             )
@@ -335,11 +446,10 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
                 override fun onCanceled() {
                     super.onCanceled()
-                    println("MASUK SINI CANCEL")
                     callback.invoke(
                         Result.success(
-                            NativeSecureDecryptAuthResult(
-                                status = NativeAuthResultStatus.CANCELED
+                            AndroidSecureDecryptAuthResult(
+                                status = AndroidAuthenticationResultStatus.CANCELED
                             )
                         )
                     )

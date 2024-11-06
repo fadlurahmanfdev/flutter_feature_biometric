@@ -1,10 +1,10 @@
 name: flutter_feature_biometric_android
-description: "A new Flutter plugin project."
+description: "Flutter Feature Biometric Android"
 version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: '>=3.0.0'
+  sdk: '^3.0.0'
   flutter: ">=3.10.0"
 
 dependencies:

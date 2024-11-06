@@ -125,24 +125,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
                 case "CREDENTIAL_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticate(
-                    authenticator: BiometricAuthenticatorType.deviceCredential,
-                    title: "Title - Credential Authenticate",
-                    description: "Description - Credential Authenticate",
-                    negativeText: "Batal",
-                    onSuccessAuthenticate: () {
-                      print("${Platform.operatingSystem} - Success authenticate credential");
-                    },
-                    onCanceled: (){
-                      print("onCanceled");
-                    }
-                  );
+                  flutterFeatureBiometric.authenticateDeviceCredential(
+                      title: "Title - Credential Authenticate",
+                      description: "Description - Credential Authenticate",
+                      negativeText: "Batal",
+                      onSuccessAuthenticate: () {
+                        print("${Platform.operatingSystem} - Success authenticate credential");
+                      },
+                      onErrorAuthenticate: (code, message) {
+                        print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                      },
+                      onCanceled: () {
+                        print("onCanceled");
+                      });
                 case "CAN_SECURE_AUTHENTICATE":
                   final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
                   break;
                 case "SECURE_ENCRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.secureEncryptAuthenticate(
+                  flutterFeatureBiometric.authenticateBiometricSecureEncrypt(
                     key: "flutterBiometricKey",
                     requestForEncrypt: {
                       "test": "P4ssw0rd",
@@ -151,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     description: "Secure Encrypt Authenticate",
                     negativeText: "Batal",
                     onSuccessAuthenticate: (state) {
-                      if(state is SuccessAuthenticateEncryptAndroid){
+                      if (state is SuccessAuthenticateEncryptAndroid) {
                         encodedIVKey = state.encodedIVKey;
                         state.encryptedResult.forEach((key, value) {
                           encryptedResult[key] = "$value";
@@ -161,11 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         print("Result: $encryptedResult");
                       }
                     },
-                    onFailed: () {
-                      print("onFailed");
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - Failed Encrypt Authenticate");
                     },
-                    onError: (code, message) {
-                      print("onError: $code - $message");
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error Encrypt Authenticate: $code - $message");
                     },
                     onDialogClicked: (which) {
                       print("onDialogClicked: $which");
@@ -173,32 +174,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   break;
                 case "SECURE_DECRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.secureDecryptAuthenticate(
-                    key: "flutterBiometricKey",
-                    encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
-                    requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
-                    title: "Secure Decrypt Authenticate",
-                    description: "Secure Decrypt Authenticate",
-                    negativeText: "Batal",
-                    onSuccessAuthenticate: (state) {
-                      print("${Platform.operatingSystem} - Success Decrypt Authenticate");
-                      if(state is SuccessAuthenticateDecryptAndroid){
-                        print("Result: ${state.decryptedResult}");
-                      }
-                    },
-                    onFailed: () {
-                      print("onFailed");
-                    },
-                    onError: (code, message) {
-                      print("onErrorXXX: $code - $message");
-                    },
-                    onDialogClicked: (which) {
-                      print("onDialogClicked: $which");
-                    },
-                    onCanceled: (){
-                      print("onCanceled");
-                    }
-                  );
+                  flutterFeatureBiometric.authenticateBiometricSecureDecrypt(
+                      key: "flutterBiometricKey",
+                      encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
+                      requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
+                      title: "Secure Decrypt Authenticate",
+                      description: "Secure Decrypt Authenticate",
+                      negativeText: "Batal",
+                      onSuccessAuthenticate: (state) {
+                        print("${Platform.operatingSystem} - Success Decrypt Authenticate");
+                        if (state is SuccessAuthenticateDecryptAndroid) {
+                          print("Result: ${state.decryptedResult}");
+                        }
+                      },
+                      onFailedAuthenticate: () {
+                        print("${Platform.operatingSystem} - Failed Decrypt Authenticate");
+                      },
+                      onErrorAuthenticate: (code, message) {
+                        print("${Platform.operatingSystem} - Error Decrypt Authenticate: $code - $message");
+                      },
+                      onDialogClicked: (which) {
+                        print("onDialogClicked: $which");
+                      },
+                      onCanceled: () {
+                        print("onCanceled");
+                      });
                   break;
               }
             },
