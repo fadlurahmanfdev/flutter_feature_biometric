@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import android.util.Base64
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentActivity
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.AuthenticationCallBack
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationDecryptCallBack
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationEncryptCallBack
@@ -31,27 +32,35 @@ class FlutterFeatureBiometricAndroidPlugin : FlutterPlugin, ActivityAware,
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        kotlin.io.println("MASUK_XXX onAttachedToEngine")
         FlutterFeatureBiometricApi.setUp(flutterPluginBinding.binaryMessenger, this)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        kotlin.io.println("MASUK_XXX onDetachedFromEngine")
         channel.setMethodCallHandler(null)
         FlutterFeatureBiometricApi.setUp(binding.binaryMessenger, this)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        featureAuthentication = FeatureAuthentication(binding.activity)
+        kotlin.io.println("MASUK_XXX onAttachedToActivity")
+        activity = binding.activity
+        featureAuthentication = FeatureAuthentication(activity = activity as FragmentActivity)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-
+        kotlin.io.println("MASUK_XXX onDetachedFromActivityForConfigChanges")
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        featureAuthentication = FeatureAuthentication(binding.activity)
+        kotlin.io.println("MASUK_XXX onReattachedToActivityForConfigChanges")
+        activity = binding.activity
+        featureAuthentication = FeatureAuthentication(activity = activity as FragmentActivity)
     }
 
     override fun onDetachedFromActivity() {
+        kotlin.io.println("MASUK_XXX onDetachedFromActivity")
+        activity = null
         featureAuthentication = null
     }
 
