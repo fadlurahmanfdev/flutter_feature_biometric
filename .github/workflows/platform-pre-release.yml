@@ -29,7 +29,7 @@ jobs:
         run: |
           flutter doctor -v
           flutter --version
-      - name: Publish To Pub Dev
+      - name: Dry Only - Publish To Pub Dev
         run: |
           mkdir -p $HOME/.config/dart
           cat <<EOF > $HOME/.config/dart/pub-credentials.json
