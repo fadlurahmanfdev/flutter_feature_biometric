@@ -1,6 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_feature_biometric_ios/flutter_feature_biometric_ios.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 // class MockFlutterFeatureBiometricIosPlatform
 //     with MockPlatformInterfaceMixin

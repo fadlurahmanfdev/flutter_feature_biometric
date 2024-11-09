@@ -124,25 +124,58 @@ class _MyHomePageState extends State<MyHomePage> {
                       await flutterFeatureBiometric.checkAuthenticatorStatus(BiometricAuthenticatorType.biometric);
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
-                case "CREDENTIAL_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticate(
-                    authenticator: BiometricAuthenticatorType.deviceCredential,
+                case "STANDARD_BIOMETRIC_AUTHENTICATE":
+                  flutterFeatureBiometric.authenticateBiometric(
                     title: "Title - Credential Authenticate",
                     description: "Description - Credential Authenticate",
+                    confirmationRequired: true,
                     negativeText: "Batal",
                     onSuccessAuthenticate: () {
                       print("${Platform.operatingSystem} - Success authenticate credential");
                     },
-                    onCanceled: (){
-                      print("onCanceled");
-                    }
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                    },
+                    onCanceled: () {
+                      print("${Platform.operatingSystem} - On Canceled");
+                    },
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - On Failed Authenticate");
+                    },
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
+                    },
                   );
+                  break;
+                case "CREDENTIAL_AUTHENTICATE":
+                  flutterFeatureBiometric.authenticateDeviceCredential(
+                    title: "Title - Credential Authenticate",
+                    description: "Description - Credential Authenticate",
+                    confirmationRequired: true,
+                    negativeText: "Batal",
+                    onSuccessAuthenticate: () {
+                      print("${Platform.operatingSystem} - Success authenticate credential");
+                    },
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                    },
+                    onCanceled: () {
+                      print("${Platform.operatingSystem} - On Canceled");
+                    },
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - On Failed Authenticate");
+                    },
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
+                    },
+                  );
+                  break;
                 case "CAN_SECURE_AUTHENTICATE":
                   final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
                   break;
                 case "SECURE_ENCRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.secureEncryptAuthenticate(
+                  flutterFeatureBiometric.authenticateBiometricSecureEncrypt(
                     key: "flutterBiometricKey",
                     requestForEncrypt: {
                       "test": "P4ssw0rd",
@@ -151,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     description: "Secure Encrypt Authenticate",
                     negativeText: "Batal",
                     onSuccessAuthenticate: (state) {
-                      if(state is SuccessAuthenticateEncryptAndroid){
+                      if (state is SuccessAuthenticateEncryptAndroid) {
                         encodedIVKey = state.encodedIVKey;
                         state.encryptedResult.forEach((key, value) {
                           encryptedResult[key] = "$value";
@@ -161,19 +194,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         print("Result: $encryptedResult");
                       }
                     },
-                    onFailed: () {
-                      print("onFailed");
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - Failed Encrypt Authenticate");
                     },
-                    onError: (code, message) {
-                      print("onError: $code - $message");
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error Encrypt Authenticate: $code - $message");
                     },
-                    onDialogClicked: (which) {
-                      print("onDialogClicked: $which");
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
                     },
                   );
                   break;
                 case "SECURE_DECRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.secureDecryptAuthenticate(
+                  flutterFeatureBiometric.authenticateBiometricSecureDecrypt(
                     key: "flutterBiometricKey",
                     encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
                     requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
@@ -182,22 +215,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     negativeText: "Batal",
                     onSuccessAuthenticate: (state) {
                       print("${Platform.operatingSystem} - Success Decrypt Authenticate");
-                      if(state is SuccessAuthenticateDecryptAndroid){
+                      if (state is SuccessAuthenticateDecryptAndroid) {
                         print("Result: ${state.decryptedResult}");
                       }
                     },
-                    onFailed: () {
-                      print("onFailed");
+                    onFailedAuthenticate: () {
+                      print("${Platform.operatingSystem} - Failed Decrypt Authenticate");
                     },
-                    onError: (code, message) {
-                      print("onErrorXXX: $code - $message");
+                    onErrorAuthenticate: (code, message) {
+                      print("${Platform.operatingSystem} - Error Decrypt Authenticate: $code - $message");
                     },
-                    onDialogClicked: (which) {
-                      print("onDialogClicked: $which");
+                    onNegativeButtonClicked: (which) {
+                      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
                     },
-                    onCanceled: (){
+                    onCanceled: () {
                       print("onCanceled");
-                    }
+                    },
                   );
                   break;
               }

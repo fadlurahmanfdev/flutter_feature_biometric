@@ -22,80 +22,114 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) {
     // TODO: implement checkBiometricStatus
-    return super.checkAuthenticationTypeStatus(authenticator);
+    return super.checkAuthenticatorStatus(authenticatorType);
   }
 
   @override
-  Future<void> authenticate({
-    required BiometricAuthenticatorType authenticator,
+  Future<void> authenticateDeviceCredential({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function() onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    // TODO: implement authenticate
-    return super.authenticate(
-      authenticator: authenticator,
+    // TODO: implement authenticateDeviceCredential
+    return super.authenticateDeviceCredential(
       title: title,
+      subTitle: subTitle,
       description: description,
       negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
-      onDialogClicked: onDialogClicked,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
+      onNegativeButtonClicked: onNegativeButtonClicked,
       onCanceled: onCanceled,
     );
   }
 
   @override
-  Future<void> secureEncryptAuthenticate({
-    required String key,
-    Map<String, String>? requestForEncrypt,
+  Future<void> authenticateBiometric({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
+    Function()? onCanceled,
+  }) async {
+    // TODO: implement authenticateBiometric
+    return super.authenticateBiometric(
+      title: title,
+      subTitle: subTitle,
+      description: description,
+      negativeText: negativeText,
+      confirmationRequired: confirmationRequired,
+      onSuccessAuthenticate: onSuccessAuthenticate,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
+      onNegativeButtonClicked: onNegativeButtonClicked,
+      onCanceled: onCanceled,
+    );
+  }
+
+  @override
+  Future<void> authenticateSecureEncrypt({
+    required String key,
+    required Map<String, String> requestForEncrypt,
+    required String title,
+    String? subTitle,
+    required String description,
+    required String negativeText,
+    bool confirmationRequired = false,
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     // TODO: implement secureEncryptAuthenticate
-    return super.secureEncryptAuthenticate(
+    return super.authenticateSecureEncrypt(
       key: key,
       requestForEncrypt: requestForEncrypt,
       title: title,
       description: description,
       negativeText: negativeText,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
-      onDialogClicked: onDialogClicked,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
+      onNegativeButtonClicked: onNegativeButtonClicked,
     );
   }
 
   @override
-  Future<void> secureDecryptAuthenticate({
+  Future<void> authenticateSecureDecrypt({
     required String key,
-    String? encodedIVKey,
-    Map<String, String>? requestForDecrypt,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
     // TODO: implement secureEncryptAuthenticate
-    return super.secureDecryptAuthenticate(
+    return super.authenticateSecureDecrypt(
       key: key,
       encodedIVKey: encodedIVKey,
       requestForDecrypt: requestForDecrypt,
@@ -103,9 +137,9 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
       description: description,
       negativeText: negativeText,
       onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailed: onFailed,
-      onError: onError,
-      onDialogClicked: onDialogClicked,
+      onFailedAuthenticate: onFailedAuthenticate,
+      onErrorAuthenticate: onErrorAuthenticate,
+      onNegativeButtonClicked: onNegativeButtonClicked,
     );
   }
 }

@@ -47,75 +47,58 @@ class FlutterError (
   val details: Any? = null
 ) : Throwable()
 
-enum class NativeBiometricStatus(val raw: Int) {
+enum class AndroidAuthenticatorStatus(val raw: Int) {
   SUCCESS(0),
-  NO_AVAILABLE(1),
+  NO_HARDWARE_AVAILABLE(1),
   UNAVAILABLE(2),
   NONE_ENROLLED(3),
-  UNKNOWN(4);
+  SECURITY_UPDATE_REQUIRED(4),
+  UNSUPPORTED_OSVERSION(5),
+  UNKNOWN(6);
 
   companion object {
-    fun ofRaw(raw: Int): NativeBiometricStatus? {
+    fun ofRaw(raw: Int): AndroidAuthenticatorStatus? {
       return values().firstOrNull { it.raw == raw }
     }
   }
 }
 
-enum class NativeBiometricAuthenticator(val raw: Int) {
-  WEAK(0),
-  STRONG(1),
-  DEVICE_CREDENTIAL(2);
+enum class AndroidAuthenticatorType(val raw: Int) {
+  BIOMETRIC(0),
+  DEVICE_CREDENTIAL(1);
 
   companion object {
-    fun ofRaw(raw: Int): NativeBiometricAuthenticator? {
+    fun ofRaw(raw: Int): AndroidAuthenticatorType? {
       return values().firstOrNull { it.raw == raw }
     }
   }
 }
 
-enum class NativeAuthResultStatus(val raw: Int) {
+enum class AndroidAuthenticationResultStatus(val raw: Int) {
   SUCCESS(0),
   CANCELED(1),
   FAILED(2),
   ERROR(3),
-  DIALOG_CLICKED(4);
+  NEGATIVE_BUTTON_CLICKED(4);
 
   companion object {
-    fun ofRaw(raw: Int): NativeAuthResultStatus? {
+    fun ofRaw(raw: Int): AndroidAuthenticationResultStatus? {
       return values().firstOrNull { it.raw == raw }
     }
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NativeAuthDialogClickResult (
-  val which: Long
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): NativeAuthDialogClickResult {
-      val which = pigeonVar_list[0] as Long
-      return NativeAuthDialogClickResult(which)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      which,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class NativeAuthFailure (
+data class AndroidAuthenticationFailure (
   val code: String,
   val message: String? = null
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): NativeAuthFailure {
+    fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationFailure {
       val code = pigeonVar_list[0] as String
       val message = pigeonVar_list[1] as String?
-      return NativeAuthFailure(code, message)
+      return AndroidAuthenticationFailure(code, message)
     }
   }
   fun toList(): List<Any?> {
@@ -127,46 +110,64 @@ data class NativeAuthFailure (
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NativeAuthResult (
-  val status: NativeAuthResultStatus,
-  val failure: NativeAuthFailure? = null,
-  val dialogClickResult: NativeAuthDialogClickResult? = null
+data class AndroidAuthenticationNegativeButtonClickResult (
+  val which: Long
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): NativeAuthResult {
-      val status = pigeonVar_list[0] as NativeAuthResultStatus
-      val failure = pigeonVar_list[1] as NativeAuthFailure?
-      val dialogClickResult = pigeonVar_list[2] as NativeAuthDialogClickResult?
-      return NativeAuthResult(status, failure, dialogClickResult)
+    fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationNegativeButtonClickResult {
+      val which = pigeonVar_list[0] as Long
+      return AndroidAuthenticationNegativeButtonClickResult(which)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      which,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class AndroidAuthenticationResult (
+  val status: AndroidAuthenticationResultStatus,
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): AndroidAuthenticationResult {
+      val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
+      val failure = pigeonVar_list[1] as AndroidAuthenticationFailure?
+      val negativeButtonClickResult = pigeonVar_list[2] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidAuthenticationResult(status, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       status,
       failure,
-      dialogClickResult,
+      negativeButtonClickResult,
     )
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NativeSecureEncryptAuthResult (
-  val status: NativeAuthResultStatus,
+data class AndroidSecureEncryptAuthResult (
+  val status: AndroidAuthenticationResultStatus,
   val encodedIVKey: String? = null,
   val encryptedResult: Map<String, String?>? = null,
-  val failure: NativeAuthFailure? = null,
-  val dialogClickResult: NativeAuthDialogClickResult? = null
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): NativeSecureEncryptAuthResult {
-      val status = pigeonVar_list[0] as NativeAuthResultStatus
+    fun fromList(pigeonVar_list: List<Any?>): AndroidSecureEncryptAuthResult {
+      val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val encodedIVKey = pigeonVar_list[1] as String?
       val encryptedResult = pigeonVar_list[2] as Map<String, String?>?
-      val failure = pigeonVar_list[3] as NativeAuthFailure?
-      val dialogClickResult = pigeonVar_list[4] as NativeAuthDialogClickResult?
-      return NativeSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure, dialogClickResult)
+      val failure = pigeonVar_list[3] as AndroidAuthenticationFailure?
+      val negativeButtonClickResult = pigeonVar_list[4] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidSecureEncryptAuthResult(status, encodedIVKey, encryptedResult, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
@@ -175,26 +176,26 @@ data class NativeSecureEncryptAuthResult (
       encodedIVKey,
       encryptedResult,
       failure,
-      dialogClickResult,
+      negativeButtonClickResult,
     )
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NativeSecureDecryptAuthResult (
-  val status: NativeAuthResultStatus,
+data class AndroidSecureDecryptAuthResult (
+  val status: AndroidAuthenticationResultStatus,
   val decryptedResult: Map<String, String?>? = null,
-  val failure: NativeAuthFailure? = null,
-  val dialogClickResult: NativeAuthDialogClickResult? = null
+  val failure: AndroidAuthenticationFailure? = null,
+  val negativeButtonClickResult: AndroidAuthenticationNegativeButtonClickResult? = null
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): NativeSecureDecryptAuthResult {
-      val status = pigeonVar_list[0] as NativeAuthResultStatus
+    fun fromList(pigeonVar_list: List<Any?>): AndroidSecureDecryptAuthResult {
+      val status = pigeonVar_list[0] as AndroidAuthenticationResultStatus
       val decryptedResult = pigeonVar_list[1] as Map<String, String?>?
-      val failure = pigeonVar_list[2] as NativeAuthFailure?
-      val dialogClickResult = pigeonVar_list[3] as NativeAuthDialogClickResult?
-      return NativeSecureDecryptAuthResult(status, decryptedResult, failure, dialogClickResult)
+      val failure = pigeonVar_list[2] as AndroidAuthenticationFailure?
+      val negativeButtonClickResult = pigeonVar_list[3] as AndroidAuthenticationNegativeButtonClickResult?
+      return AndroidSecureDecryptAuthResult(status, decryptedResult, failure, negativeButtonClickResult)
     }
   }
   fun toList(): List<Any?> {
@@ -202,7 +203,7 @@ data class NativeSecureDecryptAuthResult (
       status,
       decryptedResult,
       failure,
-      dialogClickResult,
+      negativeButtonClickResult,
     )
   }
 }
@@ -211,42 +212,42 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          NativeBiometricStatus.ofRaw(it.toInt())
+          AndroidAuthenticatorStatus.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          NativeBiometricAuthenticator.ofRaw(it.toInt())
+          AndroidAuthenticatorType.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          NativeAuthResultStatus.ofRaw(it.toInt())
+          AndroidAuthenticationResultStatus.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NativeAuthDialogClickResult.fromList(it)
+          AndroidAuthenticationFailure.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NativeAuthFailure.fromList(it)
+          AndroidAuthenticationNegativeButtonClickResult.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NativeAuthResult.fromList(it)
+          AndroidAuthenticationResult.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NativeSecureEncryptAuthResult.fromList(it)
+          AndroidSecureEncryptAuthResult.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NativeSecureDecryptAuthResult.fromList(it)
+          AndroidSecureDecryptAuthResult.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -254,35 +255,35 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
     when (value) {
-      is NativeBiometricStatus -> {
+      is AndroidAuthenticatorStatus -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is NativeBiometricAuthenticator -> {
+      is AndroidAuthenticatorType -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is NativeAuthResultStatus -> {
+      is AndroidAuthenticationResultStatus -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is NativeAuthDialogClickResult -> {
+      is AndroidAuthenticationFailure -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is NativeAuthFailure -> {
+      is AndroidAuthenticationNegativeButtonClickResult -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is NativeAuthResult -> {
+      is AndroidAuthenticationResult -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is NativeSecureEncryptAuthResult -> {
+      is AndroidSecureEncryptAuthResult -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is NativeSecureDecryptAuthResult -> {
+      is AndroidSecureDecryptAuthResult -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
@@ -294,12 +295,20 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface FlutterFeatureBiometricApi {
+  fun deleteSecretKey(alias: String)
+  fun isDeviceSupportFingerprint(): Boolean
+  fun isDeviceSupportFaceAuth(): Boolean
   fun isDeviceSupportBiometric(): Boolean
-  fun checkAuthenticationStatus(authenticator: NativeBiometricAuthenticator): NativeBiometricStatus
-  fun canAuthenticate(authenticator: NativeBiometricAuthenticator): Boolean
-  fun authenticate(authenticator: NativeBiometricAuthenticator, title: String, description: String, negativeText: String, callback: (Result<NativeAuthResult>) -> Unit)
-  fun secureEncryptAuthenticate(alias: String, requestForEncrypt: Map<String, String>, title: String, description: String, negativeText: String, callback: (Result<NativeSecureEncryptAuthResult>) -> Unit)
-  fun secureDecryptAuthenticate(alias: String, encodedIVKey: String, requestForDecrypt: Map<String, String>, title: String, description: String, negativeText: String, callback: (Result<NativeSecureDecryptAuthResult>) -> Unit)
+  fun isFingerprintEnrolled(): Boolean
+  fun isDeviceCredentialEnrolled(): Boolean
+  fun checkAuthenticatorStatus(androidAuthenticatorType: AndroidAuthenticatorType): AndroidAuthenticatorStatus
+  fun checkSecureAuthenticatorStatus(): AndroidAuthenticatorStatus
+  fun canAuthenticate(androidAuthenticatorType: AndroidAuthenticatorType): Boolean
+  fun authenticateDeviceCredential(title: String, subTitle: String?, description: String, negativeText: String, confirmationRequired: Boolean, callback: (Result<AndroidAuthenticationResult>) -> Unit)
+  fun authenticateBiometric(title: String, subTitle: String?, description: String, negativeText: String, confirmationRequired: Boolean, callback: (Result<AndroidAuthenticationResult>) -> Unit)
+  fun isBiometricChanged(alias: String): Boolean
+  fun authenticateBiometricSecureEncrypt(alias: String, requestForEncrypt: Map<String, String>, title: String, subTitle: String?, description: String, negativeText: String, confirmationRequired: Boolean, callback: (Result<AndroidSecureEncryptAuthResult>) -> Unit)
+  fun authenticateBiometricSecureDecrypt(alias: String, encodedIVKey: String, requestForDecrypt: Map<String, String>, title: String, subTitle: String?, description: String, negativeText: String, confirmationRequired: Boolean, callback: (Result<AndroidSecureDecryptAuthResult>) -> Unit)
 
   companion object {
     /** The codec used by FlutterFeatureBiometricApi. */
@@ -310,6 +319,54 @@ interface FlutterFeatureBiometricApi {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: FlutterFeatureBiometricApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.deleteSecretKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val aliasArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              api.deleteSecretKey(aliasArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFingerprint$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isDeviceSupportFingerprint())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportFaceAuth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isDeviceSupportFaceAuth())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceSupportBiometric$separatedMessageChannelSuffix", codec)
         if (api != null) {
@@ -326,13 +383,58 @@ interface FlutterFeatureBiometricApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkAuthenticationStatus$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isFingerprintEnrolled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isFingerprintEnrolled())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isDeviceCredentialEnrolled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isDeviceCredentialEnrolled())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkAuthenticatorStatus$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val authenticatorArg = args[0] as NativeBiometricAuthenticator
+            val androidAuthenticatorTypeArg = args[0] as AndroidAuthenticatorType
             val wrapped: List<Any?> = try {
-              listOf(api.checkAuthenticationStatus(authenticatorArg))
+              listOf(api.checkAuthenticatorStatus(androidAuthenticatorTypeArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.checkSecureAuthenticatorStatus$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.checkSecureAuthenticatorStatus())
             } catch (exception: Throwable) {
               wrapError(exception)
             }
@@ -347,9 +449,9 @@ interface FlutterFeatureBiometricApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val authenticatorArg = args[0] as NativeBiometricAuthenticator
+            val androidAuthenticatorTypeArg = args[0] as AndroidAuthenticatorType
             val wrapped: List<Any?> = try {
-              listOf(api.canAuthenticate(authenticatorArg))
+              listOf(api.canAuthenticate(androidAuthenticatorTypeArg))
             } catch (exception: Throwable) {
               wrapError(exception)
             }
@@ -360,15 +462,16 @@ interface FlutterFeatureBiometricApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticate$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateDeviceCredential$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val authenticatorArg = args[0] as NativeBiometricAuthenticator
-            val titleArg = args[1] as String
+            val titleArg = args[0] as String
+            val subTitleArg = args[1] as String?
             val descriptionArg = args[2] as String
             val negativeTextArg = args[3] as String
-            api.authenticate(authenticatorArg, titleArg, descriptionArg, negativeTextArg) { result: Result<NativeAuthResult> ->
+            val confirmationRequiredArg = args[4] as Boolean
+            api.authenticateDeviceCredential(titleArg, subTitleArg, descriptionArg, negativeTextArg, confirmationRequiredArg) { result: Result<AndroidAuthenticationResult> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -383,16 +486,59 @@ interface FlutterFeatureBiometricApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.secureEncryptAuthenticate$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometric$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val titleArg = args[0] as String
+            val subTitleArg = args[1] as String?
+            val descriptionArg = args[2] as String
+            val negativeTextArg = args[3] as String
+            val confirmationRequiredArg = args[4] as Boolean
+            api.authenticateBiometric(titleArg, subTitleArg, descriptionArg, negativeTextArg, confirmationRequiredArg) { result: Result<AndroidAuthenticationResult> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.isBiometricChanged$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val aliasArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              listOf(api.isBiometricChanged(aliasArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometricSecureEncrypt$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val aliasArg = args[0] as String
             val requestForEncryptArg = args[1] as Map<String, String>
             val titleArg = args[2] as String
-            val descriptionArg = args[3] as String
-            val negativeTextArg = args[4] as String
-            api.secureEncryptAuthenticate(aliasArg, requestForEncryptArg, titleArg, descriptionArg, negativeTextArg) { result: Result<NativeSecureEncryptAuthResult> ->
+            val subTitleArg = args[3] as String?
+            val descriptionArg = args[4] as String
+            val negativeTextArg = args[5] as String
+            val confirmationRequiredArg = args[6] as Boolean
+            api.authenticateBiometricSecureEncrypt(aliasArg, requestForEncryptArg, titleArg, subTitleArg, descriptionArg, negativeTextArg, confirmationRequiredArg) { result: Result<AndroidSecureEncryptAuthResult> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -407,7 +553,7 @@ interface FlutterFeatureBiometricApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.secureDecryptAuthenticate$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_feature_biometric_android.FlutterFeatureBiometricApi.authenticateBiometricSecureDecrypt$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -415,9 +561,11 @@ interface FlutterFeatureBiometricApi {
             val encodedIVKeyArg = args[1] as String
             val requestForDecryptArg = args[2] as Map<String, String>
             val titleArg = args[3] as String
-            val descriptionArg = args[4] as String
-            val negativeTextArg = args[5] as String
-            api.secureDecryptAuthenticate(aliasArg, encodedIVKeyArg, requestForDecryptArg, titleArg, descriptionArg, negativeTextArg) { result: Result<NativeSecureDecryptAuthResult> ->
+            val subTitleArg = args[4] as String?
+            val descriptionArg = args[5] as String
+            val negativeTextArg = args[6] as String
+            val confirmationRequiredArg = args[7] as Boolean
+            api.authenticateBiometricSecureDecrypt(aliasArg, encodedIVKeyArg, requestForDecryptArg, titleArg, subTitleArg, descriptionArg, negativeTextArg, confirmationRequiredArg) { result: Result<AndroidSecureDecryptAuthResult> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

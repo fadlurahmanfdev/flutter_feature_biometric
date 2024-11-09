@@ -1,12 +1,13 @@
-name: Create Platform Release & Publish Platform to Pub Dev
+name: Android Pre Release (Check Tag & Dry Run Publish Pub Dev)
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'android-v*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: pub-dev
     permissions:
       id-token: write
       contents: read
@@ -17,18 +18,8 @@ jobs:
         id: setup
         run: |
           echo "TAG VERSION: $GITHUB_REF_NAME"
-          echo "RELEASE VERSION: ${GITHUB_REF_NAME#platform-v}"
-          echo "::set-output name=release_name::${GITHUB_REF_NAME#platform-v}"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: ${{ steps.setup.outputs.release_name }}
-          draft: false
-          prerelease: false
+          echo "RELEASE VERSION: ${GITHUB_REF_NAME#android-v}"
+          echo "::set-output name=release_name::${GITHUB_REF_NAME#android-v}"
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -38,7 +29,7 @@ jobs:
         run: |
           flutter doctor -v
           flutter --version
-      - name: Publish To Pub Dev
+      - name: Dry Only - Publish To Pub Dev
         run: |
           mkdir -p $HOME/.config/dart
           cat <<EOF > $HOME/.config/dart/pub-credentials.json
@@ -51,6 +42,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd flutter_feature_biometric_platform_interface
-          dart pub publish -f
+          cd flutter_feature_biometric_android
+          dart pub publish --dry-run
           

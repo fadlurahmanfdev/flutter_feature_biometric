@@ -1,4 +1,4 @@
-name: Create Platform Release & Publish Platform to Pub Dev
+name: Create iOS Release & Publish iOS to Pub Dev
 
 on:
   workflow_dispatch:
@@ -17,8 +17,8 @@ jobs:
         id: setup
         run: |
           echo "TAG VERSION: $GITHUB_REF_NAME"
-          echo "RELEASE VERSION: ${GITHUB_REF_NAME#platform-v}"
-          echo "::set-output name=release_name::${GITHUB_REF_NAME#platform-v}"
+          echo "RELEASE VERSION: ${GITHUB_REF_NAME#ios-v}"
+          echo "::set-output name=release_name::${GITHUB_REF_NAME#ios-v}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -51,6 +51,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd flutter_feature_biometric_platform_interface
+          cd flutter_feature_biometric_ios
           dart pub publish -f
           

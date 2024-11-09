@@ -27,20 +27,20 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<BiometricStatus> checkAuthenticationTypeStatus(BiometricAuthenticatorType authenticator) async {
-    NativeLAPolicy policy;
-    switch (authenticator) {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) async {
+    IOSLAPolicy policy;
+    switch (authenticatorType) {
       case BiometricAuthenticatorType.biometric:
-        policy = NativeLAPolicy.biometric;
+        policy = IOSLAPolicy.biometric;
       case BiometricAuthenticatorType.deviceCredential:
-        policy = NativeLAPolicy.deviceCredential;
+        policy = IOSLAPolicy.deviceCredential;
     }
     final canAuthenticate = await _hostApi.canAuthenticate(policy);
     switch (canAuthenticate) {
       case true:
-        return BiometricStatus.success;
+        return AuthenticatorStatus.success;
       default:
-        return BiometricStatus.noneEnrolled;
+        return AuthenticatorStatus.noneEnrolled;
     }
   }
 
@@ -50,113 +50,143 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<void> authenticate({
-    required BiometricAuthenticatorType authenticator,
+  Future<void> authenticateDeviceCredential({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function() onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    NativeLAPolicy policy;
-    switch (authenticator) {
-      case BiometricAuthenticatorType.biometric:
-        policy = NativeLAPolicy.biometric;
-      case BiometricAuthenticatorType.deviceCredential:
-        policy = NativeLAPolicy.deviceCredential;
-    }
-
     final result = await _hostApi.authenticate(
-      policy,
+      IOSLAPolicy.deviceCredential,
       description,
     );
+
     switch (result.status) {
-      case NativeAuthResultStatus.success:
+      case IOSAuthenticationResultStatus.success:
         onSuccessAuthenticate();
         break;
-      case NativeAuthResultStatus.biometricChanged:
-        if (onError != null) {
-          onError("-", "-");
-        }
-        break;
-      case NativeAuthResultStatus.canceled:
+      case IOSAuthenticationResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
+      default:
+        onErrorAuthenticate("UNKNOWN_STATUS", "IOS_FAILURE");
         break;
     }
   }
 
   @override
-  Future<void> secureEncryptAuthenticate({
-    required String key,
-    Map<String, String>? requestForEncrypt,
+  Future<void> authenticateBiometric({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
+    required Function() onSuccessAuthenticate,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
+    Function()? onCanceled,
+  }) async {
+    final result = await _hostApi.authenticate(
+      IOSLAPolicy.biometric,
+      description,
+    );
+    switch (result.status) {
+      case IOSAuthenticationResultStatus.success:
+        onSuccessAuthenticate();
+        break;
+      case IOSAuthenticationResultStatus.canceled:
+        if (onCanceled != null) {
+          onCanceled();
+        }
+        break;
+      default:
+        onErrorAuthenticate("UNKNOWN_STATUS", "IOS_FAILURE");
+        break;
+    }
+  }
+
+  @override
+  Future<void> authenticateSecureEncrypt({
+    required String key,
+    required Map<String, String> requestForEncrypt,
+    required String title,
+    String? subTitle,
+    required String description,
+    required String negativeText,
+    bool confirmationRequired = false,
     required Function(SuccessAuthenticateEncryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String? message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticateSecure(
-      NativeLAPolicy.biometric,
+      IOSLAPolicy.biometric,
       key,
       description,
     );
     switch (result.status) {
-      case NativeAuthResultStatus.success:
+      case IOSAuthenticationResultStatus.success:
         onSuccessAuthenticate(SuccessAuthenticateEncryptIOS());
         break;
-      case NativeAuthResultStatus.biometricChanged:
-        if (onError != null) {
-          onError("-", "-");
-        }
+      case IOSAuthenticationResultStatus.biometricChanged:
+        onErrorAuthenticate("BIOMETRIC_CHANGED", null);
         break;
-      case NativeAuthResultStatus.canceled:
+      case IOSAuthenticationResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
+      default:
+        onErrorAuthenticate("GENERAL", null);
         break;
     }
   }
 
   @override
-  Future<void> secureDecryptAuthenticate({
+  Future<void> authenticateSecureDecrypt({
     required String key,
-    String? encodedIVKey,
-    Map<String, String>? requestForDecrypt,
+    required String encodedIVKey,
+    required Map<String, String> requestForDecrypt,
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    bool confirmationRequired = false,
     required Function(SuccessAuthenticateDecryptState state) onSuccessAuthenticate,
-    Function()? onFailed,
-    Function(String code, String message)? onError,
-    Function(int which)? onDialogClicked,
+    Function()? onFailedAuthenticate,
+    required Function(String code, String? message) onErrorAuthenticate,
+    Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
     final result = await _hostApi.authenticateSecure(
-      NativeLAPolicy.biometric,
+      IOSLAPolicy.biometric,
       key,
       description,
     );
     switch (result.status) {
-      case NativeAuthResultStatus.success:
+      case IOSAuthenticationResultStatus.success:
         onSuccessAuthenticate(SuccessAuthenticateDecryptIOS());
         break;
-      case NativeAuthResultStatus.biometricChanged:
-        if (onError != null) {
-          onError("-", "-");
-        }
+      case IOSAuthenticationResultStatus.biometricChanged:
+        onErrorAuthenticate("BIOMETRIC_CHANGED", "-");
         break;
-      case NativeAuthResultStatus.canceled:
+      case IOSAuthenticationResultStatus.canceled:
         if (onCanceled != null) {
           onCanceled();
         }
+        break;
+      default:
+        onErrorAuthenticate("GENERAL", null);
         break;
     }
   }

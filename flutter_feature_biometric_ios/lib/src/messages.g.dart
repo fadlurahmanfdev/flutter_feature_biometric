@@ -18,23 +18,23 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-enum NativeLAPolicy {
+enum IOSLAPolicy {
   biometric,
   deviceCredential,
 }
 
-enum NativeAuthResultStatus {
+enum IOSAuthenticationResultStatus {
   success,
   biometricChanged,
   canceled,
 }
 
-class NativeAuthResult {
-  NativeAuthResult({
+class IOSAuthenticationResult {
+  IOSAuthenticationResult({
     required this.status,
   });
 
-  NativeAuthResultStatus status;
+  IOSAuthenticationResultStatus status;
 
   Object encode() {
     return <Object?>[
@@ -42,10 +42,10 @@ class NativeAuthResult {
     ];
   }
 
-  static NativeAuthResult decode(Object result) {
+  static IOSAuthenticationResult decode(Object result) {
     result as List<Object?>;
-    return NativeAuthResult(
-      status: result[0]! as NativeAuthResultStatus,
+    return IOSAuthenticationResult(
+      status: result[0]! as IOSAuthenticationResultStatus,
     );
   }
 }
@@ -58,13 +58,13 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is NativeLAPolicy) {
+    }    else if (value is IOSLAPolicy) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is NativeAuthResultStatus) {
+    }    else if (value is IOSAuthenticationResultStatus) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    }    else if (value is NativeAuthResult) {
+    }    else if (value is IOSAuthenticationResult) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else {
@@ -77,12 +77,12 @@ class _PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeLAPolicy.values[value];
+        return value == null ? null : IOSLAPolicy.values[value];
       case 130: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NativeAuthResultStatus.values[value];
+        return value == null ? null : IOSAuthenticationResultStatus.values[value];
       case 131: 
-        return NativeAuthResult.decode(readValue(buffer)!);
+        return IOSAuthenticationResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -129,7 +129,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<bool> canAuthenticate(NativeLAPolicy policy) async {
+  Future<bool> canAuthenticate(IOSLAPolicy laPolicy) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.canAuthenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -137,7 +137,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[policy]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[laPolicy]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -156,7 +156,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<NativeAuthResult> authenticate(NativeLAPolicy policy, String description) async {
+  Future<IOSAuthenticationResult> authenticate(IOSLAPolicy policy, String description) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -179,11 +179,11 @@ class FlutterFeatureBiometricApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as NativeAuthResult?)!;
+      return (pigeonVar_replyList[0] as IOSAuthenticationResult?)!;
     }
   }
 
-  Future<NativeAuthResult> authenticateSecure(NativeLAPolicy policy, String key, String description) async {
+  Future<IOSAuthenticationResult> authenticateSecure(IOSLAPolicy policy, String key, String description) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -206,7 +206,7 @@ class FlutterFeatureBiometricApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as NativeAuthResult?)!;
+      return (pigeonVar_replyList[0] as IOSAuthenticationResult?)!;
     }
   }
 }

@@ -10,120 +10,153 @@ import 'package:pigeon/pigeon.dart';
   kotlinOptions: KotlinOptions(package: 'com.fadlurahmanfdev.flutter_feature_biometric_android'),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
-enum NativeBiometricStatus {
+enum AndroidAuthenticatorStatus {
   success,
-  noAvailable,
+  noHardwareAvailable,
   unavailable,
   noneEnrolled,
+  securityUpdateRequired,
+  unsupportedOSVersion,
   unknown,
 }
 
-enum NativeBiometricAuthenticator {
-  weak,
-  strong,
+enum AndroidAuthenticatorType {
+  biometric,
   deviceCredential,
 }
 
-enum NativeAuthResultStatus {
+enum AndroidAuthenticationResultStatus {
   success,
   canceled,
   failed,
   error,
-  dialogClicked,
+  negativeButtonClicked,
 }
 
-class NativeAuthDialogClickResult {
-  int which;
-
-  NativeAuthDialogClickResult({required this.which});
-}
-
-class NativeAuthFailure {
+class AndroidAuthenticationFailure {
   String code;
   String? message;
 
-  NativeAuthFailure({
+  AndroidAuthenticationFailure({
     required this.code,
     this.message,
   });
 }
 
-class NativeAuthResult {
-  NativeAuthResultStatus status;
-  NativeAuthFailure? failure;
-  NativeAuthDialogClickResult? dialogClickResult;
+class AndroidAuthenticationNegativeButtonClickResult {
+  int which;
 
-  NativeAuthResult({
-    required this.status,
-    this.failure,
-    this.dialogClickResult,
+  AndroidAuthenticationNegativeButtonClickResult({
+    required this.which,
   });
 }
 
-class NativeSecureEncryptAuthResult {
-  NativeAuthResultStatus status;
+class AndroidAuthenticationResult {
+  AndroidAuthenticationResultStatus status;
+  AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
+
+  AndroidAuthenticationResult({
+    required this.status,
+    this.failure,
+    this.negativeButtonClickResult,
+  });
+}
+
+class AndroidSecureEncryptAuthResult {
+  AndroidAuthenticationResultStatus status;
   String? encodedIVKey;
   Map<String, String?>? encryptedResult;
-  NativeAuthFailure? failure;
-  NativeAuthDialogClickResult? dialogClickResult;
+  AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
 
-  NativeSecureEncryptAuthResult({
+  AndroidSecureEncryptAuthResult({
     required this.status,
     this.encodedIVKey,
     this.encryptedResult,
     this.failure,
-    this.dialogClickResult,
+    this.negativeButtonClickResult,
   });
 }
 
-class NativeSecureDecryptAuthResult {
-  NativeAuthResultStatus status;
+class AndroidSecureDecryptAuthResult {
+  AndroidAuthenticationResultStatus status;
   Map<String, String?>? decryptedResult;
-  NativeAuthFailure? failure;
-  NativeAuthDialogClickResult? dialogClickResult;
+  AndroidAuthenticationFailure? failure;
+  AndroidAuthenticationNegativeButtonClickResult? negativeButtonClickResult;
 
-  NativeSecureDecryptAuthResult({
+  AndroidSecureDecryptAuthResult({
     required this.status,
     this.decryptedResult,
     this.failure,
-    this.dialogClickResult,
+    this.negativeButtonClickResult,
   });
 }
 
 @HostApi()
 abstract class FlutterFeatureBiometricApi {
+  void deleteSecretKey(String alias);
+
+  bool isDeviceSupportFingerprint();
+
+  bool isDeviceSupportFaceAuth();
+
   bool isDeviceSupportBiometric();
 
-  NativeBiometricStatus checkAuthenticationStatus(NativeBiometricAuthenticator authenticator);
+  bool isFingerprintEnrolled();
+
+  bool isDeviceCredentialEnrolled();
+
+  AndroidAuthenticatorStatus checkAuthenticatorStatus(AndroidAuthenticatorType androidAuthenticatorType);
+
+  AndroidAuthenticatorStatus checkSecureAuthenticatorStatus();
 
   bool canAuthenticate({
-    required NativeBiometricAuthenticator authenticator,
+    required AndroidAuthenticatorType androidAuthenticatorType,
   });
 
   @async
-  NativeAuthResult authenticate({
-    required NativeBiometricAuthenticator authenticator,
+  AndroidAuthenticationResult authenticateDeviceCredential({
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    required bool confirmationRequired,
   });
 
   @async
-  NativeSecureEncryptAuthResult secureEncryptAuthenticate({
+  AndroidAuthenticationResult authenticateBiometric({
+    required String title,
+    String? subTitle,
+    required String description,
+    required String negativeText,
+    required bool confirmationRequired,
+  });
+
+  bool isBiometricChanged({
+    required String alias,
+});
+
+  @async
+  AndroidSecureEncryptAuthResult authenticateBiometricSecureEncrypt({
     required String alias,
     required Map<String, String> requestForEncrypt,
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    required bool confirmationRequired,
   });
 
   @async
-  NativeSecureDecryptAuthResult secureDecryptAuthenticate({
+  AndroidSecureDecryptAuthResult authenticateBiometricSecureDecrypt({
     required String alias,
     required String encodedIVKey,
     required Map<String, String> requestForDecrypt,
     required String title,
+    String? subTitle,
     required String description,
     required String negativeText,
+    required bool confirmationRequired,
   });
 }
