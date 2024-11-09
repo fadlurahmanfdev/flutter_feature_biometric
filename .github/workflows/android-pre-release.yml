@@ -1,4 +1,4 @@
-name: Platform Pre Release (Check Tag & Dry Run Publish Pub Dev)
+name: Android Pre Release (Check Tag & Dry Run Publish Pub Dev)
 
 on:
   push:

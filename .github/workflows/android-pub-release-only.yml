@@ -1,4 +1,4 @@
-name: Publish Platform to Pub Dev
+name: Publish Android to Pub Dev
 
 on:
   workflow_dispatch:

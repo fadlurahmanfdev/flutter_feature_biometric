@@ -1,4 +1,4 @@
-name: Create Platform Release & Publish Platform to Pub Dev
+name: Create iOS Release & Publish iOS to Pub Dev
 
 on:
   workflow_dispatch:
