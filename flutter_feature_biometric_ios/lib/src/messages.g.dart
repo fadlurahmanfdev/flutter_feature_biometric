@@ -129,7 +129,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<bool> canAuthenticate(IOSLAPolicy laPolicy) async {
+  Future<bool> canAuthenticate({required IOSLAPolicy laPolicy}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.canAuthenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -156,7 +156,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<IOSAuthenticationResult> authenticate(IOSLAPolicy policy, String description) async {
+  Future<IOSAuthenticationResult> authenticate({required IOSLAPolicy laPolicy, required String description}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -164,7 +164,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[policy, description]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[laPolicy, description]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -183,7 +183,34 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<IOSAuthenticationResult> authenticateSecure(IOSLAPolicy policy, String key, String description) async {
+  Future<bool> isBiometricChanged({required String key}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.isBiometricChanged$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[key]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<IOSAuthenticationResult> authenticateSecure({required IOSLAPolicy laPolicy, required String key, required String description,}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -191,7 +218,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[policy, key, description]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[laPolicy, key, description]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

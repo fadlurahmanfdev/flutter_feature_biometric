@@ -22,8 +22,8 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         return false
     }
     
-    func canAuthenticate(policy: NativeLAPolicy) throws -> Bool {
-        switch policy {
+    func canAuthenticate(laPolicy: IOSLAPolicy) throws -> Bool {
+        switch laPolicy {
         case .biometric:
             return repository.canAuthenticate(
                 policy: .deviceOwnerAuthenticationWithBiometrics)
@@ -33,9 +33,9 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         }
     }
     
-    func authenticate(policy: NativeLAPolicy, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+    func authenticate(laPolicy: IOSLAPolicy, description: String, completion: @escaping (Result<IOSAuthenticationResult, any Error>) -> Void) {
         var iosPolicy:LAPolicy
-        switch policy {
+        switch laPolicy {
         case .biometric:
             iosPolicy = LAPolicy.deviceOwnerAuthenticationWithBiometrics
             break
@@ -44,19 +44,23 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
             break;
         }
         
-        repository.authenticate(key: "biometricID", policy: iosPolicy, localizedReason: description){ result in
-            completion(.success(NativeAuthResult(status: .success)))
+        repository.authenticate(policy: iosPolicy, localizedReason: description){ result in
+            completion(.success(IOSAuthenticationResult(status: .success)))
         }
     }
     
-    func authenticateSecure(policy: NativeLAPolicy, key: String, description: String, completion: @escaping (Result<NativeAuthResult, any Error>) -> Void) {
+    func isBiometricChanged(key: String) throws -> Bool {
+        return repository.isBiometricChanged(key: key)
+    }
+    
+    func authenticateSecure(laPolicy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, any Error>) -> Void) {
         if(repository.isBiometricChanged(key: key)){
-            completion(.success(NativeAuthResult(status: .biometricChanged)))
+            completion(.success(IOSAuthenticationResult(status: .biometricChanged)))
             return
         }
         
-        repository.authenticate(key: key, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
-            completion(.success(NativeAuthResult(status: .success)))
+        repository.secureAuthenticate(key: key, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
+            completion(.success(IOSAuthenticationResult(status: .success)))
         }
     }
 }

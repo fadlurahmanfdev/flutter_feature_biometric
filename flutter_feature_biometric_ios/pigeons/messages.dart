@@ -31,11 +31,13 @@ class IOSAuthenticationResult {
 abstract class FlutterFeatureBiometricApi {
   bool isDeviceSupportBiometric();
 
-  bool canAuthenticate(IOSLAPolicy laPolicy);
+  bool canAuthenticate({required IOSLAPolicy laPolicy});
 
   @async
-  IOSAuthenticationResult authenticate(IOSLAPolicy policy, String description);
+  IOSAuthenticationResult authenticate({required IOSLAPolicy laPolicy, required String description});
+
+  bool isBiometricChanged({required String key});
 
   @async
-  IOSAuthenticationResult authenticateSecure(IOSLAPolicy policy, String key, String description);
+  IOSAuthenticationResult authenticateSecure({required IOSLAPolicy laPolicy, required String key, required String description});
 }

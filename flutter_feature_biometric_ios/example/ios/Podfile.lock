@@ -1,17 +1,17 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_feature_biometric_ios (0.0.1):
+  - flutter_feature_biometric_ios (0.1.0):
     - Flutter
-    - SwiftFeatureBiometric (= 0.0.9)
+    - SwiftFeatureBiometric (= 0.0.10)
   - integration_test (0.0.1):
     - Flutter
-  - SwiftFeatureBiometric (0.0.9)
+  - SwiftFeatureBiometric (0.0.10)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_feature_biometric_ios (from `.symlinks/plugins/flutter_feature_biometric_ios/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - SwiftFeatureBiometric (= 0.0.9)
+  - SwiftFeatureBiometric (= 0.0.10)
 
 SPEC REPOS:
   trunk:
@@ -27,10 +27,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_feature_biometric_ios: e485cff503ba40f31695ab9c52ffcd0edb98b8b0
+  flutter_feature_biometric_ios: bf47533ab570ebf856d711818e802043680ede51
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  SwiftFeatureBiometric: 3f1db9f4529458faa7d2289db4a1c80684956538
+  SwiftFeatureBiometric: cf6c57381170d9f1277c75da48e519c50ac41c01
 
-PODFILE CHECKSUM: 192c8ec0c04b57b2f9085218d45a534350d1a617
+PODFILE CHECKSUM: a09c227bcd1fa31977ca5a36179e0562533f4c9a
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

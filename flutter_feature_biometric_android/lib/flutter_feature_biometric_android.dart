@@ -74,8 +74,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }) async {
     AndroidAuthenticationResult result;
 
-    switch(authenticatorType){
-
+    switch (authenticatorType) {
       case FeatureAuthenticatorType.biometric:
         result = await _api.authenticateBiometric(
           title: title,
@@ -116,6 +115,11 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
         }
         break;
     }
+  }
+
+  @override
+  Future<bool> isBiometricChanged({required String key}) {
+    return _api.isBiometricChanged(alias: key);
   }
 
   @override

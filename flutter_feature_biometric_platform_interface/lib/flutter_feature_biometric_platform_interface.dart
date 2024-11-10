@@ -81,7 +81,11 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    throw UnimplementedError('authenticateBiometric() has not been implemented.');
+    throw UnimplementedError('authenticate() has not been implemented.');
+  }
+
+  Future<bool> isBiometricChanged({required String key}) async {
+    throw UnimplementedError('isBiometricChanged() has not been implemented.');
   }
 
   Future<void> authenticateSecureEncrypt({

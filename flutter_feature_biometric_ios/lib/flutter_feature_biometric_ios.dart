@@ -13,9 +13,9 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   /// Creates a new plugin implementation instance.
   FlutterFeatureBiometricIOS({
     @visibleForTesting FlutterFeatureBiometricApi? api,
-  }) : _hostApi = api ?? FlutterFeatureBiometricApi();
+  }) : _api = api ?? FlutterFeatureBiometricApi();
 
-  final FlutterFeatureBiometricApi _hostApi;
+  final FlutterFeatureBiometricApi _api;
 
   /// Registers this class as the default instance of [FlutterFeatureBiometricPlatform].
   static void registerWith() {
@@ -24,19 +24,19 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<bool> isDeviceSupportBiometric() {
-    return _hostApi.isDeviceSupportBiometric();
+    return _api.isDeviceSupportBiometric();
   }
 
   @override
   Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
-    IOSLAPolicy policy;
+    IOSLAPolicy laPolicy;
     switch (authenticatorType) {
       case FeatureAuthenticatorType.biometric:
-        policy = IOSLAPolicy.biometric;
+        laPolicy = IOSLAPolicy.biometric;
       case FeatureAuthenticatorType.deviceCredential:
-        policy = IOSLAPolicy.deviceCredential;
+        laPolicy = IOSLAPolicy.deviceCredential;
     }
-    final canAuthenticate = await _hostApi.canAuthenticate(policy);
+    final canAuthenticate = await _api.canAuthenticate(laPolicy: laPolicy);
     switch (canAuthenticate) {
       case true:
         return AuthenticatorStatus.success;
@@ -80,9 +80,9 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
                 'Unknown policy other than ${FeatureAuthenticatorType.biometric} or ${FeatureAuthenticatorType.deviceCredential}',
           );
       }
-      final result = await _hostApi.authenticate(
-        laPolicy,
-        description,
+      final result = await _api.authenticate(
+        laPolicy: laPolicy,
+        description: description,
       );
       switch (result.status) {
         case IOSAuthenticationResultStatus.success:
@@ -105,6 +105,11 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
+  Future<bool> isBiometricChanged({required String key}) async {
+    return _api.isBiometricChanged(key: key);
+  }
+
+  @override
   Future<void> authenticateSecureEncrypt({
     required String key,
     required Map<String, String> requestForEncrypt,
@@ -119,10 +124,10 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _hostApi.authenticateSecure(
-      IOSLAPolicy.biometric,
-      key,
-      description,
+    final result = await _api.authenticateSecure(
+      laPolicy: IOSLAPolicy.biometric,
+      key: key,
+      description: description,
     );
     switch (result.status) {
       case IOSAuthenticationResultStatus.success:
@@ -158,10 +163,10 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _hostApi.authenticateSecure(
-      IOSLAPolicy.biometric,
-      key,
-      description,
+    final result = await _api.authenticateSecure(
+      laPolicy: IOSLAPolicy.biometric,
+      key: key,
+      description: description,
     );
     switch (result.status) {
       case IOSAuthenticationResultStatus.success:

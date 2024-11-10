@@ -58,6 +58,12 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
+  Future<bool> isBiometricChanged({required String key}) {
+    // TODO: implement isBiometricChanged
+    return super.isBiometricChanged(key: key);
+  }
+
+  @override
   Future<void> authenticateSecureEncrypt({
     required String key,
     required Map<String, String> requestForEncrypt,

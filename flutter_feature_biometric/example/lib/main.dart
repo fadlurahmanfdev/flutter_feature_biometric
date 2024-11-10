@@ -83,6 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
       key: 'CAN_SECURE_AUTHENTICATE',
     ),
     FeatureModel(
+      title: 'Check Whether Biometric Changed',
+      desc: 'Check whether biometric changed',
+      key: 'IS_BIOMETRIC_CHANGED',
+    ),
+    FeatureModel(
       title: 'Secure Encrypt Authenticate',
       desc: 'Secure Encrypt Authenticate',
       key: 'SECURE_ENCRYPT_AUTHENTICATE',
@@ -175,6 +180,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 case "CAN_SECURE_AUTHENTICATE":
                   final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
+                  break;
+                case "IS_BIOMETRIC_CHANGED":
+                  final isBiometricChanged = await flutterFeatureBiometric.isBiometricChanged(key: 'flutterBiometricKey');
+                  print("${Platform.operatingSystem} - is biometric changed: $isBiometricChanged");
                   break;
                 case "SECURE_ENCRYPT_AUTHENTICATE":
                   flutterFeatureBiometric.authenticateBiometricSecureEncrypt(

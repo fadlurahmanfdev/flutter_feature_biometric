@@ -158,8 +158,9 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
   func canAuthenticate(laPolicy: IOSLAPolicy) throws -> Bool
-  func authenticate(policy: IOSLAPolicy, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
-  func authenticateSecure(policy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
+  func authenticate(laPolicy: IOSLAPolicy, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
+  func isBiometricChanged(key: String) throws -> Bool
+  func authenticateSecure(laPolicy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -200,9 +201,9 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       authenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let policyArg = args[0] as! IOSLAPolicy
+        let laPolicyArg = args[0] as! IOSLAPolicy
         let descriptionArg = args[1] as! String
-        api.authenticate(policy: policyArg, description: descriptionArg) { result in
+        api.authenticate(laPolicy: laPolicyArg, description: descriptionArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -214,14 +215,29 @@ class FlutterFeatureBiometricApiSetup {
     } else {
       authenticateChannel.setMessageHandler(nil)
     }
+    let isBiometricChangedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.isBiometricChanged\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isBiometricChangedChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let keyArg = args[0] as! String
+        do {
+          let result = try api.isBiometricChanged(key: keyArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isBiometricChangedChannel.setMessageHandler(nil)
+    }
     let authenticateSecureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       authenticateSecureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let policyArg = args[0] as! IOSLAPolicy
+        let laPolicyArg = args[0] as! IOSLAPolicy
         let keyArg = args[1] as! String
         let descriptionArg = args[2] as! String
-        api.authenticateSecure(policy: policyArg, key: keyArg, description: descriptionArg) { result in
+        api.authenticateSecure(laPolicy: laPolicyArg, key: keyArg, description: descriptionArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

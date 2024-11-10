@@ -41,6 +41,10 @@ class FlutterFeatureBiometric {
     );
   }
 
+  Future<bool> isBiometricChanged({required String key}) {
+    return FlutterFeatureBiometricPlatform.instance.isBiometricChanged(key: key);
+  }
+
   Future<void> authenticateBiometricSecureEncrypt({
     required String key,
     required Map<String, String> requestForEncrypt,

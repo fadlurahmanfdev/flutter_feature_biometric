@@ -4,8 +4,8 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_feature_biometric_ios'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.version          = '0.1.0'
+  s.summary          = 'Biometric Authentication Plugin'
   s.description      = <<-DESC
 A new Flutter plugin project.
                        DESC
@@ -21,5 +21,5 @@ A new Flutter plugin project.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
 
-  s.dependency 'SwiftFeatureBiometric', '0.0.9'
+  s.dependency 'SwiftFeatureBiometric', '0.0.10'
 end
