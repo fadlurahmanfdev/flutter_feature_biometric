@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Feature Biometric',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Feature Crypto'),
+      home: const MyHomePage(title: 'Flutter Feature Biometric'),
     );
   }
 }
@@ -126,15 +126,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   break;
                 case "STANDARD_BIOMETRIC_AUTHENTICATE":
                   flutterFeatureBiometric.authenticateBiometric(
-                    title: "Title - Credential Authenticate",
-                    description: "Description - Credential Authenticate",
+                    title: "Title - Biometric Authenticate",
+                    description: "Description - Biometric Authenticate",
                     confirmationRequired: true,
                     negativeText: "Batal",
                     onSuccessAuthenticate: () {
-                      print("${Platform.operatingSystem} - Success authenticate credential");
+                      print("${Platform.operatingSystem} - Success authenticate biometric");
                     },
                     onErrorAuthenticate: (code, message) {
-                      print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
+                      print("${Platform.operatingSystem} - Error authenticate biometric: $code - $message");
                     },
                     onCanceled: () {
                       print("${Platform.operatingSystem} - On Canceled");
