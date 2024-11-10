@@ -1,6 +1,7 @@
-## 0.0.3
+## 0.1.0
 
 * Update Docs
+* Update authentication biometric & authentication device credential using same function
 
 ## 0.0.2
 

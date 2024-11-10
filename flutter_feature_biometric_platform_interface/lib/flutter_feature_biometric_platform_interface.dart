@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-export 'src/enum/biometric_authenticate_status.dart';
-export 'src/enum/biometric_authenticator_type.dart';
+export 'src/enum/feature_authenticator_type.dart';
 export 'src/enum/authenticator_status.dart';
+
+export 'src/exception/feature_biometric_exception.dart';
 
 export 'src/state/success_authenticate_encrypt_state.dart';
 export 'src/state/success_authenticate_decrypt_state.dart';
 
-import 'package:flutter_feature_biometric_platform_interface/src/enum/biometric_authenticator_type.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/feature_authenticator_type.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/enum/authenticator_status.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_decrypt_state.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_encrypt_state.dart';
@@ -53,7 +54,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   }
 
   /// Check whether biometric status, whether can authenticate or not
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) async {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     throw UnimplementedError('checkAuthenticationTypeStatus() has not been implemented.');
   }
 
@@ -62,27 +63,13 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     throw UnimplementedError('isSupportSecureBiometric() has not been implemented.');
   }
 
-  Future<void> authenticateDeviceCredential({
-    required String title,
-    String? subTitle,
-    required String description,
-    required String negativeText,
-    bool confirmationRequired = false,
-    required Function() onSuccessAuthenticate,
-    Function()? onFailedAuthenticate,
-    required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onNegativeButtonClicked,
-    Function()? onCanceled,
-  }) async {
-    throw UnimplementedError('authenticateDeviceCredential() has not been implemented.');
-  }
-
   /// Authenticate Using Biometric
   ///
   /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
   /// - [description] - the description of explanation why it need use a biometric
   /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
-  Future<void> authenticateBiometric({
+  Future<void> authenticate({
+    required FeatureAuthenticatorType authenticatorType,
     required String title,
     String? subTitle,
     required String description,

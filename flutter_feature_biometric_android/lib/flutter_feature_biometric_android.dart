@@ -27,12 +27,12 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) async {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     AndroidAuthenticatorStatus authenticatorStatus;
     switch (authenticatorType) {
-      case BiometricAuthenticatorType.biometric:
+      case FeatureAuthenticatorType.biometric:
         authenticatorStatus = await _api.checkAuthenticatorStatus(AndroidAuthenticatorType.biometric);
-      case BiometricAuthenticatorType.deviceCredential:
+      case FeatureAuthenticatorType.deviceCredential:
         authenticatorStatus = await _api.checkAuthenticatorStatus(AndroidAuthenticatorType.deviceCredential);
     }
     switch (authenticatorStatus) {
@@ -59,7 +59,8 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<void> authenticateDeviceCredential({
+  Future<void> authenticate({
+    required FeatureAuthenticatorType authenticatorType,
     required String title,
     String? subTitle,
     required String description,
@@ -71,56 +72,27 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _api.authenticateDeviceCredential(
-      title: title,
-      description: description,
-      negativeText: negativeText,
-      confirmationRequired: confirmationRequired,
-    );
-    switch (result.status) {
-      case AndroidAuthenticationResultStatus.success:
-        onSuccessAuthenticate();
+    AndroidAuthenticationResult result;
+
+    switch(authenticatorType){
+
+      case FeatureAuthenticatorType.biometric:
+        result = await _api.authenticateBiometric(
+          title: title,
+          description: description,
+          negativeText: negativeText,
+          confirmationRequired: confirmationRequired,
+        );
         break;
-      case AndroidAuthenticationResultStatus.canceled:
-        if (onCanceled != null) {
-          onCanceled();
-        }
-        break;
-      case AndroidAuthenticationResultStatus.failed:
-        if (onFailedAuthenticate != null) {
-          onFailedAuthenticate();
-        }
-        break;
-      case AndroidAuthenticationResultStatus.error:
-        onErrorAuthenticate(result.failure!.code, result.failure?.message);
-        break;
-      case AndroidAuthenticationResultStatus.negativeButtonClicked:
-        if (onNegativeButtonClicked != null) {
-          onNegativeButtonClicked(result.negativeButtonClickResult!.which);
-        }
+      case FeatureAuthenticatorType.deviceCredential:
+        result = await _api.authenticateDeviceCredential(
+          title: title,
+          description: description,
+          negativeText: negativeText,
+          confirmationRequired: confirmationRequired,
+        );
         break;
     }
-  }
-
-  @override
-  Future<void> authenticateBiometric({
-    required String title,
-    String? subTitle,
-    required String description,
-    required String negativeText,
-    bool confirmationRequired = false,
-    required Function() onSuccessAuthenticate,
-    Function()? onFailedAuthenticate,
-    required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onNegativeButtonClicked,
-    Function()? onCanceled,
-  }) async {
-    final result = await _api.authenticateBiometric(
-      title: title,
-      description: description,
-      negativeText: negativeText,
-      confirmationRequired: confirmationRequired,
-    );
     switch (result.status) {
       case AndroidAuthenticationResultStatus.success:
         onSuccessAuthenticate();

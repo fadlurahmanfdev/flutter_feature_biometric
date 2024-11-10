@@ -121,11 +121,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   break;
                 case "CAN_AUTHENTICATE_BIOMETRIC":
                   final canAuthenticate =
-                      await flutterFeatureBiometric.checkAuthenticatorStatus(BiometricAuthenticatorType.biometric);
+                      await flutterFeatureBiometric.checkAuthenticatorStatus(FeatureAuthenticatorType.biometric);
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
                 case "STANDARD_BIOMETRIC_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticateBiometric(
+                  flutterFeatureBiometric.authenticate(
+                    authenticatorType: FeatureAuthenticatorType.biometric,
                     title: "Title - Biometric Authenticate",
                     description: "Description - Biometric Authenticate",
                     confirmationRequired: true,
@@ -148,7 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   break;
                 case "CREDENTIAL_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticateDeviceCredential(
+                  flutterFeatureBiometric.authenticate(
+                    authenticatorType: FeatureAuthenticatorType.deviceCredential,
                     title: "Title - Credential Authenticate",
                     description: "Description - Credential Authenticate",
                     confirmationRequired: true,

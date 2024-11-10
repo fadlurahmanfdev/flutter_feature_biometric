@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter_feature_biometric_ios/src/constant/error_constant.dart';
 import 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';
 
 import 'src/messages.g.dart';
@@ -27,12 +28,12 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) async {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     IOSLAPolicy policy;
     switch (authenticatorType) {
-      case BiometricAuthenticatorType.biometric:
+      case FeatureAuthenticatorType.biometric:
         policy = IOSLAPolicy.biometric;
-      case BiometricAuthenticatorType.deviceCredential:
+      case FeatureAuthenticatorType.deviceCredential:
         policy = IOSLAPolicy.deviceCredential;
     }
     final canAuthenticate = await _hostApi.canAuthenticate(policy);
@@ -50,7 +51,8 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<void> authenticateDeviceCredential({
+  Future<void> authenticate({
+    required FeatureAuthenticatorType authenticatorType,
     required String title,
     String? subTitle,
     required String description,
@@ -62,55 +64,43 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _hostApi.authenticate(
-      IOSLAPolicy.deviceCredential,
-      description,
-    );
-
-    switch (result.status) {
-      case IOSAuthenticationResultStatus.success:
-        onSuccessAuthenticate();
-        break;
-      case IOSAuthenticationResultStatus.canceled:
-        if (onCanceled != null) {
-          onCanceled();
-        }
-        break;
-      default:
-        onErrorAuthenticate("UNKNOWN_STATUS", "IOS_FAILURE");
-        break;
-    }
-  }
-
-  @override
-  Future<void> authenticateBiometric({
-    required String title,
-    String? subTitle,
-    required String description,
-    required String negativeText,
-    bool confirmationRequired = false,
-    required Function() onSuccessAuthenticate,
-    Function()? onFailedAuthenticate,
-    required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onNegativeButtonClicked,
-    Function()? onCanceled,
-  }) async {
-    final result = await _hostApi.authenticate(
-      IOSLAPolicy.biometric,
-      description,
-    );
-    switch (result.status) {
-      case IOSAuthenticationResultStatus.success:
-        onSuccessAuthenticate();
-        break;
-      case IOSAuthenticationResultStatus.canceled:
-        if (onCanceled != null) {
-          onCanceled();
-        }
-        break;
-      default:
-        onErrorAuthenticate("UNKNOWN_STATUS", "IOS_FAILURE");
-        break;
+    try {
+      IOSLAPolicy laPolicy;
+      switch (authenticatorType) {
+        case FeatureAuthenticatorType.biometric:
+          laPolicy = IOSLAPolicy.biometric;
+          break;
+        case FeatureAuthenticatorType.deviceCredential:
+          laPolicy = IOSLAPolicy.deviceCredential;
+          break;
+        default:
+          throw FeatureBiometricException(
+            code: ErrorConstantIOS.IOS_UNKNOWN_POLICY,
+            message:
+                'Unknown policy other than ${FeatureAuthenticatorType.biometric} or ${FeatureAuthenticatorType.deviceCredential}',
+          );
+      }
+      final result = await _hostApi.authenticate(
+        laPolicy,
+        description,
+      );
+      switch (result.status) {
+        case IOSAuthenticationResultStatus.success:
+          onSuccessAuthenticate();
+          break;
+        case IOSAuthenticationResultStatus.canceled:
+          if (onCanceled != null) {
+            onCanceled();
+          }
+          break;
+        default:
+          onErrorAuthenticate(ErrorConstantIOS.IOS_UNKNOWN_RESULT, 'Unknown result: ${result.status}');
+          break;
+      }
+    } on FeatureBiometricException catch(e){
+      onErrorAuthenticate(e.code, e.message);
+    } catch (e) {
+      onErrorAuthenticate(ErrorConstantIOS.IOS_UNKNOWN_UNABLE_AUTHENTICATE, '$e');
     }
   }
 

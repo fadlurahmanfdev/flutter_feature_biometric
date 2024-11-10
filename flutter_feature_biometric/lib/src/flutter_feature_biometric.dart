@@ -5,7 +5,7 @@ class FlutterFeatureBiometric {
     return FlutterFeatureBiometricPlatform.instance.isDeviceSupportBiometric();
   }
 
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticator) {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticator) {
     return FlutterFeatureBiometricPlatform.instance.checkAuthenticatorStatus(authenticator);
   }
 
@@ -13,7 +13,8 @@ class FlutterFeatureBiometric {
     return FlutterFeatureBiometricPlatform.instance.canSecureAuthenticate();
   }
 
-  Future<void> authenticateDeviceCredential({
+  Future<void> authenticate({
+    required FeatureAuthenticatorType authenticatorType,
     required String title,
     String? subTitle,
     required String description,
@@ -25,33 +26,8 @@ class FlutterFeatureBiometric {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) {
-    return FlutterFeatureBiometricPlatform.instance.authenticateDeviceCredential(
-      title: title,
-      subTitle: subTitle,
-      description: description,
-      negativeText: negativeText,
-      confirmationRequired: confirmationRequired,
-      onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailedAuthenticate: onFailedAuthenticate,
-      onErrorAuthenticate: onErrorAuthenticate,
-      onNegativeButtonClicked: onNegativeButtonClicked,
-      onCanceled: onCanceled,
-    );
-  }
-
-  Future<void> authenticateBiometric({
-    required String title,
-    String? subTitle,
-    required String description,
-    required String negativeText,
-    bool confirmationRequired = false,
-    required Function() onSuccessAuthenticate,
-    Function()? onFailedAuthenticate,
-    required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onNegativeButtonClicked,
-    Function()? onCanceled,
-  }) {
-    return FlutterFeatureBiometricPlatform.instance.authenticateBiometric(
+    return FlutterFeatureBiometricPlatform.instance.authenticate(
+      authenticatorType: authenticatorType,
       title: title,
       subTitle: subTitle,
       description: description,

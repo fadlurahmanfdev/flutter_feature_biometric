@@ -22,41 +22,14 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(BiometricAuthenticatorType authenticatorType) {
+  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) {
     // TODO: implement checkBiometricStatus
     return super.checkAuthenticatorStatus(authenticatorType);
   }
 
   @override
-  Future<void> authenticateDeviceCredential({
-    required String title,
-    String? subTitle,
-    required String description,
-    required String negativeText,
-    bool confirmationRequired = false,
-    required Function() onSuccessAuthenticate,
-    Function()? onFailedAuthenticate,
-    required Function(String code, String? message) onErrorAuthenticate,
-    Function(int which)? onNegativeButtonClicked,
-    Function()? onCanceled,
-  }) async {
-    // TODO: implement authenticateDeviceCredential
-    return super.authenticateDeviceCredential(
-      title: title,
-      subTitle: subTitle,
-      description: description,
-      negativeText: negativeText,
-      confirmationRequired: confirmationRequired,
-      onSuccessAuthenticate: onSuccessAuthenticate,
-      onFailedAuthenticate: onFailedAuthenticate,
-      onErrorAuthenticate: onErrorAuthenticate,
-      onNegativeButtonClicked: onNegativeButtonClicked,
-      onCanceled: onCanceled,
-    );
-  }
-
-  @override
-  Future<void> authenticateBiometric({
+  Future<void> authenticate({
+    required FeatureAuthenticatorType authenticatorType,
     required String title,
     String? subTitle,
     required String description,
@@ -69,7 +42,8 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
     Function()? onCanceled,
   }) async {
     // TODO: implement authenticateBiometric
-    return super.authenticateBiometric(
+    return super.authenticate(
+      authenticatorType: authenticatorType,
       title: title,
       subTitle: subTitle,
       description: description,
