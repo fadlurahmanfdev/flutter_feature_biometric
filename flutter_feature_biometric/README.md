@@ -58,26 +58,28 @@ Future<void> screenFunction() async {
 }
 ```
 
-## Device Credential Authentication
+## Authentication
 
-Authenticate using device credential
+Authenticate using biometric or device credential
 
-| Parameter                 | Type                                  | android | iOS | Desc                                                                                          |
-|---------------------------|---------------------------------------|---------|-----|-----------------------------------------------------------------------------------------------|
-| tile                      | String                                | v       | x   | The title will be shown in prompt authentication.                                             |
-| subTitle                  | String                                | v       | x   | The subtitle will be shown in prompt authentication.                                          |
-| description               | String                                | v       | v   | The description will be shown in prompt authentication.                                       |
-| negativeText              | String                                | v       | x   | The button text will be shown in prompt authentication.                                       |
-| confirmationRequired      | bool                                  | v       | x   | If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered. |
-| onSuccessAuthenticate     | Function()                            | v       | v   | This will be triggered if successfully authenticated.                                         |
-| onFailedAuthenticate      | Function()                            | v       | v   | This will be triggered if failed authenticated.                                               |
-| onErrorAuthenticate       | Function(String code, String message) | v       | x   | This will be triggered if authenticate catch an error.                                        |
-| onNegativeButtonClicked   | Function(int)                         | v       | x   | This will be triggered if negative text clicked.                                              |
-| onCanceled                | Function()                            | v       | x   | This will be triggered if user cancel through device bottom nav bar.                          |
+| Parameter               | Type                                  | android | iOS | Desc                                                                                          |
+|-------------------------|---------------------------------------|---------|-----|-----------------------------------------------------------------------------------------------|
+| authenticatorType       | FeatureAuthenticatorType              | v       | v   | The specific authenticator for authentication. (e.g., biometric or device credential)         |
+| tile                    | String                                | v       | x   | The title will be shown in prompt authentication.                                             |
+| subTitle                | String                                | v       | x   | The subtitle will be shown in prompt authentication.                                          |
+| description             | String                                | v       | v   | The description will be shown in prompt authentication.                                       |
+| negativeText            | String                                | v       | x   | The button text will be shown in prompt authentication.                                       |
+| confirmationRequired    | bool                                  | v       | x   | If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered. |
+| onSuccessAuthenticate   | Function()                            | v       | v   | This will be triggered if successfully authenticated.                                         |
+| onFailedAuthenticate    | Function()                            | v       | v   | This will be triggered if failed authenticated.                                               |
+| onErrorAuthenticate     | Function(String code, String message) | v       | x   | This will be triggered if authenticate catch an error.                                        |
+| onNegativeButtonClicked | Function(int)                         | v       | x   | This will be triggered if negative text clicked.                                              |
+| onCanceled              | Function()                            | v       | x   | This will be triggered if user cancel through device bottom nav bar.                          |
 
 ```dart
 Future<void> screenFunction() async {
-  FlutterFeatureBiometric().authenticateDeviceCredential(
+  FlutterFeatureBiometric().authenticate(
+    authenticatorType: FeatureAuthenticatorType.deviceCredential,
     title: "Title - Credential Authenticate",
     description: "Description - Credential Authenticate",
     confirmationRequired: true,
@@ -87,49 +89,6 @@ Future<void> screenFunction() async {
     },
     onErrorAuthenticate: (code, message) {
       print("${Platform.operatingSystem} - Error authenticate credential: $code - $message");
-    },
-    onCanceled: () {
-      print("${Platform.operatingSystem} - On Canceled");
-    },
-    onFailedAuthenticate: () {
-      print("${Platform.operatingSystem} - On Failed Authenticate");
-    },
-    onNegativeButtonClicked: (which) {
-      print("${Platform.operatingSystem} - onNegativeButtonClicked: $which");
-    },
-  );
-}
-```
-
-## Biometric Authentication
-
-Authenticate using biometric
-
-| Parameter                 | Type                                  | android | iOS | Desc                                                                                          |
-|---------------------------|---------------------------------------|---------|-----|-----------------------------------------------------------------------------------------------|
-| tile                      | String                                | v       | x   | The title will be shown in prompt authentication.                                             |
-| subTitle                  | String                                | v       | x   | The subtitle will be shown in prompt authentication.                                          |
-| description               | String                                | v       | v   | The description will be shown in prompt authentication.                                       |
-| negativeText              | String                                | v       | x   | The button text will be shown in prompt authentication.                                       |
-| confirmationRequired      | bool                                  | v       | x   | If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered. |
-| onSuccessAuthenticate     | Function()                            | v       | v   | This will be triggered if successfully authenticated.                                         |
-| onFailedAuthenticate      | Function()                            | v       | v   | This will be triggered if failed authenticated.                                               |
-| onErrorAuthenticate       | Function(String code, String message) | v       | x   | This will be triggered if authenticate catch an error.                                        |
-| onNegativeButtonClicked   | Function(int)                         | v       | x   | This will be triggered if negative text clicked.                                              |
-| onCanceled                | Function()                            | v       | x   | This will be triggered if user cancel through device bottom nav bar.                          |
-
-```dart
-Future<void> screenFunction() async {
-  FlutterFeatureBiometric().authenticateBiometric(
-    title: "Title - Biometric Authenticate",
-    description: "Description - Biometric Authenticate",
-    confirmationRequired: true,
-    negativeText: "Cancel",
-    onSuccessAuthenticate: () {
-      print("${Platform.operatingSystem} - Success authenticate biometric");
-    },
-    onErrorAuthenticate: (code, message) {
-      print("${Platform.operatingSystem} - Error authenticate biometric: $code - $message");
     },
     onCanceled: () {
       print("${Platform.operatingSystem} - On Canceled");

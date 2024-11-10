@@ -46,28 +46,18 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Returns true if the device is capable of checking biometrics.
-  ///
-  /// This will return true even if there are no biometrics currently enrolled.
   Future<bool> isDeviceSupportBiometric() async {
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 
-  /// Check whether biometric status, whether can authenticate or not
   Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     throw UnimplementedError('checkAuthenticationTypeStatus() has not been implemented.');
   }
 
-  /// Check if device can secure authenticate
   Future<bool> canSecureAuthenticate() async {
     throw UnimplementedError('isSupportSecureBiometric() has not been implemented.');
   }
 
-  /// Authenticate Using Biometric
-  ///
-  /// - [title] - the title of explanation why it need use a biometric, ONLY WORKS IN ANDROID
-  /// - [description] - the description of explanation why it need use a biometric
-  /// - [negativeText] - the button of negative text in button of cancel biometric, ONLY WORKS IN ANDROID
   Future<void> authenticate({
     required FeatureAuthenticatorType authenticatorType,
     required String title,
