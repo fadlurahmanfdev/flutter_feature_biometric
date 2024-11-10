@@ -1,6 +1,6 @@
 name: flutter_feature_biometric_android
 description: "Flutter Feature Biometric for Android"
-version: 0.0.2
+version: 0.1.0
 homepage: https://github.com/fadlurahmanfdev/flutter_feature_biometric
 
 environment:
@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  flutter_feature_biometric_platform_interface:
-    path: ../flutter_feature_biometric_platform_interface
-#  flutter_feature_biometric_platform_interface: ^0.0.3
+#  flutter_feature_biometric_platform_interface:
+#    path: ../flutter_feature_biometric_platform_interface
+  flutter_feature_biometric_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
