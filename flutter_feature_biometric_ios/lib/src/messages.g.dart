@@ -32,13 +32,17 @@ enum IOSAuthenticationResultStatus {
 class IOSAuthenticationResult {
   IOSAuthenticationResult({
     required this.status,
+    this.encodedDomainState,
   });
 
   IOSAuthenticationResultStatus status;
 
+  String? encodedDomainState;
+
   Object encode() {
     return <Object?>[
       status,
+      encodedDomainState,
     ];
   }
 
@@ -46,6 +50,7 @@ class IOSAuthenticationResult {
     result as List<Object?>;
     return IOSAuthenticationResult(
       status: result[0]! as IOSAuthenticationResultStatus,
+      encodedDomainState: result[1] as String?,
     );
   }
 }
@@ -183,7 +188,7 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<bool> isBiometricChanged({required String key}) async {
+  Future<bool> isBiometricChanged({required String alias, required String encodedDomainState}) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.isBiometricChanged$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -191,7 +196,7 @@ class FlutterFeatureBiometricApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[key]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[alias, encodedDomainState]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -210,15 +215,42 @@ class FlutterFeatureBiometricApi {
     }
   }
 
-  Future<IOSAuthenticationResult> authenticateSecure({required IOSLAPolicy laPolicy, required String key, required String description,}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure$pigeonVar_messageChannelSuffix';
+  Future<IOSAuthenticationResult> authenticateSecureEncrypt({required IOSLAPolicy laPolicy, required String alias, required String description,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecureEncrypt$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[laPolicy, key, description]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[laPolicy, alias, description]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as IOSAuthenticationResult?)!;
+    }
+  }
+
+  Future<IOSAuthenticationResult> authenticateSecureDecrypt({required IOSLAPolicy laPolicy, required String encodedDomainState, required String alias, required String description,}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecureDecrypt$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[laPolicy, encodedDomainState, alias, description]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

@@ -28,7 +28,7 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
+  Future<FeatureAuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     IOSLAPolicy laPolicy;
     switch (authenticatorType) {
       case FeatureAuthenticatorType.biometric:
@@ -39,9 +39,9 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     final canAuthenticate = await _api.canAuthenticate(laPolicy: laPolicy);
     switch (canAuthenticate) {
       case true:
-        return AuthenticatorStatus.success;
+        return FeatureAuthenticatorStatus.success;
       default:
-        return AuthenticatorStatus.noneEnrolled;
+        return FeatureAuthenticatorStatus.noneEnrolled;
     }
   }
 
@@ -105,13 +105,13 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<bool> isBiometricChanged({required String key}) async {
-    return _api.isBiometricChanged(key: key);
+  Future<bool> isBiometricChanged({required String alias, required String encodedKey}) async {
+    return _api.isBiometricChanged(alias: alias, encodedDomainState: encodedKey);
   }
 
   @override
   Future<void> authenticateSecureEncrypt({
-    required String key,
+    required String alias,
     required Map<String, String> requestForEncrypt,
     required String title,
     String? subTitle,
@@ -124,14 +124,14 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _api.authenticateSecure(
+    final result = await _api.authenticateSecureEncrypt(
       laPolicy: IOSLAPolicy.biometric,
-      key: key,
+      alias: alias,
       description: description,
     );
     switch (result.status) {
       case IOSAuthenticationResultStatus.success:
-        onSuccessAuthenticate(SuccessAuthenticateEncryptIOS());
+        onSuccessAuthenticate(SuccessAuthenticateEncryptIOS(encodedDomainState: result.encodedDomainState!));
         break;
       case IOSAuthenticationResultStatus.biometricChanged:
         onErrorAuthenticate("BIOMETRIC_CHANGED", null);
@@ -149,8 +149,8 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<void> authenticateSecureDecrypt({
-    required String key,
-    required String encodedIVKey,
+    required String alias,
+    required String encodedKey,
     required Map<String, String> requestForDecrypt,
     required String title,
     String? subTitle,
@@ -163,9 +163,10 @@ class FlutterFeatureBiometricIOS extends FlutterFeatureBiometricPlatform {
     Function(int which)? onNegativeButtonClicked,
     Function()? onCanceled,
   }) async {
-    final result = await _api.authenticateSecure(
+    final result = await _api.authenticateSecureDecrypt(
       laPolicy: IOSLAPolicy.biometric,
-      key: key,
+      alias: alias,
+      encodedDomainState: encodedKey,
       description: description,
     );
     switch (result.status) {

@@ -81,20 +81,24 @@ enum IOSAuthenticationResultStatus: Int {
 /// Generated class from Pigeon that represents data sent in messages.
 struct IOSAuthenticationResult {
   var status: IOSAuthenticationResultStatus
+  var encodedDomainState: String? = nil
 
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> IOSAuthenticationResult? {
     let status = pigeonVar_list[0] as! IOSAuthenticationResultStatus
+    let encodedDomainState: String? = nilOrValue(pigeonVar_list[1])
 
     return IOSAuthenticationResult(
-      status: status
+      status: status,
+      encodedDomainState: encodedDomainState
     )
   }
   func toList() -> [Any?] {
     return [
-      status
+      status,
+      encodedDomainState,
     ]
   }
 }
@@ -159,8 +163,9 @@ protocol FlutterFeatureBiometricApi {
   func isDeviceSupportBiometric() throws -> Bool
   func canAuthenticate(laPolicy: IOSLAPolicy) throws -> Bool
   func authenticate(laPolicy: IOSLAPolicy, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
-  func isBiometricChanged(key: String) throws -> Bool
-  func authenticateSecure(laPolicy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
+  func isBiometricChanged(alias: String, encodedDomainState: String) throws -> Bool
+  func authenticateSecureEncrypt(laPolicy: IOSLAPolicy, alias: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
+  func authenticateSecureDecrypt(laPolicy: IOSLAPolicy, encodedDomainState: String, alias: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -219,9 +224,10 @@ class FlutterFeatureBiometricApiSetup {
     if let api = api {
       isBiometricChangedChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let keyArg = args[0] as! String
+        let aliasArg = args[0] as! String
+        let encodedDomainStateArg = args[1] as! String
         do {
-          let result = try api.isBiometricChanged(key: keyArg)
+          let result = try api.isBiometricChanged(alias: aliasArg, encodedDomainState: encodedDomainStateArg)
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
@@ -230,14 +236,14 @@ class FlutterFeatureBiometricApiSetup {
     } else {
       isBiometricChangedChannel.setMessageHandler(nil)
     }
-    let authenticateSecureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecure\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let authenticateSecureEncryptChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecureEncrypt\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      authenticateSecureChannel.setMessageHandler { message, reply in
+      authenticateSecureEncryptChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let laPolicyArg = args[0] as! IOSLAPolicy
-        let keyArg = args[1] as! String
+        let aliasArg = args[1] as! String
         let descriptionArg = args[2] as! String
-        api.authenticateSecure(laPolicy: laPolicyArg, key: keyArg, description: descriptionArg) { result in
+        api.authenticateSecureEncrypt(laPolicy: laPolicyArg, alias: aliasArg, description: descriptionArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -247,7 +253,27 @@ class FlutterFeatureBiometricApiSetup {
         }
       }
     } else {
-      authenticateSecureChannel.setMessageHandler(nil)
+      authenticateSecureEncryptChannel.setMessageHandler(nil)
+    }
+    let authenticateSecureDecryptChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_feature_biometric_ios.FlutterFeatureBiometricApi.authenticateSecureDecrypt\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      authenticateSecureDecryptChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let laPolicyArg = args[0] as! IOSLAPolicy
+        let encodedDomainStateArg = args[1] as! String
+        let aliasArg = args[2] as! String
+        let descriptionArg = args[3] as! String
+        api.authenticateSecureDecrypt(laPolicy: laPolicyArg, encodedDomainState: encodedDomainStateArg, alias: aliasArg, description: descriptionArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      authenticateSecureDecryptChannel.setMessageHandler(nil)
     }
   }
 }

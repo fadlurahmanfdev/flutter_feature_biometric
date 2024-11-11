@@ -23,8 +23,12 @@ enum IOSAuthenticationResultStatus {
 
 class IOSAuthenticationResult {
   IOSAuthenticationResultStatus status;
+  String? encodedDomainState;
 
-  IOSAuthenticationResult({required this.status});
+  IOSAuthenticationResult({
+    required this.status,
+    this.encodedDomainState,
+  });
 }
 
 @HostApi()
@@ -36,8 +40,20 @@ abstract class FlutterFeatureBiometricApi {
   @async
   IOSAuthenticationResult authenticate({required IOSLAPolicy laPolicy, required String description});
 
-  bool isBiometricChanged({required String key});
+  bool isBiometricChanged({required String alias, required String encodedDomainState});
 
   @async
-  IOSAuthenticationResult authenticateSecure({required IOSLAPolicy laPolicy, required String key, required String description});
+  IOSAuthenticationResult authenticateSecureEncrypt({
+    required IOSLAPolicy laPolicy,
+    required String alias,
+    required String description,
+  });
+
+  @async
+  IOSAuthenticationResult authenticateSecureDecrypt({
+    required IOSLAPolicy laPolicy,
+    required String encodedDomainState,
+    required String alias,
+    required String description,
+  });
 }
