@@ -22,7 +22,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) {
+  Future<FeatureAuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) {
     // TODO: implement checkBiometricStatus
     return super.checkAuthenticatorStatus(authenticatorType);
   }
@@ -58,14 +58,14 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }
 
   @override
-  Future<bool> isBiometricChanged({required String key}) {
+  Future<bool> isBiometricChanged({required String alias, required String encodedKey}) {
     // TODO: implement isBiometricChanged
-    return super.isBiometricChanged(key: key);
+    return super.isBiometricChanged(alias: alias, encodedKey: encodedKey);
   }
 
   @override
   Future<void> authenticateSecureEncrypt({
-    required String key,
+    required String alias,
     required Map<String, String> requestForEncrypt,
     required String title,
     String? subTitle,
@@ -80,7 +80,7 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }) async {
     // TODO: implement secureEncryptAuthenticate
     return super.authenticateSecureEncrypt(
-      key: key,
+      alias: alias,
       requestForEncrypt: requestForEncrypt,
       title: title,
       description: description,
@@ -94,8 +94,8 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
 
   @override
   Future<void> authenticateSecureDecrypt({
-    required String key,
-    required String encodedIVKey,
+    required String alias,
+    required String encodedKey,
     required Map<String, String> requestForDecrypt,
     required String title,
     String? subTitle,
@@ -110,8 +110,8 @@ class DefaultFlutterFeatureBiometricPlatform extends FlutterFeatureBiometricPlat
   }) {
     // TODO: implement secureEncryptAuthenticate
     return super.authenticateSecureDecrypt(
-      key: key,
-      encodedIVKey: encodedIVKey,
+      alias: alias,
+      encodedKey: encodedKey,
       requestForDecrypt: requestForDecrypt,
       title: title,
       description: description,
