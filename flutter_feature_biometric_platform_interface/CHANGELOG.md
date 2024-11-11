@@ -1,4 +1,4 @@
-## 0.1.0
+## 0.2.0
 
 * add parameter `encodedKey` inside `isBiometricChanged`
 * change `key` to `alias` inside `authenticateSecureEncrypt`
