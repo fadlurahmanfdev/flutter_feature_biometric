@@ -27,7 +27,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
+  Future<FeatureAuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     AndroidAuthenticatorStatus authenticatorStatus;
     switch (authenticatorType) {
       case FeatureAuthenticatorType.biometric:
@@ -37,19 +37,19 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     }
     switch (authenticatorStatus) {
       case AndroidAuthenticatorStatus.success:
-        return AuthenticatorStatus.success;
+        return FeatureAuthenticatorStatus.success;
       case AndroidAuthenticatorStatus.noHardwareAvailable:
-        return AuthenticatorStatus.noHardwareAvailable;
+        return FeatureAuthenticatorStatus.noHardwareAvailable;
       case AndroidAuthenticatorStatus.unavailable:
-        return AuthenticatorStatus.unavailable;
+        return FeatureAuthenticatorStatus.unavailable;
       case AndroidAuthenticatorStatus.noneEnrolled:
-        return AuthenticatorStatus.noneEnrolled;
+        return FeatureAuthenticatorStatus.noneEnrolled;
       case AndroidAuthenticatorStatus.securityUpdateRequired:
-        return AuthenticatorStatus.securityUpdateRequired;
+        return FeatureAuthenticatorStatus.securityUpdateRequired;
       case AndroidAuthenticatorStatus.unsupportedOSVersion:
-        return AuthenticatorStatus.unsupportedOSVersion;
+        return FeatureAuthenticatorStatus.unsupportedOSVersion;
       default:
-        return AuthenticatorStatus.unknown;
+        return FeatureAuthenticatorStatus.unknown;
     }
   }
 
@@ -118,13 +118,13 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
   }
 
   @override
-  Future<bool> isBiometricChanged({required String key}) {
-    return _api.isBiometricChanged(alias: key);
+  Future<bool> isBiometricChanged({required String alias, required String encodedKey}) {
+    return _api.isBiometricChanged(alias: alias);
   }
 
   @override
   Future<void> authenticateSecureEncrypt({
-    required String key,
+    required String alias,
     required Map<String, String> requestForEncrypt,
     required String title,
     String? subTitle,
@@ -138,7 +138,7 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureEncrypt(
-      alias: key,
+      alias: alias,
       requestForEncrypt: requestForEncrypt,
       title: title,
       description: description,
@@ -177,8 +177,8 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
 
   @override
   Future<void> authenticateSecureDecrypt({
-    required String key,
-    required String encodedIVKey,
+    required String alias,
+    required String encodedKey,
     required Map<String, String> requestForDecrypt,
     required String title,
     String? subTitle,
@@ -192,8 +192,8 @@ class FlutterFeatureBiometricAndroid extends FlutterFeatureBiometricPlatform {
     Function()? onCanceled,
   }) async {
     final result = await _api.authenticateBiometricSecureDecrypt(
-      alias: key,
-      encodedIVKey: encodedIVKey,
+      alias: alias,
+      encodedIVKey: encodedKey,
       requestForDecrypt: requestForDecrypt,
       title: title,
       description: description,
