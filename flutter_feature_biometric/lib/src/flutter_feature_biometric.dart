@@ -11,7 +11,7 @@ class FlutterFeatureBiometric {
   /// Check whether biometric status, whether can authenticate or not
   ///
   /// * [FeatureAuthenticatorType] - authenticator type (biometric, device credential)
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticator) {
+  Future<FeatureAuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticator) {
     return FlutterFeatureBiometricPlatform.instance.checkAuthenticatorStatus(authenticator);
   }
 
@@ -66,8 +66,8 @@ class FlutterFeatureBiometric {
   ///
   /// Parameter:
   /// - [key] - the alias key store for object
-  Future<bool> isBiometricChanged({required String key}) {
-    return FlutterFeatureBiometricPlatform.instance.isBiometricChanged(key: key);
+  Future<bool> isBiometricChanged({required String key, required String encodedKey}) {
+    return FlutterFeatureBiometricPlatform.instance.isBiometricChanged(alias: key, encodedKey: encodedKey);
   }
 
   /// Authenticate Secure Using Biometric
@@ -100,7 +100,7 @@ class FlutterFeatureBiometric {
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureEncrypt(
-      key: key,
+      alias: key,
       requestForEncrypt: requestForEncrypt,
       title: title,
       description: description,
@@ -146,8 +146,8 @@ class FlutterFeatureBiometric {
     Function()? onCanceled,
   }) {
     return FlutterFeatureBiometricPlatform.instance.authenticateSecureDecrypt(
-      key: key,
-      encodedIVKey: encodedIVKey,
+      alias: key,
+      encodedKey: encodedIVKey,
       requestForDecrypt: requestForDecrypt,
       title: title,
       description: description,

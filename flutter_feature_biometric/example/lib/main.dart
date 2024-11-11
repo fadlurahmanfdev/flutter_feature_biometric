@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     flutterFeatureBiometric = FlutterFeatureBiometric();
   }
 
-  late String encodedIVKey;
+  late String encodedKey;
   Map<String, String> encryptedResult = {};
 
   @override
@@ -182,7 +182,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
                   break;
                 case "IS_BIOMETRIC_CHANGED":
-                  final isBiometricChanged = await flutterFeatureBiometric.isBiometricChanged(key: 'flutterBiometricKey');
+                  final isBiometricChanged = await flutterFeatureBiometric.isBiometricChanged(
+                      key: 'flutterBiometricKey', encodedKey: encodedKey);
                   print("${Platform.operatingSystem} - is biometric changed: $isBiometricChanged");
                   break;
                 case "SECURE_ENCRYPT_AUTHENTICATE":
@@ -196,13 +197,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     negativeText: "Batal",
                     onSuccessAuthenticate: (state) {
                       if (state is SuccessAuthenticateEncryptAndroid) {
-                        encodedIVKey = state.encodedIVKey;
+                        encodedKey = state.encodedIVKey;
                         state.encryptedResult.forEach((key, value) {
                           encryptedResult[key] = "$value";
                         });
                         print("${Platform.operatingSystem} - Success Encrypt Authenticate");
-                        print("Encoded IV Key: $encodedIVKey");
+                        print("Encoded IV Key: $encodedKey");
                         print("Result: $encryptedResult");
+                      } else if (state is SuccessAuthenticateEncryptIOS) {
+                        encodedKey = state.encodedDomainState;
+                        print("Encoded Domain State: ${encodedKey}");
                       }
                     },
                     onFailedAuthenticate: () {

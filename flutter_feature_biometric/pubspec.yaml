@@ -1,6 +1,6 @@
 name: flutter_feature_biometric
 description: "Flutter Feature Biometric App Facing Package"
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/fadlurahmanfdev/flutter_feature_biometric
 
 environment:
@@ -20,9 +20,9 @@ dependencies:
 #    path: ../flutter_feature_biometric_platform_interface
 
 
-  flutter_feature_biometric_android: ^0.1.0
-  flutter_feature_biometric_ios: ^0.1.0
-  flutter_feature_biometric_platform_interface: ^0.1.0
+  flutter_feature_biometric_android: ^0.2.0
+  flutter_feature_biometric_ios: ^0.2.0
+  flutter_feature_biometric_platform_interface: ^0.2.0
 
 dev_dependencies:
   flutter_test:
