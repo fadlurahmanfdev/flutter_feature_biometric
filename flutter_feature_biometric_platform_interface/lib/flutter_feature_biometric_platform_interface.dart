@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 export 'src/enum/feature_authenticator_type.dart';
-export 'src/enum/authenticator_status.dart';
+export 'src/enum/feature_authenticator_status.dart';
 
 export 'src/exception/feature_biometric_exception.dart';
 
@@ -11,7 +11,7 @@ export 'src/state/success_authenticate_encrypt_state.dart';
 export 'src/state/success_authenticate_decrypt_state.dart';
 
 import 'package:flutter_feature_biometric_platform_interface/src/enum/feature_authenticator_type.dart';
-import 'package:flutter_feature_biometric_platform_interface/src/enum/authenticator_status.dart';
+import 'package:flutter_feature_biometric_platform_interface/src/enum/feature_authenticator_status.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_decrypt_state.dart';
 import 'package:flutter_feature_biometric_platform_interface/src/state/success_authenticate_encrypt_state.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -50,7 +50,7 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 
-  Future<AuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
+  Future<FeatureAuthenticatorStatus> checkAuthenticatorStatus(FeatureAuthenticatorType authenticatorType) async {
     throw UnimplementedError('checkAuthenticationTypeStatus() has not been implemented.');
   }
 
@@ -74,12 +74,12 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
     throw UnimplementedError('authenticate() has not been implemented.');
   }
 
-  Future<bool> isBiometricChanged({required String key}) async {
+  Future<bool> isBiometricChanged({required String alias, required String encodedKey}) async {
     throw UnimplementedError('isBiometricChanged() has not been implemented.');
   }
 
   Future<void> authenticateSecureEncrypt({
-    required String key,
+    required String alias,
     required Map<String, String> requestForEncrypt,
     required String title,
     String? subTitle,
@@ -96,8 +96,8 @@ abstract class FlutterFeatureBiometricPlatform extends PlatformInterface {
   }
 
   Future<void> authenticateSecureDecrypt({
-    required String key,
-    required String encodedIVKey,
+    required String alias,
+    required String encodedKey,
     required Map<String, String> requestForDecrypt,
     required String title,
     String? subTitle,

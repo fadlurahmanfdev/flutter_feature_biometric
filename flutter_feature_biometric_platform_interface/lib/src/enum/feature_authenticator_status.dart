@@ -1,4 +1,4 @@
-enum AuthenticatorStatus {
+enum FeatureAuthenticatorStatus {
   success,
   noHardwareAvailable,
   unavailable,

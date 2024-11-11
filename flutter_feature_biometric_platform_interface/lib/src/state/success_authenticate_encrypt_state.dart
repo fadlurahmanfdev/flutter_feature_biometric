@@ -10,4 +10,8 @@ class SuccessAuthenticateEncryptAndroid extends SuccessAuthenticateEncryptState 
   });
 }
 
-class SuccessAuthenticateEncryptIOS extends SuccessAuthenticateEncryptState {}
+class SuccessAuthenticateEncryptIOS extends SuccessAuthenticateEncryptState {
+  String encodedDomainState;
+
+  SuccessAuthenticateEncryptIOS({required this.encodedDomainState});
+}
