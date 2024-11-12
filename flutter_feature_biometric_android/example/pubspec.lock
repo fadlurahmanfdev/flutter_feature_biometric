@@ -81,13 +81,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.2.0"
   flutter_feature_biometric_platform_interface:
     dependency: transitive
     description:
-      path: "../../flutter_feature_biometric_platform_interface"
-      relative: true
-    source: path
+      name: flutter_feature_biometric_platform_interface
+      sha256: a6035dc264fd23cccdfa433206c64df9209743fc36ee097138d735e4eff1b3f0
+      url: "https://pub.dev"
+    source: hosted
     version: "0.2.0"
   flutter_lints:
     dependency: "direct dev"

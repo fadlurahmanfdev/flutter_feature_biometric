@@ -89,27 +89,30 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.2.1"
   flutter_feature_biometric_android:
     dependency: transitive
     description:
-      path: "../../flutter_feature_biometric_android"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: flutter_feature_biometric_android
+      sha256: "0017d92b07fd6af86e3a5a247667880ece96e22aab8390bf457f43c2de710fa6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   flutter_feature_biometric_ios:
     dependency: transitive
     description:
-      path: "../../flutter_feature_biometric_ios"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: flutter_feature_biometric_ios
+      sha256: "9620b9f6c1b05d8b0ffb46c5ffc1ba0dd7488531023e902bdc65ca73322ad426"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   flutter_feature_biometric_platform_interface:
     dependency: transitive
     description:
-      path: "../../flutter_feature_biometric_platform_interface"
-      relative: true
-    source: path
+      name: flutter_feature_biometric_platform_interface
+      sha256: a6035dc264fd23cccdfa433206c64df9209743fc36ee097138d735e4eff1b3f0
+      url: "https://pub.dev"
+    source: hosted
     version: "0.2.0"
   flutter_lints:
     dependency: "direct dev"
