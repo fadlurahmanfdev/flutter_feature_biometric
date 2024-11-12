@@ -1,3 +1,7 @@
+## 0.2.1
+
+* update method ios
+
 ## 0.2.0
 
 * add parameter `encodedKey` inside `isBiometricChanged`
