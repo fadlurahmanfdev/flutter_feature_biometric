@@ -49,48 +49,40 @@ public class FlutterFeatureBiometricIosPlugin: NSObject, FlutterPlugin,
         }
     }
     
-    func isBiometricChanged(key: String) throws -> Bool {
-        print("key: \(key)")
+    func isBiometricChanged(alias: String, encodedDomainState: String) throws -> Bool {
         let defaults = UserDefaults.standard
-        let oldDomainState = defaults.object(forKey: key) as? Data
-        print("old domain state: \(oldDomainState?.base64EncodedString())")
-        let currentDomainState = LAContext().evaluatedPolicyDomainState
-        print("current domain state: \(currentDomainState?.base64EncodedString())")
-        return currentDomainState != oldDomainState
-//        return repository.isBiometricChanged(key: key)
+        let oldDomainState = defaults.object(forKey: alias) as? Data
+        return encodedDomainState != oldDomainState?.base64EncodedString()
     }
     
-    func authenticateSecure(laPolicy: IOSLAPolicy, key: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, any Error>) -> Void) {
-        print("masuk authenticateSecure \(repository.isBiometricChanged(key: key))")
-//        if(repository.isBiometricChanged(key: key)){
-//            completion(.success(IOSAuthenticationResult(status: .biometricChanged)))
-//            return
-//        }
-        
-//        repository.secureAuthenticate(key: key, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
-//            completion(.success(IOSAuthenticationResult(status: .success)))
-//        }
-        
-        print("key: \(key)")
-        print("domain state \((UserDefaults.standard.object(forKey: key) as? Data)?.base64EncodedString())")
-        let context = LAContext()
-        let defaults = UserDefaults.standard
-        context.evaluatePolicy(
-            .deviceOwnerAuthenticationWithBiometrics,
-            localizedReason: description
-        ) { success, error in
-            if success {
-                let domainState = context.evaluatedPolicyDomainState
-                print("domain state \(domainState?.base64EncodedString())")
-                defaults.set(domainState, forKey: key)
-                completion(.success(IOSAuthenticationResult(status: .biometricChanged)))
-//                completion(
-//                    .success(
-//                        encodedDomainState: domainState?.base64EncodedString()))
-            } else {
-                completion(.canceled)
+    func authenticateSecureEncrypt(laPolicy: IOSLAPolicy, alias: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, any Error>) -> Void) {
+        repository.secureAuthenticate(key: alias, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
+            switch result   {
+            case .success(let encodedDomainState):
+                completion(.success(IOSAuthenticationResult(status: .success, encodedDomainState: encodedDomainState)))
+                break;
+            case .canceled:
+                completion(.success(IOSAuthenticationResult(status: .canceled)))
+                break;
             }
-
+        }
+    }
+    
+    func authenticateSecureDecrypt(laPolicy: IOSLAPolicy, encodedDomainState: String, alias: String, description: String, completion: @escaping (Result<IOSAuthenticationResult, any Error>) -> Void) {
+        if(repository.isBiometricChanged(key: alias, encodedDomainState: encodedDomainState)){
+            completion(.success(IOSAuthenticationResult(status: .biometricChanged)))
+            return
+        }
+        
+        repository.secureAuthenticate(key: alias, policy: .deviceOwnerAuthenticationWithBiometrics, localizedReason: description){ result in
+            switch result   {
+            case .success(let encodedDomainState):
+                completion(.success(IOSAuthenticationResult(status: .success)))
+                break;
+            case .canceled:
+                completion(.success(IOSAuthenticationResult(status: .canceled)))
+                break;
+            }
         }
     }
 }
