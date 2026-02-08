@@ -33,7 +33,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.19.5
+          flutter-version: 3.29.3
       - name: Check Flutter Version
         run: |
           flutter doctor -v
@@ -51,6 +51,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd flutter_feature_biometric_android
+          cd mark_android
           dart pub publish -f
           
