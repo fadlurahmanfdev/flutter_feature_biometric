@@ -1,6 +1,6 @@
 import 'package:mark_platform_interface/mark_platform_interface.dart';
 
-class Mark {
+class MarkBiometric {
   /// Returns true if the device is capable of checking biometrics.
   ///
   /// This will return true even if there are no biometrics currently enrolled.

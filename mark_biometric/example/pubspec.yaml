@@ -17,7 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mark:
+  mark_biometric:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.

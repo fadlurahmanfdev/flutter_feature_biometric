@@ -138,33 +138,36 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  mark:
+  mark_android:
+    dependency: transitive
+    description:
+      name: mark_android
+      sha256: "8d97f72bc353cb725ed59caaee3688896bd16506c8678277c999339f2d28da94"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
+  mark_biometric:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
     version: "0.0.1"
-  mark_android:
-    dependency: transitive
-    description:
-      path: "../../mark_android"
-      relative: true
-    source: path
-    version: "0.0.1"
   mark_ios:
     dependency: transitive
     description:
-      path: "../../mark_ios"
-      relative: true
-    source: path
+      name: mark_ios
+      sha256: "8b1aef4d1002e4c1862a4803ce12397c5f4ff7211518816d3d2412e9b6b4251a"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   mark_platform_interface:
     dependency: transitive
     description:
-      path: "../../mark_platform_interface"
-      relative: true
-    source: path
+      name: mark_platform_interface
+      sha256: "4e6d993674cfb3a672817ae32c2aab015ff018a508d8863b28516f5d3689af7b"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   matcher:
     dependency: transitive

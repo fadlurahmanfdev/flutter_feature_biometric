@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mark/mark.dart';
+import 'package:mark_biometric/mark_biometric.dart';
 import 'package:mark_example/data/dto/model/feature_model.dart';
 import 'package:mark_example/presentation/widget/feature_widget.dart';
 
@@ -55,7 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Mark flutterFeatureBiometric;
+  late MarkBiometric markBiometric;
   List<FeatureModel> features = [
     FeatureModel(
       title: 'Is Device Support Biometric',
@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    flutterFeatureBiometric = Mark();
+    markBiometric = MarkBiometric();
   }
 
   late String encodedKey;
@@ -121,16 +121,16 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () async {
               switch (feature.key) {
                 case "IS_DEVICE_SUPPORT_BIOMETRIC":
-                  final isSupportedBiometric = await flutterFeatureBiometric.isDeviceSupportBiometric();
+                  final isSupportedBiometric = await markBiometric.isDeviceSupportBiometric();
                   print("${Platform.operatingSystem} - IS SUPPORT BIOMETRIC: $isSupportedBiometric");
                   break;
                 case "CAN_AUTHENTICATE_BIOMETRIC":
                   final canAuthenticate =
-                      await flutterFeatureBiometric.checkAuthenticatorStatus(MarkAuthenticatorType.biometric);
+                      await markBiometric.checkAuthenticatorStatus(MarkAuthenticatorType.biometric);
                   print("${Platform.operatingSystem} - CAN AUTHENTICATE: $canAuthenticate");
                   break;
                 case "STANDARD_BIOMETRIC_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticate(
+                  markBiometric.authenticate(
                     authenticatorType: MarkAuthenticatorType.biometric,
                     title: "Title - Biometric Authenticate",
                     description: "Description - Biometric Authenticate",
@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   break;
                 case "CREDENTIAL_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticate(
+                  markBiometric.authenticate(
                     authenticatorType: MarkAuthenticatorType.deviceCredential,
                     title: "Title - Credential Authenticate",
                     description: "Description - Credential Authenticate",
@@ -178,16 +178,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   break;
                 case "CAN_SECURE_AUTHENTICATE":
-                  final canSecureAuthenticate = await flutterFeatureBiometric.canSecureAuthenticate();
+                  final canSecureAuthenticate = await markBiometric.canSecureAuthenticate();
                   print("${Platform.operatingSystem} - CAN SECURE AUTHENTICATE: $canSecureAuthenticate");
                   break;
                 case "IS_BIOMETRIC_CHANGED":
-                  final isBiometricChanged = await flutterFeatureBiometric.isBiometricChanged(
+                  final isBiometricChanged = await markBiometric.isBiometricChanged(
                       key: 'flutterBiometricKey', encodedKey: encodedKey);
                   print("${Platform.operatingSystem} - is biometric changed: $isBiometricChanged");
                   break;
                 case "SECURE_ENCRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticateBiometricSecureEncrypt(
+                  markBiometric.authenticateBiometricSecureEncrypt(
                     key: "flutterBiometricKey",
                     requestForEncrypt: {
                       "test": "P4ssw0rd",
@@ -222,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   break;
                 case "SECURE_DECRYPT_AUTHENTICATE":
-                  flutterFeatureBiometric.authenticateBiometricSecureDecrypt(
+                  markBiometric.authenticateBiometricSecureDecrypt(
                     key: "flutterBiometricKey",
                     encodedIVKey: encodedKey,
                     requestForDecrypt: encryptedResult,
