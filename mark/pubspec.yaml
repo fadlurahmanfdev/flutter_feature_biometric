@@ -12,17 +12,17 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  mark_android:
-    path: ../mark_android
-  mark_ios:
-    path: ../mark_ios
-  mark_platform_interface:
-    path: ../mark_platform_interface
+#  mark_android:
+#    path: ../mark_android
+#  mark_ios:
+#    path: ../mark_ios
+#  mark_platform_interface:
+#    path: ../mark_platform_interface
 
 
-#  mark_android: ^0.0.1
-#  mark_ios: ^0.0.1
-#  mark_platform_interface: ^0.0.1
+  mark_android: ^0.0.1
+  mark_ios: ^0.0.1
+  mark_platform_interface: ^0.0.1
 
 dev_dependencies:
   flutter_test:
