@@ -1,7 +1,9 @@
 name: Create Release & Publish to Pub Dev
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'mark-v*'
 
 jobs:
   build:

@@ -1,7 +1,9 @@
 name: Create Platform Release & Publish Platform to Pub Dev
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'mark-platform-v*'
 
 jobs:
   build:

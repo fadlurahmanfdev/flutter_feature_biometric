@@ -1,9 +1,7 @@
 name: Pre Release (Check Tag & Dry Run Publish Pub Dev)
 
 on:
-  push:
-    tags:
-      - 'mark-v*'
+  workflow_dispatch:
 
 jobs:
   build:

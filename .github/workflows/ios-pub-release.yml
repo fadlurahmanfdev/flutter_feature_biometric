@@ -1,7 +1,9 @@
 name: Create iOS Release & Publish iOS to Pub Dev
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'mark-ios-v*'
 
 jobs:
   build:

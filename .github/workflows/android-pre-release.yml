@@ -1,9 +1,7 @@
 name: Android Pre Release (Check Tag & Dry Run Publish Pub Dev)
 
 on:
-  push:
-    tags:
-      - 'mark-android-v*'
+  workflow_dispatch:
 
 jobs:
   build:
