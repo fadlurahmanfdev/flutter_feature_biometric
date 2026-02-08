@@ -3,7 +3,7 @@ name: iOS Pre Release (Check Tag & Dry Run Publish Pub Dev)
 on:
   push:
     tags:
-      - 'ios-v*'
+      - 'mark-ios-v*'
 
 jobs:
   build:

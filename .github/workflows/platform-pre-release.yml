@@ -3,7 +3,7 @@ name: Platform Pre Release (Check Tag & Dry Run Publish Pub Dev)
 on:
   push:
     tags:
-      - 'platform-v*'
+      - 'mark-platform-v*'
 
 jobs:
   build:

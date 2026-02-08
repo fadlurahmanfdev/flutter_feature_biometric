@@ -3,7 +3,7 @@ name: Pre Release (Check Tag & Dry Run Publish Pub Dev)
 on:
   push:
     tags:
-      - 'v*'
+      - 'mark-v*'
 
 jobs:
   build:

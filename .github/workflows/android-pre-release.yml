@@ -3,7 +3,7 @@ name: Android Pre Release (Check Tag & Dry Run Publish Pub Dev)
 on:
   push:
     tags:
-      - 'android-v*'
+      - 'mark-android-v*'
 
 jobs:
   build:
