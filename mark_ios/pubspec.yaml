@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  mark_platform_interface:
-    path: ../mark_platform_interface
-#  mark_platform_interface: ^0.0.1
+#  mark_platform_interface:
+#    path: ../mark_platform_interface
+  mark_platform_interface: ^0.0.1
 
 dev_dependencies:
   flutter_test:
