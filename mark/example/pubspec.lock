@@ -144,28 +144,28 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.2.1"
+    version: "0.0.1"
   mark_android:
     dependency: transitive
     description:
       path: "../../mark_android"
       relative: true
     source: path
-    version: "0.2.0"
+    version: "0.0.1"
   mark_ios:
     dependency: transitive
     description:
       path: "../../mark_ios"
       relative: true
     source: path
-    version: "0.2.1"
+    version: "0.0.1"
   mark_platform_interface:
     dependency: transitive
     description:
       path: "../../mark_platform_interface"
       relative: true
     source: path
-    version: "0.2.0"
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
