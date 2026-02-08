@@ -17,8 +17,8 @@ jobs:
         id: setup
         run: |
           echo "TAG VERSION: $GITHUB_REF_NAME"
-          echo "RELEASE VERSION: ${GITHUB_REF_NAME#v}"
-          echo "::set-output name=release_name::${GITHUB_REF_NAME#v}"
+          echo "RELEASE VERSION: ${GITHUB_REF_NAME#mark-v}"
+          echo "::set-output name=release_name::${GITHUB_REF_NAME#mark-v}"
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -41,6 +41,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd mark_ios
+          cd mark
           dart pub publish -f
           
