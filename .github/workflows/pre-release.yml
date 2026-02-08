@@ -40,6 +40,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd mark
+          cd mark_biometric
           dart pub publish --dry-run
           
