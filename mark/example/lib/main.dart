@@ -200,6 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         encodedKey = state.encodedIVKey;
                         state.encryptedResult.forEach((key, value) {
                           encryptedResult[key] = "$value";
+                          print("${Platform.operatingSystem} - Key: $key, Value: $value");
                         });
                         print("${Platform.operatingSystem} - Success Encrypt Authenticate");
                         print("Encoded IV Key: $encodedKey");
@@ -223,8 +224,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 case "SECURE_DECRYPT_AUTHENTICATE":
                   flutterFeatureBiometric.authenticateBiometricSecureDecrypt(
                     key: "flutterBiometricKey",
-                    encodedIVKey: "MbUhu6SsOk9vN8iJ/Td1lQ==",
-                    requestForDecrypt: {"test": "xZqWsEIQLL/IaurzD5bZAQ=="},
+                    encodedIVKey: encodedKey,
+                    requestForDecrypt: encryptedResult,
                     title: "Secure Decrypt Authenticate",
                     description: "Secure Decrypt Authenticate",
                     negativeText: "Batal",

@@ -9,7 +9,7 @@ import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.AuthenticationC
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationDecryptCallBack
 import com.fadlurahmanfdev.kotlin_feature_identity.data.callback.SecureAuthenticationEncryptCallBack
 import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureAuthenticationStatus
-import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.MarkAuthenticatorType
+import com.fadlurahmanfdev.kotlin_feature_identity.data.enums.FeatureAuthenticatorType
 import com.fadlurahmanfdev.kotlin_feature_identity.data.exception.FeatureIdentityException
 import com.fadlurahmanfdev.kotlin_feature_identity.plugin.FeatureAuthentication
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -81,8 +81,8 @@ class MarkAndroidPlugin : FlutterPlugin, ActivityAware,
 
     override fun checkAuthenticatorStatus(androidAuthenticatorType: AndroidAuthenticatorType): AndroidAuthenticatorStatus {
         val authenticatorType = when (androidAuthenticatorType) {
-            AndroidAuthenticatorType.BIOMETRIC -> MarkAuthenticatorType.BIOMETRIC
-            AndroidAuthenticatorType.DEVICE_CREDENTIAL -> MarkAuthenticatorType.DEVICE_CREDENTIAL
+            AndroidAuthenticatorType.BIOMETRIC -> FeatureAuthenticatorType.BIOMETRIC
+            AndroidAuthenticatorType.DEVICE_CREDENTIAL -> FeatureAuthenticatorType.DEVICE_CREDENTIAL
         }
 
         val authenticatorStatus =
