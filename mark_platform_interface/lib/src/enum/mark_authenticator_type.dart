@@ -1,0 +1,4 @@
+enum MarkAuthenticatorType {
+  biometric,
+  deviceCredential
+}

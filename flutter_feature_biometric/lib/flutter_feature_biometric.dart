@@ -1,4 +1,0 @@
-export 'src/flutter_feature_biometric.dart';
-export 'package:flutter_feature_biometric_android/flutter_feature_biometric_android.dart';
-export 'package:flutter_feature_biometric_ios/flutter_feature_biometric_ios.dart';
-export 'package:flutter_feature_biometric_platform_interface/flutter_feature_biometric_platform_interface.dart';

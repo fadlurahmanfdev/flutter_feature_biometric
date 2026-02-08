@@ -51,6 +51,6 @@ jobs:
             "expiration": ${{ secrets.PUB_EXPIRATION }}
           }
           EOF
-          cd flutter_feature_biometric_platform_interface
+          cd mark_platform_interface
           dart pub publish -f
           

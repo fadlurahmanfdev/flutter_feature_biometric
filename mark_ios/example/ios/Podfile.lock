@@ -1,0 +1,36 @@
+PODS:
+  - Flutter (1.0.0)
+  - mark_ios (0.2.0):
+    - Flutter
+    - SwiftFeatureBiometric (= 0.1.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - SwiftFeatureBiometric (0.1.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - mark_ios (from `.symlinks/plugins/mark_ios/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - SwiftFeatureBiometric (= 0.1.0)
+
+SPEC REPOS:
+  trunk:
+    - SwiftFeatureBiometric
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  mark_ios:
+    :path: ".symlinks/plugins/mark_ios/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  mark_ios: 7ff183c8a8737c6e0abbb3aaf908809bbe395e0a
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  SwiftFeatureBiometric: a304ef4d4e6b458fde90aa02144899f5539d23c7
+
+PODFILE CHECKSUM: 4f02bdc208e5199d85639d4017885db0d0170a6b
+
+COCOAPODS: 1.16.2

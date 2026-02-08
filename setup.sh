@@ -1,5 +1,5 @@
-cd flutter_feature_biometric_platform_interface && fvm use 3.19.5 && fvm global 3.19.5 && flutter clean && flutter pub get && cd .. && \
-  cd flutter_feature_biometric_android && fvm use 3.19.5 && flutter clean && flutter pub get && cd .. && \
-  cd flutter_feature_biometric_ios && fvm use 3.19.5 && flutter clean && flutter pub get && cd .. && \
-  cd flutter_feature_biometric && fvm use 3.19.5 && flutter clean && flutter pub get && \
-  cd example && fvm use 3.19.5 && flutter clean && flutter pub get && cd .. && cd ..
+cd mark_platform_interface && fvm use 3.29.3 && fvm global 3.29.3 && fvm flutter clean && fvm flutter pub get && cd .. && \
+  cd mark_android && fvm use 3.29.3 && fvm flutter clean && fvm flutter pub get && cd .. && \
+  cd mark_ios && fvm use 3.29.3 && fvm flutter clean && fvm flutter pub get && cd .. && \
+  cd mark && fvm use 3.29.3 && fvm flutter clean && fvm flutter pub get && \
+  cd example && fvm use 3.29.3 && fvm flutter clean && fvm flutter pub get && cd .. && cd ..
