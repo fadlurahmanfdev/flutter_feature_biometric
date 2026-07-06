@@ -4,11 +4,11 @@ version: 0.0.1
 homepage: https://github.com/fadlurahmanfdev/mark
 
 environment:
-  sdk: '^3.0.0'
+  sdk: '>=3.11.0 <4.0.0'
 
 dependencies:
   plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
-  test: ^1.25.8
-  flutter_lints: ^5.0.0
+  test: ^1.31.2
+  flutter_lints: ^6.0.0
