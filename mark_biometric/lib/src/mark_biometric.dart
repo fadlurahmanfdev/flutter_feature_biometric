@@ -1,39 +1,42 @@
 import 'package:mark_platform_interface/mark_platform_interface.dart';
 
+/// Main entry point for biometric and device-credential authentication.
+///
+/// This class forwards all calls to the active platform implementation.
 class MarkBiometric {
-  /// Returns true if the device is capable of checking biometrics.
+  /// Returns `true` when the device has biometric capability.
   ///
-  /// This will return true even if there are no biometrics currently enrolled.
+  /// This only checks hardware and OS support. It can still return `true`
+  /// when no biometric data is enrolled yet.
   Future<bool> isDeviceSupportBiometric() {
     return MarkPlatform.instance.isDeviceSupportBiometric();
   }
 
-  /// Check whether biometric status, whether can authenticate or not
-  ///
-  /// * [MarkAuthenticatorType] - authenticator type (biometric, device credential)
+  /// Returns the current availability status for [authenticator].
   Future<MarkAuthenticatorStatus> checkAuthenticatorStatus(MarkAuthenticatorType authenticator) {
     return MarkPlatform.instance.checkAuthenticatorStatus(authenticator);
   }
 
-  /// Check if device can secure authenticate
+  /// Returns `true` when secure authenticate flow can be used.
+  ///
+  /// Secure authenticate is required by encrypt/decrypt biometric APIs.
   Future<bool> canSecureAuthenticate() {
     return MarkPlatform.instance.canSecureAuthenticate();
   }
 
-  /// Authenticate Using Biometric
+  /// Starts standard authentication using the selected [authenticatorType].
   ///
-  /// Parameter:
-  /// - [MarkAuthenticatorType] - the authenticator for authentication. (e.g., biometric or device credential)
-  /// - [title] - the title will be shown in authentication prompt
-  /// - [subTitle] - the subTitle will be shown in authentication prompt
-  /// - [description] - the description will be shown in authentication prompt
-  /// - [negativeText] - the negative text for button will be shown in authentication prompt
-  /// - [confirmationRequired] - If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered.
-  /// - [onSuccessAuthenticate] - This will be triggered if successfully authenticated.
-  /// - [onFailedAuthenticate] - This will be triggered if failed authenticated.
-  /// - [onErrorAuthenticate] - This will be triggered if authenticate catch an error.
-  /// - [onNegativeButtonClicked] - This will be triggered if negative text clicked.
-  /// - [onCanceled] - This will be triggered if user cancel through device bottom nav bar.
+  /// Callbacks:
+  /// - [onSuccessAuthenticate] is called after successful authentication.
+  /// - [onFailedAuthenticate] is called when authentication fails.
+  /// - [onErrorAuthenticate] is called when an error occurs and includes
+  ///   an error `code` and optional `message`.
+  /// - [onNegativeButtonClicked] is called when the negative button is tapped
+  ///   on supported platforms.
+  /// - [onCanceled] is called when the user cancels the prompt.
+  ///
+  /// Prompt fields such as [title], [subTitle], [negativeText], and
+  /// [confirmationRequired] are platform-specific and may be ignored.
   Future<void> authenticate({
     required MarkAuthenticatorType authenticatorType,
     required String title,
@@ -62,29 +65,22 @@ class MarkBiometric {
     );
   }
 
-  /// Check whether biometric already changed or enrolled a new biometric
+  /// Returns `true` when enrolled biometric data has changed.
   ///
-  /// Parameter:
-  /// - [key] - the alias key store for object
+  /// [key] is the alias used when storing secure biometric data.
+  /// [encodedKey] should be the value returned by a previous secure
+  /// authenticate flow.
   Future<bool> isBiometricChanged({required String key, required String encodedKey}) {
     return MarkPlatform.instance.isBiometricChanged(alias: key, encodedKey: encodedKey);
   }
 
-  /// Authenticate Secure Using Biometric
+  /// Authenticates and encrypts [requestForEncrypt] using secure biometric flow.
   ///
-  /// Parameter:
-  /// - [key] - the alias key to store a key
-  /// - [requestForEncrypt] - the data will be encrypted
-  /// - [title] - the title will be shown in authentication prompt
-  /// - [subTitle] - the subTitle will be shown in authentication prompt
-  /// - [description] - the description will be shown in authentication prompt
-  /// - [negativeText] - the negative text for button will be shown in authentication prompt
-  /// - [confirmationRequired] - If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered.
-  /// - [onSuccessAuthenticate] - This will be triggered if successfully authenticated.
-  /// - [onFailedAuthenticate] - This will be triggered if failed authenticated.
-  /// - [onErrorAuthenticate] - This will be triggered if authenticate catch an error.
-  /// - [onNegativeButtonClicked] - This will be triggered if negative text clicked.
-  /// - [onCanceled] - This will be triggered if user cancel through device bottom nav bar.
+  /// [key] is the secure alias.
+  /// [onSuccessAuthenticate] returns platform-specific
+  /// [SuccessAuthenticateEncryptState].
+  ///
+  /// Error and cancellation callbacks behave the same as in [authenticate].
   Future<void> authenticateBiometricSecureEncrypt({
     required String key,
     required Map<String, String> requestForEncrypt,
@@ -114,22 +110,15 @@ class MarkBiometric {
     );
   }
 
-  /// Authenticate Secure Using Biometric
+  /// Authenticates and decrypts [requestForDecrypt] using secure biometric flow.
   ///
-  /// Parameter:
-  /// - [key] - the alias key to store a key
-  /// - [encodedIVKey] - the encoded iv key get from secure encrypt authenticate.
-  /// - [requestForDecrypt] - the data will be decrypted.
-  /// - [title] - the title will be shown in authentication prompt
-  /// - [subTitle] - the subTitle will be shown in authentication prompt
-  /// - [description] - the description will be shown in authentication prompt
-  /// - [negativeText] - the negative text for button will be shown in authentication prompt
-  /// - [confirmationRequired] - If true, confirmation after biometric will be shown before onSuccessAuthenticate() triggered.
-  /// - [onSuccessAuthenticate] - This will be triggered if successfully authenticated.
-  /// - [onFailedAuthenticate] - This will be triggered if failed authenticated.
-  /// - [onErrorAuthenticate] - This will be triggered if authenticate catch an error.
-  /// - [onNegativeButtonClicked] - This will be triggered if negative text clicked.
-  /// - [onCanceled] - This will be triggered if user cancel through device bottom nav bar.
+  /// [key] is the secure alias.
+  /// [encodedIVKey] is the key returned by secure encrypt flow
+  /// (Android) or encoded domain state (iOS).
+  /// [onSuccessAuthenticate] returns platform-specific
+  /// [SuccessAuthenticateDecryptState].
+  ///
+  /// Error and cancellation callbacks behave the same as in [authenticate].
   Future<void> authenticateBiometricSecureDecrypt({
     required String key,
     required String encodedIVKey,

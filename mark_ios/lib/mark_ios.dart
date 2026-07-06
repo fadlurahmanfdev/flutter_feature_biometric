@@ -22,11 +22,13 @@ class MarkIOS extends MarkPlatform {
     MarkPlatform.instance = MarkIOS();
   }
 
+  /// Returns `true` if this iOS device supports biometric capability.
   @override
   Future<bool> isDeviceSupportBiometric() {
     return _api.isDeviceSupportBiometric();
   }
 
+  /// Returns the availability status for [authenticatorType] on iOS.
   @override
   Future<MarkAuthenticatorStatus> checkAuthenticatorStatus(MarkAuthenticatorType authenticatorType) async {
     IOSLAPolicy laPolicy;
@@ -45,11 +47,17 @@ class MarkIOS extends MarkPlatform {
     }
   }
 
+  /// Returns whether secure authentication can be used on iOS.
+  ///
+  /// Current implementation always returns `true`.
   @override
   Future<bool> canSecureAuthenticate() async {
     return true;
   }
 
+  /// Starts standard iOS authentication flow.
+  ///
+  /// iOS mainly uses [description] for localized prompt text.
   @override
   Future<void> authenticate({
     required MarkAuthenticatorType authenticatorType,
@@ -97,18 +105,20 @@ class MarkIOS extends MarkPlatform {
           onErrorAuthenticate(ErrorConstantIOS.IOS_UNKNOWN_RESULT, 'Unknown result: ${result.status}');
           break;
       }
-    } on FeatureBiometricException catch(e){
+    } on FeatureBiometricException catch (e) {
       onErrorAuthenticate(e.code, e.message);
     } catch (e) {
       onErrorAuthenticate(ErrorConstantIOS.IOS_UNKNOWN_UNABLE_AUTHENTICATE, '$e');
     }
   }
 
+  /// Returns `true` when enrolled biometric data has changed for [alias].
   @override
   Future<bool> isBiometricChanged({required String alias, required String encodedKey}) async {
     return _api.isBiometricChanged(alias: alias, encodedDomainState: encodedKey);
   }
 
+  /// Starts secure encrypt authentication flow on iOS.
   @override
   Future<void> authenticateSecureEncrypt({
     required String alias,
@@ -147,6 +157,7 @@ class MarkIOS extends MarkPlatform {
     }
   }
 
+  /// Starts secure decrypt authentication flow on iOS.
   @override
   Future<void> authenticateSecureDecrypt({
     required String alias,

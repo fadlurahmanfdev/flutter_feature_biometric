@@ -26,7 +26,7 @@ Rules:
 
 Documentation:
 - Use README.md for documentation
-- ensure all of mark_android, mark_biometric, mark_ios, mark_platform_interface, have their own README.md
+- ensure only have one README.md in mark_biometric, and then create README.md in all other directory but the content ask user to read the main plugin README.md
 - add the simple minimal example for every public API function
 - list exception that probably happen
 
