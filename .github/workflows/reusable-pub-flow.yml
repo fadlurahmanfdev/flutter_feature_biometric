@@ -34,6 +34,10 @@ jobs:
           echo "RELEASE VERSION: ${GITHUB_REF_NAME#${{ inputs.tag_prefix }}}"
           echo "release_name=${GITHUB_REF_NAME#${{ inputs.tag_prefix }}}" >> "$GITHUB_OUTPUT"
 
+      # Required for pub.dev trusted publishing via GitHub OIDC.
+      - name: Setup Dart (OIDC for pub.dev)
+        uses: dart-lang/setup-dart@v1
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
