@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   pre_release:
     uses: ./.github/workflows/reusable-pub-flow.yml

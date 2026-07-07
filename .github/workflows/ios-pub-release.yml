@@ -5,6 +5,10 @@ on:
     tags:
       - 'mark-ios-v*'
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
   publish:
     uses: ./.github/workflows/reusable-pub-flow.yml
