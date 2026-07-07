@@ -165,7 +165,7 @@ packages:
       path: "../../mark_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   matcher:
     dependency: transitive
     description:

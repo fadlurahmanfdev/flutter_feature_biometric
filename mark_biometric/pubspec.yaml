@@ -1,6 +1,6 @@
 name: mark_biometric
 description: "Mark Library for Biometric Authentication"
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/fadlurahmanfdev/mark
 
 environment:
