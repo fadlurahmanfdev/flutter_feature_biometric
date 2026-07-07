@@ -1,7 +1,9 @@
 name: Android Pre Release (Check Tag & Dry Run Publish Pub Dev)
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
