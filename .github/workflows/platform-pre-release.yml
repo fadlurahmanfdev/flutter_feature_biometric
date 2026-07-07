@@ -1,9 +1,7 @@
 name: Platform Pre Release (Dry Run Publish Pub Dev)
 
 on:
-  pull_request:
-    branches:
-      - master
+  workflow_dispatch:
 
 permissions:
   contents: read
