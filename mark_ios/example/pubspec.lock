@@ -136,13 +136,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   mark_platform_interface:
     dependency: transitive
     description:
-      path: "../../mark_platform_interface"
-      relative: true
-    source: path
+      name: mark_platform_interface
+      sha256: "30099867c39783fa911f12ad067758906725cba3595e41d513b3a22fe1b47c75"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   matcher:
     dependency: transitive
