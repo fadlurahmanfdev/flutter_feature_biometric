@@ -1,4 +1,6 @@
-# Description
+# mark_android
 
-The android implementation of `mark`
+Please read the main plugin documentation:
+
+- [`mark_biometric/README.md`](../mark_biometric/README.md)
 

@@ -1,26 +1,27 @@
 name: mark_ios
 description: "Mark Library for iOS Biometric Authentication"
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/fadlurahmanfdev/mark
 
 environment:
-  sdk: '^3.0.0'
-  flutter: ">=3.10.0"
+  sdk: '>=3.11.0 <4.0.0'
+  flutter: ">=3.41.6"
 
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.1.8
+  meta: ^1.17.0
 
 #  mark_platform_interface:
 #    path: ../mark_platform_interface
-  mark_platform_interface: ^0.0.1
+  mark_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
-  pigeon: ^26.1.0
+  flutter_lints: ^6.0.0
+  pigeon: ^27.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

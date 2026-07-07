@@ -18,13 +18,10 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'default_method_channel_platform.dart';
 
-/// The interface that implementations of local_auth must implement.
+/// Platform interface used by all biometric platform implementations.
 ///
-/// Platform implementations should extend this class rather than implement it as `local_auth`
-/// does not consider newly added methods to be breaking changes. Extending this class
-/// (using `extends`) ensures that the subclass will get the default implementation, while
-/// platform implementations that `implements` this interface will be broken by newly added
-/// [MarkPlatform] methods.
+/// Platform implementations should use `extends` instead of `implements`
+/// so new methods can be added safely with default behavior.
 abstract class MarkPlatform extends PlatformInterface {
   /// Constructs a MarkPlatform.
   MarkPlatform() : super(token: _token);
@@ -46,18 +43,24 @@ abstract class MarkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Returns `true` when the device supports biometric capability.
   Future<bool> isDeviceSupportBiometric() async {
     throw UnimplementedError('isDeviceSupportBiometric() has not been implemented.');
   }
 
+  /// Returns availability status for the requested [authenticatorType].
   Future<MarkAuthenticatorStatus> checkAuthenticatorStatus(MarkAuthenticatorType authenticatorType) async {
     throw UnimplementedError('checkAuthenticationTypeStatus() has not been implemented.');
   }
 
+  /// Returns `true` when secure encrypt/decrypt flow is available.
   Future<bool> canSecureAuthenticate() async {
     throw UnimplementedError('isSupportSecureBiometric() has not been implemented.');
   }
 
+  /// Starts standard authentication flow.
+  ///
+  /// Implementations should call one of the callbacks based on native result.
   Future<void> authenticate({
     required MarkAuthenticatorType authenticatorType,
     required String title,
@@ -74,10 +77,14 @@ abstract class MarkPlatform extends PlatformInterface {
     throw UnimplementedError('authenticate() has not been implemented.');
   }
 
+  /// Returns `true` when biometric enrollment has changed for the given key.
   Future<bool> isBiometricChanged({required String alias, required String encodedKey}) async {
     throw UnimplementedError('isBiometricChanged() has not been implemented.');
   }
 
+  /// Authenticates and encrypts data in [requestForEncrypt].
+  ///
+  /// Implementations must return platform-specific success state.
   Future<void> authenticateSecureEncrypt({
     required String alias,
     required Map<String, String> requestForEncrypt,
@@ -95,6 +102,9 @@ abstract class MarkPlatform extends PlatformInterface {
     throw UnimplementedError('authenticateSecureEncrypt() has not been implemented.');
   }
 
+  /// Authenticates and decrypts data in [requestForDecrypt].
+  ///
+  /// Implementations must return platform-specific success state.
   Future<void> authenticateSecureDecrypt({
     required String alias,
     required String encodedKey,

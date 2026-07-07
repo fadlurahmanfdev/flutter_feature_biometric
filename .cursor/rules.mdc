@@ -1,0 +1,35 @@
+Overview:
+
+This repository is a flutter federated plugin/library that handling biometric authentication related
+
+Capabilities:
+- Strong biometric authentication
+- Split biometric authentication into two different process (registration & authentication)
+- check whether device credential is set
+- check biometric is enrolled
+- check face auth is support
+- check whether device is comply with biometric, face auth, or etc.
+
+Rules:
+- Use clean architecture & SOLID principle
+- this library project contain a specific directory for platform, android, ios
+- ensure code is testable
+- keep public api is simple
+- using pigeon for native communication
+- there is (core, internal, api, model, enum, exception) directory for this library project
+- api can depends on core, internal, model, enum, exception
+- internal can depends on core, model, enum, exception
+- core, model, enum, and exception is independent
+- keep all public api function, model, enum, or exception have their own comment
+- ensure exception have a code
+
+
+Documentation:
+- Use README.md for documentation
+- ensure only have one README.md in mark_biometric, and then create README.md in all other directory but the content ask user to read the main plugin README.md
+- add the simple minimal example for every public API function
+- list exception that probably happen
+
+After Agent Perform:
+- Update README.md
+- Ensure to notes if any breaking changes in README.md

@@ -1,5 +1,5 @@
-# Launch Screen Assets
+# mark_ios launch image set
 
-You can customize the launch screen with your own desired assets by replacing the image files in this directory.
+Please read the main plugin documentation:
 
-You can also do it by opening your Flutter project's Xcode project with `open ios/Runner.xcworkspace`, selecting `Runner/Assets.xcassets` in the Project Navigator and dropping in the desired images.
+- [`mark_biometric/README.md`](../../../../../../../mark_biometric/README.md)

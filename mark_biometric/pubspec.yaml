@@ -1,16 +1,16 @@
 name: mark_biometric
 description: "Mark Library for Biometric Authentication"
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/fadlurahmanfdev/mark
 
 environment:
-  sdk: '^3.0.0'
-  flutter: ">=3.10.0"
+  sdk: '>=3.11.0 <4.0.0'
+  flutter: ">=3.41.6"
 
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.1.8
 
 #  mark_android:
 #    path: ../mark_android
@@ -20,14 +20,14 @@ dependencies:
 #    path: ../mark_platform_interface
 
 
-  mark_android: ^0.0.1
-  mark_ios: ^0.0.1
-  mark_platform_interface: ^0.0.1
+  mark_android: ^0.1.0
+  mark_ios: ^0.1.0
+  mark_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

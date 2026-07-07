@@ -1,6 +1,8 @@
-# mark_android_example
+# mark_android example
 
-Demonstrates how to use the mark_android plugin.
+Please read the main plugin documentation:
+
+- [`mark_biometric/README.md`](../../mark_biometric/README.md)
 
 ## Getting Started
 

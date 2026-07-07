@@ -1,0 +1,73 @@
+name: Reusable Pub Flow
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string
+      package_path:
+        required: true
+        type: string
+      tag_prefix:
+        required: false
+        type: string
+        default: ''
+      release_name_prefix:
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    environment: pub-dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Version
+        id: setup
+        if: ${{ inputs.mode == 'publish' }}
+        run: |
+          echo "TAG VERSION: $GITHUB_REF_NAME"
+          echo "RELEASE VERSION: ${GITHUB_REF_NAME#${{ inputs.tag_prefix }}}"
+          echo "release_name=${GITHUB_REF_NAME#${{ inputs.tag_prefix }}}" >> "$GITHUB_OUTPUT"
+
+      # Required for pub.dev trusted publishing via GitHub OIDC.
+      - name: Setup Dart (OIDC for pub.dev)
+        uses: dart-lang/setup-dart@v1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.41.6
+
+      - name: Check Flutter Version
+        run: |
+          flutter doctor -v
+          flutter --version
+
+      - name: Dry Run Publish To Pub Dev
+        if: ${{ inputs.mode == 'pre_release' }}
+        run: |
+          cd "${{ inputs.package_path }}"
+          dart pub publish --dry-run
+
+      - name: Publish To Pub Dev
+        if: ${{ inputs.mode == 'publish' }}
+        run: |
+          cd "${{ inputs.package_path }}"
+          dart pub publish -f
+
+      - name: Create Release
+        if: ${{ inputs.mode == 'publish' }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ inputs.release_name_prefix }} ${{ steps.setup.outputs.release_name }}
+          draft: false
+          prerelease: false

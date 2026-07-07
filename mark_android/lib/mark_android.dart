@@ -21,11 +21,13 @@ class MarkAndroid extends MarkPlatform {
 
   final MarkApi _api;
 
+  /// Returns `true` if this Android device supports biometric capability.
   @override
   Future<bool> isDeviceSupportBiometric() async {
     return _api.isDeviceSupportBiometric();
   }
 
+  /// Returns the availability status for [authenticatorType] on Android.
   @override
   Future<MarkAuthenticatorStatus> checkAuthenticatorStatus(MarkAuthenticatorType authenticatorType) async {
     AndroidAuthenticatorStatus authenticatorStatus;
@@ -53,11 +55,15 @@ class MarkAndroid extends MarkPlatform {
     }
   }
 
+  /// Returns `true` if Android secure biometric flow is ready to use.
   @override
   Future<bool> canSecureAuthenticate() async {
     return (await _api.checkSecureAuthenticatorStatus()) == AndroidAuthenticatorStatus.success;
   }
 
+  /// Starts standard Android authentication flow.
+  ///
+  /// The selected callback is called based on native authentication result.
   @override
   Future<void> authenticate({
     required MarkAuthenticatorType authenticatorType,
@@ -117,11 +123,13 @@ class MarkAndroid extends MarkPlatform {
     }
   }
 
+  /// Returns `true` when enrolled biometric data has changed for [alias].
   @override
   Future<bool> isBiometricChanged({required String alias, required String encodedKey}) {
     return _api.isBiometricChanged(alias: alias);
   }
 
+  /// Starts secure encrypt authentication and returns encrypted values.
   @override
   Future<void> authenticateSecureEncrypt({
     required String alias,
@@ -175,6 +183,7 @@ class MarkAndroid extends MarkPlatform {
     }
   }
 
+  /// Starts secure decrypt authentication and returns decrypted values.
   @override
   Future<void> authenticateSecureDecrypt({
     required String alias,
