@@ -13,5 +13,4 @@ jobs:
       package_path: mark_platform_interface
       tag_prefix: mark-platform-v
       release_name_prefix: Mark Platform
-    secrets: inherit
           

@@ -11,4 +11,3 @@ jobs:
     with:
       mode: pre_release
       package_path: mark_biometric
-    secrets: inherit

@@ -13,5 +13,4 @@ jobs:
       package_path: mark_android
       tag_prefix: mark-android-v
       release_name_prefix: Mark Android
-    secrets: inherit
           

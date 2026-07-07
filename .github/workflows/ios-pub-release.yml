@@ -13,5 +13,4 @@ jobs:
       package_path: mark_ios
       tag_prefix: mark-ios-v
       release_name_prefix: Mark iOS
-    secrets: inherit
           

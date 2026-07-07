@@ -17,17 +17,6 @@ on:
         required: false
         type: string
         default: ''
-    secrets:
-      TOKEN:
-        required: false
-      PUB_ACCESS_TOKEN:
-        required: true
-      PUB_REFRESH_TOKEN:
-        required: true
-      PUB_ID_TOKEN:
-        required: true
-      PUB_EXPIRATION:
-        required: true
 
 jobs:
   run:
@@ -35,7 +24,7 @@ jobs:
     environment: pub-dev
     permissions:
       id-token: write
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -59,20 +48,6 @@ jobs:
           flutter doctor -v
           flutter --version
 
-      - name: Setup Pub Credentials
-        run: |
-          mkdir -p $HOME/.config/dart
-          cat <<EOF > $HOME/.config/dart/pub-credentials.json
-          {
-            "accessToken": "${{ secrets.PUB_ACCESS_TOKEN }}",
-            "refreshToken": "${{ secrets.PUB_REFRESH_TOKEN }}",
-            "idToken": "${{ secrets.PUB_ID_TOKEN }}",
-            "tokenEndpoint": "https://accounts.google.com/o/oauth2/token",
-            "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
-            "expiration": ${{ secrets.PUB_EXPIRATION }}
-          }
-          EOF
-
       - name: Dry Run Publish To Pub Dev
         if: ${{ inputs.mode == 'pre_release' }}
         run: |
@@ -89,7 +64,7 @@ jobs:
         if: ${{ inputs.mode == 'publish' }}
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ github.ref_name }}
           release_name: ${{ inputs.release_name_prefix }} ${{ steps.setup.outputs.release_name }}

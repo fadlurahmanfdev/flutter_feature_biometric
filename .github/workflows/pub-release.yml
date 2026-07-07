@@ -13,5 +13,4 @@ jobs:
       package_path: mark_biometric
       tag_prefix: mark-v
       release_name_prefix: Mark
-    secrets: inherit
           
